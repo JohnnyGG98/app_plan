@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plan/src/providers/CarreraPV.dart';
 
 class HomeP extends StatelessWidget {
   @override
@@ -19,6 +20,15 @@ class HomeP extends StatelessWidget {
       body: Center(
         child: Text('Hola Mundo'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          print('Si funciona el boton');
+          
+            final car = CarreraPV();
+            car.getTodos(); 
+        },
+      ),
     );
   }
+
 }
