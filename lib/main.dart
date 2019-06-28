@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/pages/CarreraP.dart';
 import 'package:plan/src/pages/HomeP.dart';
+import 'package:plan/src/pages/PeriodoP.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,10 +12,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Plan',
-      initialRoute: 'carrera',
+      initialRoute: 'periodo',
       routes: {
         '/': (BuildContext ct) => HomeP(),
         'carrera': (BuildContext ct) => CarreraP(),
+        'periodo': (BuildContext ct) => PeriodoP(),
       },
     );
   }
