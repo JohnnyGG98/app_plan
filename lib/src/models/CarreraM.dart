@@ -32,4 +32,6 @@ class CarreraM {
     codigo = json['carrera_codigo'];
   }
 
+  
+
 }
