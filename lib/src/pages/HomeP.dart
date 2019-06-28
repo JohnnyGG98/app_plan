@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:plan/src/models/SilaboM.dart';
 import 'package:plan/src/providers/CarreraPV.dart';
+import 'package:plan/src/providers/SilaboPV.dart';
 
 
 class HomeP extends StatefulWidget {
@@ -10,7 +12,9 @@ class HomeP extends StatefulWidget {
 class _HomePState extends State<HomeP> {
 
   final CarreraPV carpv = new CarreraPV();
+  final SilaboPV silpv = new SilaboPV();
   Future<List<CarreraM>> carreras;
+  Future<List<SilaboM>> silabos;
 
   @override
   Widget build(BuildContext context) {
@@ -99,12 +103,12 @@ class _HomePState extends State<HomeP> {
           ),
           Expanded(
             child: FutureBuilder(
-              future: carpv.getTodos(),
-              builder: (BuildContext ct, AsyncSnapshot<List<CarreraM>> snapshot){
+              future: silpv.getTodos(),
+              builder: (BuildContext ct, AsyncSnapshot<List<SilaboM>> snapshot){
                 if(snapshot.hasData){
                   return DropdownButton(
                     value: 'Seleccione',
-                    items: getCarreras(snapshot.data),
+                    items: getSilabos(snapshot.data),
                     onChanged: ((s){
                       print('Seleccionamos $s');
                     }),
@@ -141,6 +145,32 @@ class _HomePState extends State<HomeP> {
         DropdownMenuItem(
         child: Text(c.nombre),
         value: c.nombre,
+        )
+      );
+    });
+
+    print('Numero de items '+list.length.toString());
+
+    return list; 
+  }
+
+
+  List<DropdownMenuItem<String>> getSilabos(List<SilaboM> silabos) {
+
+    List<DropdownMenuItem<String>> list = new List();
+    list.add(
+      DropdownMenuItem(
+         child: Text('Seleccione'),
+         value: 'Seleccione',
+      )
+    );
+
+    silabos.forEach((s){
+      print(s.materiaNombre);
+      list.add(
+        DropdownMenuItem(
+        child: Text(s.materiaNombre),
+        value: s.materiaNombre,
         )
       );
     });

@@ -26,7 +26,7 @@ class SilaboM{
 
   int estadoSilabo;
 
-  List<String> cursos;
+  String cursos;
 
 
   SilaboM({
