@@ -40,7 +40,7 @@ class CursoP extends StatelessWidget {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: 20.0,
+          horizontal: 15.0,
           vertical: 10.0
         ),
         child: Row(
