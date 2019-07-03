@@ -16,7 +16,7 @@ class CarreraPV {
     final res = await http.get(url);
     //print(res.body);
     final decodeData = json.decode(res.body);
-    print(decodeData['items']);
+    //print(decodeData['items']);
     final carreras = new Carreras.fromJsonList(decodeData['items']);
 
     return carreras.carreras;
