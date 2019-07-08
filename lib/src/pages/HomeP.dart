@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:plan/src/models/SilaboM.dart';
 
 import 'package:plan/src/providers/CarreraPV.dart';
+import 'package:plan/src/providers/SilaboPV.dart';
 
 class HomeP extends StatefulWidget {
   @override
@@ -9,15 +11,21 @@ class HomeP extends StatefulWidget {
 
 class _HomePState extends State<HomeP> {
   final CarreraPV carpv = new CarreraPV();
+  final SilaboPV silpv = new SilaboPV();
 
   Future<List<CarreraM>> carreras;
+  Future<List<SilaboM>> silabos;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
         scrollDirection: Axis.vertical,
-        children: <Widget>[_paginaPrincipal(), _paginaSecundaria()],
+        children: <Widget>[
+          _paginaPrincipal(),
+          _paginaSecundaria(),
+          _paginaSilabos(),
+        ],
       ),
     );
   }
@@ -120,6 +128,78 @@ class _HomePState extends State<HomeP> {
         ],
       ),
     );
+  }
+
+  Widget _paginaSilabos() {
+    return FutureBuilder(
+      future: silpv.getTodos(),
+      builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.hasData) {
+          return ListView(children: _listarSilabos(snapshot.data));
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  List<Widget> _listarSilabos(List<SilaboM> silabos) {
+    final List<Widget> lista = [];
+
+    silabos.forEach((s) {
+      final wt = Card(
+        elevation: 10.0,
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.attach_file, color: Colors.blue),
+              title: Text(s.materiaNombre),
+              subtitle: Text(s.prdLectivoNombre),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                FlatButton(
+                  child: Column( // Replace with a Row for horizontal icon + text
+                  children: <Widget>[
+                    Icon(Icons.remove_red_eye, color: Colors.blue),
+                    Text("Ver")
+                  ],
+                ),
+                  onPressed: () {},
+                ),
+                FlatButton(
+                  child: Column( // Replace with a Row for horizontal icon + text
+                  children: <Widget>[
+                    Icon(Icons.file_download, color: Colors.blue),
+                    Text("Descargar")
+                  ],
+                ),
+                  onPressed: () {},
+                ),
+                FlatButton(
+                  child: Column( // Replace with a Row for horizontal icon + text
+                  children: <Widget>[
+                    Icon(Icons.library_books, color: Colors.blue),
+                    Text("Tareas")
+                  ],
+                ),
+                  onPressed: () {},
+                )
+              ],
+            )
+          ],
+        ),
+      );
+
+      lista..add(wt)..add(Divider());
+    });
+
+    return lista;
   }
 
   List<DropdownMenuItem<String>> getCarreras(List<CarreraM> carreras) {
