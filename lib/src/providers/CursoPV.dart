@@ -23,4 +23,16 @@ class CursoPV {
     final url = _url+'todos';
     return await _obtenerCursos(url);
   }
+
+  Future<List<CursoM>> buscar(String query) async {
+    final url = _url+'buscar/'+query;
+    print(url);
+    return await _obtenerCursos(url);
+  }
+
+  Future<List<CursoM>> getPorPeriodo(int idPeriodo) async {
+    final url = _url+'periodo/'+idPeriodo.toString();
+    print(url);
+    return await _obtenerCursos(url);
+  }
 }

@@ -19,4 +19,9 @@ class PeriodoPV {
     final url = _url+'todos';
     return await _obtenerPeriodo(url);
   }
+
+  Future<List<PeriodoM>> getPorCarrera(int idCarrera) async {
+    final url = _url+'carrera/'+idCarrera.toString();
+    return await _obtenerPeriodo(url);
+  }
 }

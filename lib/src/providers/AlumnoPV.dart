@@ -24,4 +24,11 @@ class AlumnoPV {
     final url = _url + 'todos'; 
     return await _obtenerAlumnos(url);
   }
+
+   Future<List<AlumnoM>> getPorCurso(int id) async {
+    final url = _url + 'curso/'+ id.toString(); 
+    return await _obtenerAlumnos(url);
+  }
+
+
 }

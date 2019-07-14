@@ -6,25 +6,28 @@ class CursoP extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String query = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title: Text('Cursos'),
         backgroundColor: Colors.blueGrey,
       ),
-      body: _listaCursos(),
+      body: _listaCursos(query),
     );
   }
 
-  Widget _listaCursos(){
+  Widget _listaCursos(String query){
+    
     return FutureBuilder(
-      future: cur.getTodos(),
+      //future: cur.getTodos(),
+      future: cur.buscar(query),
       builder: (BuildContext context, AsyncSnapshot<List<CursoM>> snapshot){
         if(snapshot.hasData){
           final crs = snapshot.data;
           return ListView.builder(
             itemCount: crs.length,
             itemBuilder: (BuildContext context, int i){
-              return _carta(crs[i]);
+              return _carta(crs[i], context);
             },
           );
         }else{
@@ -36,26 +39,61 @@ class CursoP extends StatelessWidget {
     );
   }
 
-  Widget _carta(CursoM c){
+  Widget _carta(CursoM c, BuildContext context){
+    TextStyle s = TextStyle(
+      fontSize: 20.0
+    );
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.symmetric(
+        /*padding: EdgeInsets.symmetric(
           horizontal: 15.0,
-          vertical: 10.0
+          vertical: 5.0
+        ),*/
+        padding: EdgeInsets.only(
+          top: 5.0,
+          right: 5.0,
+          left: 15.0,
+          bottom: 10.0
         ),
         child: Row(
           children: <Widget>[
             Expanded(
-              child: ListTile(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(c.getDocente(), style: s,),
+                  Text(c.periodoNombre),               Text(c.materiaNombre, style: s,),
+                  Text(c.nombre),
+                ],
+              )
+              
+              
+              /*ListTile(
                 title: Text(c.materiaNombre),
                 subtitle: Text(c.periodoNombre),
-              ),
+              ),*/
             ),
-            Icon(Icons.bookmark_border, color: Colors.blue, size: 30.0,),
-            Icon(Icons.school, color: Colors.blue, size: 30.0,)
+            Column(
+              children: <Widget>[
+                FlatButton(
+                  child: Icon(Icons.school),
+                  onPressed: (){
+                    print(c.idCurso);
+                    Navigator.pushNamed(context, 'alumno', arguments: c.idCurso);
+                  },
+                ),
+                FlatButton(
+                  child: Icon(Icons.book),
+                  onPressed: (){
+                    print(c.idMateria.toString()+' '+c.idPeriodo.toString());
+                  },
+                )
+              ],
+            ),
           ],
         ),
       ),
     );
   }
+
 }

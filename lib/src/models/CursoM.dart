@@ -51,4 +51,8 @@ class CursoM {
     materiaNombre = json['materia_nombre'];
   }
 
+  getDocente(){
+    return docenteNombre + ' ' + docenteApellido;
+  }
+
 }
