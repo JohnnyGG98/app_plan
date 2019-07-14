@@ -1,3 +1,3 @@
 class ConsApi {
-  static String path = "http://192.168.1.101/zero_api/";
+  static String path = "http://10.42.0.210/zero_api/";
 }
