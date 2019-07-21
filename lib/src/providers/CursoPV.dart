@@ -36,6 +36,16 @@ class CursoPV {
     return await _obtenerCursos(url);
   }
 
+  Future<List<CursoM>> getPorNombreCursoPeriodo(String p) async {
+    final url = _url+'periodo/'+p;
+    return await _obtenerCursos(url);
+  }
+
+  Future<List<CursoM>> getPorIdCurso(int idCurso) async {
+    final url = _url+'buscar/'+idCurso.toString();
+    return await _obtenerCursos(url);
+  }
+
   Future<List<String>> getNombreCursoPorPeriodo(int idPeriodo) async {
     final url = _url+'nombre/'+idPeriodo.toString();
     final res = await http.get(url);

@@ -145,38 +145,7 @@ class _HomePState extends State<HomeP> {
             Text('Plan', 
             style: TextStyle(fontSize: 50.0),),
             SizedBox(height: 20.0,),
-
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide()
-                      ),
-                    ),
-                    autofocus: false,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.0,
-                    ),
-                    onChanged: (input){
-                      _query = input.replaceAll(' ', '');
-                    },
-                  ),
-                ),
-                RaisedButton(
-                  color: Colors.blue,
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Icon(Icons.search, ),
-                  ),
-                  onPressed: (){
-                    Navigator.pushNamed(context, 'curso', arguments: _query);
-                  },
-                )
-              ],
-            ),
+            _buscador(),
             SizedBox(height: 40.0,),
             _comboCarreras(),
             SizedBox(height: 20.0,),
@@ -185,9 +154,50 @@ class _HomePState extends State<HomeP> {
             _comboCursoNombreFuture(),
             SizedBox(height: 20.0,),
             _comboMateriasFuture(),
+            SizedBox(height: 20.0,),
+            _botonesCombo(),
           ],
         ),
       ),
+    );
+  }
+
+  void _llamarPageCurso(List param){ 
+    Navigator.pushNamed(context, 'curso', arguments: param);
+  }
+
+  Widget _buscador(){
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                  borderSide: BorderSide()
+              ),
+            ),
+            autofocus: false,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            ),
+            onChanged: (input){
+              _query = input;
+            },
+          ),
+        ),
+        RaisedButton(
+          color: Colors.blue,
+          child: Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Icon(Icons.search, ),
+          ),
+          onPressed: (){
+            _llamarPageCurso(['buscar', _query]);
+            //Navigator.pushNamed(context, 'curso', arguments: param);
+          },
+        )
+      ],
     );
   }
 
@@ -208,6 +218,7 @@ class _HomePState extends State<HomeP> {
                     _carreraSelec = s;  
                     _periodoSelec = '0';
                     _cursoNombreSelec = '0';
+                    _materiaSelec = '0';
                   });
                 }),
                 isExpanded: true,
@@ -227,7 +238,7 @@ class _HomePState extends State<HomeP> {
 
   Widget _comboPeriodoFuture() {
     if(periodos == null){
-      return SizedBox(height: 40.0,);
+      return Container();
     }else{
       return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -244,6 +255,7 @@ class _HomePState extends State<HomeP> {
                     setState(() {
                       _periodoSelec = s;  
                       _cursoNombreSelec = '0';
+                      _materiaSelec = '0';
                     });
                   }),
                   isExpanded: true,
@@ -264,7 +276,7 @@ class _HomePState extends State<HomeP> {
 
   Widget _comboCursoNombreFuture() {
     if(cursosNombre == null){
-      return SizedBox(height: 40.0,);
+      return Container();
     }else{
       return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -301,7 +313,7 @@ class _HomePState extends State<HomeP> {
 
   Widget _comboMateriasFuture() {
     if(materias == null){
-      return SizedBox(height: 40.0,);
+      return Container();
     }else{
       return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -420,6 +432,64 @@ class _HomePState extends State<HomeP> {
       child: Text(item, 
         style: TextStyle(fontSize: 15.0),
       ),
+    );
+  }
+
+  Widget _botonesCombo(){
+    if(_periodoSelec != '0'){
+      final pading = EdgeInsets.symmetric(horizontal: 35.0,vertical: 15.0);
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            FlatButton(
+              color: Colors.blueGrey,
+              child: _txtBtns('Curso'),
+              padding: pading,
+              onPressed: (){
+                if(_periodoSelec != '0' && _cursoNombreSelec == '0' && _materiaSelec == '0'){
+                  //print('Buscamos solo por periodo: '+_periodoSelec);
+                  _llamarPageCurso(['periodo', _periodoSelec]);
+                }else if(_periodoSelec != '0' && _cursoNombreSelec != '0' && _materiaSelec == '0'){
+                  //print('Buscamos por periodo: '+_periodoSelec+ ' y nombre curso: $_cursoNombreSelec');
+                  //Debemos pasarle en este formato por el link {curso_nombre}-{id_periodo}
+                  _llamarPageCurso(['nombre', _cursoNombreSelec+'-'+_periodoSelec]);
+                }else{
+                  //print('Buscamos por curso: $_materiaSelec');
+                  _llamarPageCurso(['curso', _materiaSelec]);
+                }
+              },
+            ),
+            FlatButton(
+              color: Colors.blueGrey,
+              padding: pading,
+              child: _txtBtns('Silabo'),
+              onPressed: (){
+                if(_periodoSelec != '0' && _cursoNombreSelec == '0' && _materiaSelec == '0'){
+                  print('Buscamos solo por periodo: '+_periodoSelec);
+                }else if(_periodoSelec != '0' && _cursoNombreSelec != '0' && _materiaSelec == '0'){
+                  print('Buscamos por periodo: '+_periodoSelec+ ' y nombre curso: $_cursoNombreSelec');
+                }else{
+                  print('Buscamos por curso: $_materiaSelec');
+                }
+              },
+            )
+          ],
+        ),
+      );
+    }else{
+      return Container();
+    }
+  }
+
+  Widget _txtBtns(String txt){
+    return Text(
+      txt,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 25.0
+      ),
+      textAlign: TextAlign.center,
     );
   }
 
