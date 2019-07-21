@@ -56,3 +56,33 @@ class CursoM {
   }
 
 }
+
+class Materias {
+  List<MateriaM> materias = new List();
+  
+  Materias();
+
+  Materias.fromJsonList(List<dynamic> jsonList){
+    if(jsonList == null) return;
+
+    for(var item in jsonList){
+      final m = new MateriaM.fromJsonMap(item);
+      materias.add(m);
+    }
+  }
+}
+
+class MateriaM {
+  int idCurso;
+  String materia;
+
+  MateriaM({
+    this.idCurso,
+    this.materia
+  });
+
+  MateriaM.fromJsonMap(Map<String, dynamic> json){
+    idCurso = json['id_curso'];
+    materia = json['materia_nombre'];
+  }
+}

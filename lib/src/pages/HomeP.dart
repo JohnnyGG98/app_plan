@@ -17,17 +17,17 @@ class _HomePState extends State<HomeP> {
   final CarreraPV carpv = new CarreraPV();
   final PeriodoPV perpv = new PeriodoPV();
   final CursoPV curpv = new CursoPV();
-  final DropdownMenuItem<String> itemInicio = DropdownMenuItem(child: _stlItem(''),value: '0',);
 
   List<DropdownMenuItem<String>> listPeriodo;
-  List<DropdownMenuItem<String>> listCurso;
   Future<List<CarreraM>> carreras;
   Future<List<PeriodoM>> periodos;
-  Future<List<CursoM>> cursos;
+  Future<List<MateriaM>> materias;
+  Future<List<String>> cursosNombre;
   String _query = '';
   String _carreraSelec = '0';
   String _periodoSelec = '0';
-  String _cursoSelec = '0';
+  String _cursoNombreSelec = '0';
+  String _materiaSelec = '0';
   bool _carrerasCargado = false;
 
   
@@ -36,7 +36,6 @@ class _HomePState extends State<HomeP> {
   Widget build(BuildContext context) {
     //Cargamos el item inicial de todos los combos
     listPeriodo = new List();
-    //listCurso = new List();
     //iniciarCombos();
     if(!_carrerasCargado){
       carreras = carpv.getTodos();
@@ -50,11 +49,21 @@ class _HomePState extends State<HomeP> {
     }
 
     if(_periodoSelec == '0'){
-      cursos = null;;
+      cursosNombre = null;
+      materias = null;
     }
 
-    if(_periodoSelec != '0' && _cursoSelec == '0'){
-      cursos = curpv.getPorPeriodo(int.parse(_periodoSelec));
+    if(_cursoNombreSelec == '0'){
+      materias = null;
+    }
+
+    if(_periodoSelec != '0' && _cursoNombreSelec == '0'){
+      cursosNombre = curpv.getNombreCursoPorPeriodo(int.parse(_periodoSelec));
+    }
+
+    if(_cursoNombreSelec != '0' && _materiaSelec == '0'){
+      print('Buscando materiasss....');
+      materias = curpv.getMateriasPorNombreCursoPeriodo(_cursoNombreSelec, int.parse(_periodoSelec));
     }
     
     return Scaffold(
@@ -173,8 +182,9 @@ class _HomePState extends State<HomeP> {
             SizedBox(height: 20.0,),
             _comboPeriodoFuture(),
             SizedBox(height: 20.0,),
-            _comboCursoFuture(),
-            SizedBox(height: 40.0,),
+            _comboCursoNombreFuture(),
+            SizedBox(height: 20.0,),
+            _comboMateriasFuture(),
           ],
         ),
       ),
@@ -197,6 +207,7 @@ class _HomePState extends State<HomeP> {
                   setState(() {
                     _carreraSelec = s;  
                     _periodoSelec = '0';
+                    _cursoNombreSelec = '0';
                   });
                 }),
                 isExpanded: true,
@@ -232,7 +243,7 @@ class _HomePState extends State<HomeP> {
                   onChanged: ((s){
                     setState(() {
                       _periodoSelec = s;  
-                      _cursoSelec = '0';
+                      _cursoNombreSelec = '0';
                     });
                   }),
                   isExpanded: true,
@@ -251,24 +262,25 @@ class _HomePState extends State<HomeP> {
     }
   }
 
-  Widget _comboCursoFuture() {
-    if(cursos == null){
+  Widget _comboCursoNombreFuture() {
+    if(cursosNombre == null){
       return SizedBox(height: 40.0,);
     }else{
       return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
         child: FutureBuilder(
-          future: cursos,
-            builder: (BuildContext ct, AsyncSnapshot<List<CursoM>> snapshot){
+          future: cursosNombre,
+            builder: (BuildContext ct, AsyncSnapshot<List<String>> snapshot){
               if(snapshot.hasData){
                 return DropdownButton(
 
-                  value: _cursoSelec,
-                  items: getCursos(snapshot.data),
+                  value: _cursoNombreSelec,
+                  items: getNombreCurso(snapshot.data),
                   onChanged: ((s){
                     setState(() {
-                      _cursoSelec = s;  
+                      _cursoNombreSelec = s;  
+                      _materiaSelec = '0';
                     });
                   }),
                   isExpanded: true,
@@ -287,6 +299,41 @@ class _HomePState extends State<HomeP> {
     }
   }
 
+  Widget _comboMateriasFuture() {
+    if(materias == null){
+      return SizedBox(height: 40.0,);
+    }else{
+      return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: FutureBuilder(
+          future: materias,
+            builder: (BuildContext ct, AsyncSnapshot<List<MateriaM>> snapshot){
+              if(snapshot.hasData){
+                return DropdownButton(
+
+                  value: _materiaSelec,
+                  items: getMateria(snapshot.data),
+                  onChanged: ((s){
+                    setState(() {
+                      _materiaSelec = s;  
+                    });
+                  }),
+                  isExpanded: true,
+                  icon: Icon(Icons.content_paste),
+                  iconSize: 40.0,
+                );
+              }else{
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          )
+        ),
+      );
+    }
+  }
   
   List<DropdownMenuItem<String>> getCarreras(List<CarreraM> carreras) {
     List<DropdownMenuItem<String>> listCarreras = new List();
@@ -326,23 +373,42 @@ class _HomePState extends State<HomeP> {
     return listPeriodo; 
   }
 
-  List<DropdownMenuItem<String>> getCursos(List<CursoM> cursos) {
+  List<DropdownMenuItem<String>> getNombreCurso(List<String> cursos) {
     List<DropdownMenuItem<String>> listCurso = new List();
     listCurso.add(
       DropdownMenuItem(
-         child: _stlItem('Seleccione una materia por curso'),
+         child: _stlItem('Seleccione un curso'),
          value: '0',
       )
     );
     cursos.forEach((c){
       listCurso.add(
         DropdownMenuItem(
-          child: _stlItem(c.nombre+" | "+c.materiaNombre),
-          value: c.idCurso.toString(),
+          child: _stlItem(c),
+          value: c,
         )
       );
     });
     return listCurso; 
+  }
+
+  List<DropdownMenuItem<String>> getMateria(List<MateriaM> materias) {
+    List<DropdownMenuItem<String>> listMateria = new List();
+    listMateria.add(
+      DropdownMenuItem(
+         child: _stlItem('Seleccione una materia'),
+         value: '0',
+      )
+    );
+    materias.forEach((m){
+      listMateria.add(
+        DropdownMenuItem(
+          child: _stlItem(m.materia),
+          value: m.idCurso.toString(),
+        )
+      );
+    });
+    return listMateria; 
   }
 
   static Widget _stlItem(String item){
