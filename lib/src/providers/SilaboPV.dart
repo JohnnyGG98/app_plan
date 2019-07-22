@@ -10,7 +10,7 @@ class SilaboPV {
     final res = await http.get(url);
 
     final decodedata = json.decode(res.body);
-
+    
     print(decodedata['items']);
 
     final silabos = new Silabos.fromJsonList(decodedata['items']);

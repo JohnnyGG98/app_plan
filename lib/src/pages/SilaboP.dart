@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/SilaboM.dart';
 import 'package:plan/src/providers/SilaboPV.dart';
-import 'package:flutter_full_pdf_viewer/flutter_full_pdf_viewer.dart';
-import 'package:flutter_full_pdf_viewer/full_pdf_viewer_plugin.dart';
-import 'package:flutter_full_pdf_viewer/full_pdf_viewer_scaffold.dart';
+
 
 class SilaboP extends StatelessWidget {
   final silabos = new SilaboPV();
@@ -44,3 +42,4 @@ class SilaboP extends StatelessWidget {
     );
   }
 }
+
