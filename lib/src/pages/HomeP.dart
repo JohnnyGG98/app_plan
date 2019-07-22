@@ -71,9 +71,15 @@ class _HomePState extends State<HomeP> {
         scrollDirection: Axis.vertical,
         children: <Widget>[
           _paginaPrincipal(),
-          _paginaSecundaria(),
-          _terceraPagina()
+          _paginaSecundaria()
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.signal_wifi_off),
+        onPressed: (){
+          print('Ver contenido ofline');
+          Navigator.pushNamed(context, 'offline');
+        },
       ),
     );
   }
@@ -134,36 +140,57 @@ class _HomePState extends State<HomeP> {
       width: double.infinity,
       height: double.infinity,
       color: Colors.white,
-      child: Padding(
-        padding: EdgeInsets.only(
-                left: 20.0,
-                right: 20.0
-        ),
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 40.0,),
-            Text('Plan', 
-            style: TextStyle(fontSize: 50.0),),
-            SizedBox(height: 20.0,),
-            _buscador(),
-            SizedBox(height: 40.0,),
-            _comboCarreras(),
-            SizedBox(height: 20.0,),
-            _comboPeriodoFuture(),
-            SizedBox(height: 20.0,),
-            _comboCursoNombreFuture(),
-            SizedBox(height: 20.0,),
-            _comboMateriasFuture(),
-            SizedBox(height: 20.0,),
-            _botonesCombo(),
-          ],
-        ),
+      child: ListView(
+        children: <Widget>[
+          _headerPage(),
+          SizedBox(height: 40.0,),
+          _combos(),
+        ],
       ),
     );
   }
 
   void _llamarPageCurso(List param){ 
     Navigator.pushNamed(context, 'curso', arguments: param);
+  }
+
+  Widget _paddingWidgets(Widget w){
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: w,
+    );
+  }
+
+  Widget _headerPage(){
+    final header = Column(
+      children: <Widget>[
+        SizedBox(height: 40.0,),
+        Text('Plan', 
+        style: TextStyle(fontSize: 50.0),),
+        SizedBox(height: 20.0,),
+        _buscador(),
+      ],
+    );
+
+    return _paddingWidgets(header);
+  }
+
+  Widget _combos(){
+    final body = Column(
+      children: <Widget>[
+        _comboCarreras(),
+        SizedBox(height: 20.0,),
+        _comboPeriodoFuture(),
+        SizedBox(height: 20.0,),
+        _comboCursoNombreFuture(),
+        SizedBox(height: 20.0,),
+        _comboMateriasFuture(),
+        SizedBox(height: 20.0,),
+        _botonesCombo(),
+        SizedBox(height: 20.0,),
+      ],
+    );
+    return _paddingWidgets(body);
   }
 
   Widget _buscador(){
@@ -448,14 +475,10 @@ class _HomePState extends State<HomeP> {
               padding: pading,
               onPressed: (){
                 if(_periodoSelec != '0' && _cursoNombreSelec == '0' && _materiaSelec == '0'){
-                  //print('Buscamos solo por periodo: '+_periodoSelec);
                   _llamarPageCurso(['periodo', _periodoSelec]);
                 }else if(_periodoSelec != '0' && _cursoNombreSelec != '0' && _materiaSelec == '0'){
-                  //print('Buscamos por periodo: '+_periodoSelec+ ' y nombre curso: $_cursoNombreSelec');
-                  //Debemos pasarle en este formato por el link {curso_nombre}-{id_periodo}
                   _llamarPageCurso(['nombre', _cursoNombreSelec+'-'+_periodoSelec]);
                 }else{
-                  //print('Buscamos por curso: $_materiaSelec');
                   _llamarPageCurso(['curso', _materiaSelec]);
                 }
               },
@@ -493,58 +516,5 @@ class _HomePState extends State<HomeP> {
     );
   }
 
-  Widget _terceraPagina(){
-    final logo = Image(image: AssetImage('assets/logoISTA.png'),);
-
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      child: Stack(
-        children: <Widget>[
-          Center(child: logo,),
-          _opciones(),
-        ],
-      ),
-    );
-  }
-
-  Widget _opciones(){
-    return ListView(
-      children: <Widget>[
-        SizedBox(height: 400,),
-        _estiloBtn('Cursos'),
-        SizedBox(height: 20.0,),
-        _estiloBtn('Silabos'),
-        SizedBox(height: 20.0,),
-        SizedBox(height: 20.0,),
-        _estiloBtn('Silabos'),
-        SizedBox(height: 20.0,),
-        SizedBox(height: 20.0,),
-      ],
-    );
-  }
-
-  Widget _estiloBtn(String opt){
-    return Center(
-      child: Container(
-        width: 350.0,
-        child: RaisedButton(        
-          shape: StadiumBorder(),
-          color: Color.fromRGBO(20, 82, 139, 0.8),
-          textColor: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 15.0
-            ),
-            child: Text(opt, 
-            style: TextStyle(fontSize: 25.0),
-            ),
-          ),
-          onPressed: (){},
-        ),
-      )
-    );
-  }
 
 }
