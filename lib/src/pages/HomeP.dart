@@ -5,6 +5,9 @@ import 'package:plan/src/models/PeriodoM.dart';
 import 'package:plan/src/providers/CarreraPV.dart';
 import 'package:plan/src/providers/CursoPV.dart';
 import 'package:plan/src/providers/PeriodoPV.dart';
+import 'package:http/http.dart' as http;
+import 'package:plan/src/utils/ConsApi.dart';
+import 'package:plan/src/utils/Widgets.dart';
 
 
 class HomeP extends StatefulWidget {
@@ -29,6 +32,7 @@ class _HomePState extends State<HomeP> {
   String _cursoNombreSelec = '0';
   String _materiaSelec = '0';
   bool _carrerasCargado = false;
+  bool _conectado = false;
 
   
 
@@ -36,12 +40,6 @@ class _HomePState extends State<HomeP> {
   Widget build(BuildContext context) {
     //Cargamos el item inicial de todos los combos
     listPeriodo = new List();
-    //iniciarCombos();
-    if(!_carrerasCargado){
-      carreras = carpv.getTodos();
-      _carrerasCargado = true;
-    }
-
     if(_carreraSelec != '0'){
       periodos = perpv.getPorCarrera(int.parse(_carreraSelec));
     }else{
@@ -65,7 +63,7 @@ class _HomePState extends State<HomeP> {
       print('Buscando materiasss....');
       materias = curpv.getMateriasPorNombreCursoPeriodo(_cursoNombreSelec, int.parse(_periodoSelec));
     }
-    
+
     return Scaffold(
       body: PageView(
         scrollDirection: Axis.vertical,
@@ -84,6 +82,27 @@ class _HomePState extends State<HomeP> {
     );
   }
 
+  Future<bool> _tenemosConexion() async {
+    try{
+      if(!_conectado){
+        print('Vamos a comprobar si tenemos conexion ->tenemos conexion');
+        final r = await http.get(ConsApi.path+'alumno/buscar/johnny');
+        if(r.body.isNotEmpty){
+          print('Estamos conectados');
+          _conectado = true;
+          return true;
+        }else{
+          return false;
+        }
+      }else{
+        return true;
+      }
+    } catch(_){
+      print('No estamos conectados: '+_.toString());
+      _conectado = false;
+      return false;
+    }
+  }
   
   Widget _paginaPrincipal() {
     return Stack(
@@ -122,7 +141,8 @@ class _HomePState extends State<HomeP> {
           Text('P L A N', style: 
             TextStyle(
               color: Colors.white, 
-              fontSize: 50.0),
+              fontSize: 50.0
+            ),
           ),
           Expanded(child: Container(),),
           Icon(
@@ -136,16 +156,75 @@ class _HomePState extends State<HomeP> {
   }
 
   Widget _paginaSecundaria() {
+    print('Vamos a comprobar la conexion -> Pagina Secundaria');
+    return FutureBuilder(
+      future: _tenemosConexion(),
+      builder: (BuildContext ct, AsyncSnapshot<bool> data){
+        if(data.hasData){
+          if(data.data){
+            if(!_carrerasCargado){
+              carreras = carpv.getTodos();
+              _carrerasCargado = true;
+            }
+            return ListView(
+              children: <Widget>[
+                _headerPage(),
+                SizedBox(height: 40.0,),
+                _combos(),
+              ]
+            );
+          }else{
+            return _volverComprobarConexion();
+          }
+        }else{
+          return MisWidgets.cargando('Comprobando la conexion a la aplicacion.');
+        }
+      },
+    );
+  }
+
+  Widget _volverComprobarConexion(){
     return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.white,
-      child: ListView(
-        children: <Widget>[
-          _headerPage(),
-          SizedBox(height: 40.0,),
-          _combos(),
-        ],
+      padding: EdgeInsets.symmetric(horizontal: 30.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Card(
+              child: ListTile(
+                contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+                title: Text(
+                  'No pudimos establecer conexion con el sistema',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25.0
+                  ),
+                ),
+              ),
+              elevation: 5.0,
+              color: Colors.blueGrey,
+            ),
+            SizedBox(height: 10.0,),
+            Text('Volver a comprobar',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20.0
+              ),
+            ),
+            SizedBox(height: 10.0,),
+            IconButton(
+              icon: Icon(Icons.cached,
+                size: 40.0,
+              ),
+              onPressed: (){
+                setState(() {
+                  print('Comprobando conexion');
+                });
+              },
+            )
+          ],
+        )
       ),
     );
   }
