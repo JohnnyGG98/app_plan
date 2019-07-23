@@ -201,7 +201,7 @@ class _SilaboPState extends State<SilaboP> {
     Dio dio = Dio();
 
     try {
-      var dir = await getApplicationDocumentsDirectory();
+      var dir = await getExternalStorageDirectory();
 
       if(!downloading){
         setState(() {
@@ -248,7 +248,7 @@ Future<File> getFileFromUrl(String url) async {
   try {
     var data = await http.get(url);
     var bytes = data.bodyBytes;
-    var dir = await getApplicationDocumentsDirectory();
+    var dir = await getExternalStorageDirectory();
     File file = File("${dir.path}/mypdfonline.pdf");
 
     File urlFile = await file.writeAsBytes(bytes);
