@@ -233,6 +233,10 @@ class _HomePState extends State<HomeP> {
     Navigator.pushNamed(context, 'curso', arguments: param);
   }
 
+  void _llamarPageSilabo(List  param){
+    Navigator.pushNamed(context, 'silabo', arguments: param);
+  }
+
   Widget _paddingWidgets(Widget w){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -569,10 +573,13 @@ class _HomePState extends State<HomeP> {
               onPressed: (){
                 if(_periodoSelec != '0' && _cursoNombreSelec == '0' && _materiaSelec == '0'){
                   print('Buscamos solo por periodo: '+_periodoSelec);
+                  _llamarPageSilabo(['periodo', _periodoSelec]);
                 }else if(_periodoSelec != '0' && _cursoNombreSelec != '0' && _materiaSelec == '0'){
                   print('Buscamos por periodo: '+_periodoSelec+ ' y nombre curso: $_cursoNombreSelec');
+                  _llamarPageSilabo(['nombre', _cursoNombreSelec+'-'+_periodoSelec]);
                 }else{
                   print('Buscamos por curso: $_materiaSelec');
+                  _llamarPageSilabo(['curso', _materiaSelec]);
                 }
               },
             )

@@ -14,26 +14,57 @@ class SilaboP extends StatefulWidget {
 }
 
 class _SilaboPState extends State<SilaboP> {
-  final silabos = new SilaboPV();
-   String pdfUrl ;
+  final slpv = new SilaboPV();
+  String pdfUrl ;
   bool downloading = false;
   var progressString = "123";
   String urlPDFPath = "";
   String urlSilabo = "http://192.168.100.7/zero_api//silabo//verpdf/143";
   @override
   Widget build(BuildContext context) {
+    final List param = ModalRoute.of(context).settings.arguments;
+    //Titulo de la pagina
+    String titulo = '';
+    //Aqui cargamos todos los silabos 
+    Future<List<SilaboM>> silabos;
+
+    switch(param[0]){
+      case 'curso': {
+        //print('Buscaremos por curso: '+param[1]);
+        silabos = slpv.getPorCurso(param[1].toString());
+        titulo = 'Silabo: '+param[1].toString();
+      }
+      break;
+      case 'nombre': {
+        //print('Buscaremos por nombre: '+param[1]);
+        silabos = slpv.getPorNombreCursoPeriodo(param[1].toString());
+        titulo = 'Silabo Curso: '+param[1].toString().split('-')[0];
+      }
+      break;
+      case 'periodo': {
+        //print('Buscaremos por periodo: '+param[1]);
+        silabos = slpv.getPorPeriodo(param[1].toString());
+        titulo = 'Silabo por Periodo: '+param[1].toString();
+      }
+      break;
+      default: {
+        silabos = slpv.getTodos();
+      }
+      break;
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Silabos'),
+        title: Text(titulo),
         backgroundColor: Colors.blue,
       ),
-      body: _listaSilabos(),
+      body: _listaSilabos(silabos),
     );
   }
 
-  Widget _listaSilabos() {
+  Widget _listaSilabos(Future<List<SilaboM>> silabos) {
     return FutureBuilder(
-      future: silabos.getTodos(),
+      future: silabos,
       builder: (BuildContext context, AsyncSnapshot<List<SilaboM>> snapshot){
         if(snapshot.hasData){
           final slbs = snapshot.data;
