@@ -103,7 +103,7 @@ class _SilaboPState extends State<SilaboP> {
                     // Replace with a Row for horizontal icon + text
                     children: <Widget>[
                       Icon(Icons.file_download, color: Colors.blue),
-                      Text("Descargar:")
+                      Text("Descargar")
                     ],
                   ),
                   
