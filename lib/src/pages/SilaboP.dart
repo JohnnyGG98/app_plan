@@ -6,6 +6,7 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:plan/src/models/SilaboM.dart';
 import 'package:plan/src/providers/SilaboPV.dart';
+import 'package:plan/src/utils/ConsApi.dart';
 
 
 class SilaboP extends StatefulWidget {
@@ -17,9 +18,9 @@ class _SilaboPState extends State<SilaboP> {
   final slpv = new SilaboPV();
   String pdfUrl ;
   bool downloading = false;
-  var progressString = "123";
+  var progressString = "";
   String urlPDFPath = "";
-  String urlSilabo = "http://192.168.100.7/zero_api//silabo//verpdf/143";
+  String urlSilabo = "";
   @override
   Widget build(BuildContext context) {
     final List param = ModalRoute.of(context).settings.arguments;
@@ -66,7 +67,10 @@ class _SilaboPState extends State<SilaboP> {
     return FutureBuilder(
       future: silabos,
       builder: (BuildContext context, AsyncSnapshot<List<SilaboM>> snapshot){
-        if(snapshot.hasData){
+        if(downloading){
+          return _descargando();
+        }else{
+          if(snapshot.hasData){
           final slbs = snapshot.data;
           return ListView.builder(
             itemCount: slbs.length,
@@ -79,6 +83,9 @@ class _SilaboPState extends State<SilaboP> {
             child: CircularProgressIndicator(),
           );
         }
+        }
+
+        
       },
     );
   }
@@ -111,7 +118,7 @@ class _SilaboPState extends State<SilaboP> {
                   ),
                   onPressed: () {
                     urlSilabo =
-                        "http://192.168.100.7/zero_api//silabo//verpdf/" +
+                        ConsApi.path+"//silabo//verpdf/" +
                             idSilabo;
                     getFileFromUrl(urlSilabo).then((f) {
                       setState(() {
@@ -140,7 +147,7 @@ class _SilaboPState extends State<SilaboP> {
                   
                   onPressed: () {
                     
-                    urlSilabo="http://192.168.100.7/zero_api//silabo//verpdf/"+idSilabo;
+                    urlSilabo=ConsApi.path+"//silabo//verpdf/"+idSilabo;
                     downloadFile(urlSilabo); 
                   },
                 ),
@@ -178,7 +185,7 @@ class _SilaboPState extends State<SilaboP> {
               height: 20.0,
             ),
             Text(
-              "Downloading File: "+ progressString,
+              "Downloading File "+ progressString,
               
               style: TextStyle(
                 color: Colors.black,
@@ -213,7 +220,7 @@ class _SilaboPState extends State<SilaboP> {
 
       await dio.download(
         pdfUrl, 
-        "${dir.path}/mypdf.pdf",
+        "${dir.path}"+"/mypdf.pdf",
         onReceiveProgress: (rec, total) {
         print("Rec: $rec , Total: $total");
         
@@ -227,6 +234,10 @@ class _SilaboPState extends State<SilaboP> {
     } catch (e) {
       print(e);
     }
+
+    progressString="✔";
+
+    await Future.delayed(Duration(milliseconds: 500));
 
     setState(() {
       downloading = false;
