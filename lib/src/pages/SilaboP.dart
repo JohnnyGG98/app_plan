@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -6,51 +7,55 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:plan/src/models/SilaboM.dart';
 import 'package:plan/src/providers/SilaboPV.dart';
-
+import 'package:plan/src/utils/ConsApi.dart';
 
 class SilaboP extends StatefulWidget {
-    @override
+  @override
   _SilaboPState createState() => _SilaboPState();
 }
 
 class _SilaboPState extends State<SilaboP> {
   final slpv = new SilaboPV();
-  String pdfUrl ;
+  String pdfUrl;
   bool downloading = false;
-  var progressString = "123";
+  var progressString = "";
   String urlPDFPath = "";
-  String urlSilabo = "http://192.168.100.7/zero_api//silabo//verpdf/143";
+  String urlSilabo = "";
   @override
   Widget build(BuildContext context) {
     final List param = ModalRoute.of(context).settings.arguments;
     //Titulo de la pagina
     String titulo = '';
-    //Aqui cargamos todos los silabos 
+    //Aqui cargamos todos los silabos
     Future<List<SilaboM>> silabos;
 
-    switch(param[0]){
-      case 'curso': {
-        //print('Buscaremos por curso: '+param[1]);
-        silabos = slpv.getPorCurso(param[1].toString());
-        titulo = 'Silabo: '+param[1].toString();
-      }
-      break;
-      case 'nombre': {
-        //print('Buscaremos por nombre: '+param[1]);
-        silabos = slpv.getPorNombreCursoPeriodo(param[1].toString());
-        titulo = 'Silabo Curso: '+param[1].toString().split('-')[0];
-      }
-      break;
-      case 'periodo': {
-        //print('Buscaremos por periodo: '+param[1]);
-        silabos = slpv.getPorPeriodo(param[1].toString());
-        titulo = 'Silabo por Periodo: '+param[1].toString();
-      }
-      break;
-      default: {
-        silabos = slpv.getTodos();
-      }
-      break;
+    switch (param[0]) {
+      case 'curso':
+        {
+          //print('Buscaremos por curso: '+param[1]);
+          silabos = slpv.getPorCurso(param[1].toString());
+          titulo = 'Silabo: ' + param[1].toString();
+        }
+        break;
+      case 'nombre':
+        {
+          //print('Buscaremos por nombre: '+param[1]);
+          silabos = slpv.getPorNombreCursoPeriodo(param[1].toString());
+          titulo = 'Silabo Curso: ' + param[1].toString().split('-')[0];
+        }
+        break;
+      case 'periodo':
+        {
+          //print('Buscaremos por periodo: '+param[1]);
+          silabos = slpv.getPorPeriodo(param[1].toString());
+          titulo = 'Silabo por Periodo: ' + param[1].toString();
+        }
+        break;
+      default:
+        {
+          silabos = slpv.getTodos();
+        }
+        break;
     }
 
     return Scaffold(
@@ -65,137 +70,124 @@ class _SilaboPState extends State<SilaboP> {
   Widget _listaSilabos(Future<List<SilaboM>> silabos) {
     return FutureBuilder(
       future: silabos,
-      builder: (BuildContext context, AsyncSnapshot<List<SilaboM>> snapshot){
-        if(snapshot.hasData){
-          final slbs = snapshot.data;
-          return ListView.builder(
-            itemCount: slbs.length,
-            itemBuilder: (BuildContext context, int i){
-              return _listarSilabo('${slbs[i].materiaNombre}','${slbs[i].prdLectivoNombre}','${slbs[i].idSilabo}');
-            },
-          );
-        }else{
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+      builder: (BuildContext context, AsyncSnapshot<List<SilaboM>> snapshot) {
+        if (downloading) {
+          return _descargando();
+        } else {
+          if (snapshot.hasData) {
+            final slbs = snapshot.data;
+            return ListView.builder(
+              itemCount: slbs.length,
+              itemBuilder: (BuildContext context, int i) {
+                return _listarSilabo('${slbs[i].materiaNombre}',
+                    '${slbs[i].prdLectivoNombre}', '${slbs[i].idSilabo}');
+              },
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         }
       },
     );
   }
 
-    Widget _listarSilabo( String materiaNombre, String prdLectivoNombre,String idSilabo) {
-    
-
-    
-      final wt = Card(
-        elevation: 10.0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.attach_file, color: Colors.blue),
-              title: Text(materiaNombre),
-              subtitle: Text(prdLectivoNombre),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                FlatButton(
-                  child: Column(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Icon(Icons.remove_red_eye, color: Colors.blue),
-                      Text("Ver")
-                    ],
-                  ),
-                  onPressed: () {
-                    urlSilabo =
-                        "http://192.168.100.7/zero_api//silabo//verpdf/" +
-                            idSilabo;
-                    getFileFromUrl(urlSilabo).then((f) {
-                      setState(() {
-                        urlPDFPath = f.path;
-                        print(urlPDFPath);
-                        if (urlPDFPath != null) {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      PdfViewPage(path: urlPDFPath)));
-                        }
-                      });
+  Widget _listarSilabo(
+      String materiaNombre, String prdLectivoNombre, String idSilabo) {
+    final wt = Card(
+      elevation: 10.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.attach_file, color: Colors.blue),
+            title: Text(materiaNombre),
+            subtitle: Text(prdLectivoNombre),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              FlatButton(
+                child: Column(
+                  // Replace with a Row for horizontal icon + text
+                  children: <Widget>[
+                    Icon(Icons.remove_red_eye, color: Colors.blue),
+                    Text("Ver")
+                  ],
+                ),
+                onPressed: () {
+                  urlSilabo = ConsApi.path + "//silabo//verpdf/" + idSilabo;
+                  getFileFromUrl(urlSilabo).then((f) {
+                    setState(() {
+                      urlPDFPath = f.path;
+                      print(urlPDFPath);
+                      if (urlPDFPath != null) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    PdfViewPage(path: urlPDFPath)));
+                      }
                     });
-                  },
+                  });
+                },
+              ),
+              FlatButton(
+                child: Column(
+                  // Replace with a Row for horizontal icon + text
+                  children: <Widget>[
+                    Icon(Icons.file_download, color: Colors.blue),
+                    Text("Descargar")
+                  ],
                 ),
-                FlatButton(
-                  
-                  child: Column(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Icon(Icons.file_download, color: Colors.blue),
-                      Text("Descargar")
-                    ],
-                  ),
-                  
-                  onPressed: () {
-                    
-                    urlSilabo="http://192.168.100.7/zero_api//silabo//verpdf/"+idSilabo;
-                    downloadFile(urlSilabo); 
-                  },
+                onPressed: () {
+                  urlSilabo = ConsApi.path + "//silabo//verpdf/" + idSilabo;
+                  downloadFile(urlSilabo);
+                },
+              ),
+              FlatButton(
+                child: Column(
+                  // Replace with a Row for horizontal icon + text
+                  children: <Widget>[
+                    Icon(Icons.library_books, color: Colors.blue),
+                    Text("Tareas")
+                  ],
                 ),
-                FlatButton(
-                  child: Column(
-                    // Replace with a Row for horizontal icon + text
-                    children: <Widget>[
-                      Icon(Icons.library_books, color: Colors.blue),
-                      Text("Tareas")
-                    ],
-                  ),
-                  onPressed: () {},
-                )
-              ],
-            )
-          ],
-        ),
-      );
-
-      
-    
+                onPressed: () {},
+              )
+            ],
+          )
+        ],
+      ),
+    );
 
     return wt;
   }
 
-  Widget _descargando(){
-    if(downloading){
+  Widget _descargando() {
+    if (downloading) {
       return Container(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircularProgressIndicator(),
-            SizedBox(
-              height: 20.0,
-            ),
-            Text(
-              "Downloading File: "+ progressString,
-              
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 30.0
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircularProgressIndicator(),
+              SizedBox(
+                height: 20.0,
               ),
-            )
-          ],
+              Text(
+                "Downloading File " + progressString,
+                style: TextStyle(color: Colors.black, fontSize: 30.0),
+              )
+            ],
+          ),
         ),
-      ),
-    );
-    }else{
+      );
+    } else {
       return Container();
     }
-    
   }
-
-  
 
   Future<void> downloadFile(String pdfUrl) async {
     Dio dio = Dio();
@@ -203,7 +195,7 @@ class _SilaboPState extends State<SilaboP> {
     try {
       var dir = await getExternalStorageDirectory();
 
-      if(!downloading){
+      if (!downloading) {
         setState(() {
           downloading = true;
         });
@@ -211,12 +203,11 @@ class _SilaboPState extends State<SilaboP> {
 
       await Future.delayed(Duration(milliseconds: 10000));
 
-      await dio.download(
-        pdfUrl, 
-        "${dir.path}/mypdf.pdf",
-        onReceiveProgress: (rec, total) {
+      List <String> f=pdfUrl.split("/");
+      await dio.download(pdfUrl, "${dir.path}/silabo" + f[f.length-1]+".pdf",
+          onReceiveProgress: (rec, total) {
         print("Rec: $rec , Total: $total");
-        
+
         setState(() {
           downloading = true;
           progressString = ((rec / total) * 100).toStringAsFixed(0) + "%";
@@ -227,6 +218,10 @@ class _SilaboPState extends State<SilaboP> {
     } catch (e) {
       print(e);
     }
+
+    progressString = "✔";
+
+    await Future.delayed(Duration(milliseconds: 500));
 
     setState(() {
       downloading = false;
@@ -240,8 +235,24 @@ class _SilaboPState extends State<SilaboP> {
     // TODO: implement createState
     return null;
   }
+}
 
-  
+Future<File> getFileFromAsset(String asset, String url) async {
+  try {
+    var data = await rootBundle.load(asset);
+    if (data == null) {
+      getFileFromUrl(url);
+    } else {
+      var bytes = data.buffer.asUint8List();
+      var dir = await getExternalStorageDirectory();
+      File file = File("${dir.path}/mypdf.pdf");
+
+      File assetFile = await file.writeAsBytes(bytes);
+      return assetFile;
+    }
+  } catch (e) {
+    throw Exception("Error opening asset file");
+  }
 }
 
 Future<File> getFileFromUrl(String url) async {
@@ -339,5 +350,3 @@ class _PdfViewPageState extends State<PdfViewPage> {
     );
   }
 }
-
-
