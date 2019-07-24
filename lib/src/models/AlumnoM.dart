@@ -1,3 +1,5 @@
+import 'package:plan/src/utils/ConsApi.dart';
+
 class Alumnos {
   List<AlumnoM> alumnos = new List(); 
 
@@ -13,13 +15,14 @@ class Alumnos {
   }
 }
 
-
-//[{"id_alumno":607,"id_persona":755,"persona_primer_nombre":"CRISTINA","persona_primer_apellido":"CALLE","persona_correo":"criscalle19@hotmai.com","persona_celular":"0979254168","persona_telefono":""},
 class AlumnoM {
   int id; 
   int idPersona; 
   String nombre; 
   String apellido; 
+  String segNombre;
+  String segApellido;
+  String identificacion;
   String correo; 
   String celular; 
   String telefono; 
@@ -31,7 +34,10 @@ class AlumnoM {
     this.apellido,
     this.correo,
     this.celular,
-    this.telefono
+    this.telefono,
+    this.segApellido,
+    this.segNombre,
+    this.identificacion
   });
 
   AlumnoM.fromJsonMap(Map<String, dynamic> json){
@@ -42,10 +48,17 @@ class AlumnoM {
     correo=json['persona_correo'];
     celular=json['persona_celular'];
     telefono=json['persona_telefono'];
+    segNombre = json['persona_segundo_nombre'];
+    segApellido = json['persona_segundo_apellido'];
+    identificacion = json['persona_identificacion'];
   }
 
   String getNombreCompleto(){
-    return nombre + ' ' + apellido; 
+    return nombre + ' ' + segNombre+ ' ' + apellido + ' ' + segApellido; 
+  }
+
+  String getUrlFoto(){
+    return ConsApi.path+'/persona/verfoto/'+this.identificacion;
   }
 
 }

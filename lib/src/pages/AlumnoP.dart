@@ -11,7 +11,6 @@ class AlumnoP extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    /*print('Este es el id: ' + idCurso.toString());*/
     final idCurso = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +38,7 @@ class AlumnoP extends StatelessWidget {
           return ListView.builder(
             itemCount: alumnos.length,
             itemBuilder: (BuildContext context, int i) {
-              return _carta(alumnos[i]);
+              return _carta(context, alumnos[i]);
             },
           );
         } else {
@@ -61,7 +60,7 @@ class AlumnoP extends StatelessWidget {
           return ListView.builder(
             itemCount: alumnos.length,
             itemBuilder: (BuildContext context, int i) {
-              return _carta(alumnos[i]);
+              return _carta(context, alumnos[i]);
             },
           );
         } else {
@@ -73,15 +72,60 @@ class AlumnoP extends StatelessWidget {
     );
   }
 
-  Widget _carta(AlumnoM a) {
+  Widget _carta(BuildContext ct, AlumnoM a) {
     return SafeArea(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
         child: ListTile(
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(a.getUrlFoto()),
+          ),
           title: Text(a.getNombreCompleto()),
           subtitle: Text(a.correo),
+          onTap:() => _mostrarInformacionAlumno(ct, a),
         ),
       ),
     );
   }
+
+  void _mostrarInformacionAlumno(BuildContext ct, AlumnoM a){
+    showDialog(
+      context: ct,
+      barrierDismissible: true,
+      builder: (context){
+        return AlertDialog(
+          title: Text('Informacion de: ${a.identificacion}'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Image.network(a.getUrlFoto()),
+              Divider(),
+              _info('Cedula', a.identificacion),
+              _info('Nombre', a.getNombreCompleto()),
+              _info('Correo:', a.correo),
+              _info('Celular', a.celular),
+              _info('Telefono', a.telefono),
+
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Salir'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              color: Colors.black,
+              textColor: Colors.white,
+            ),
+          ],
+          backgroundColor: Colors.blueGrey,
+        );
+      }
+    );
+  } 
+
+  Widget _info(String titulo, String descripcion){
+    return Text('$titulo: $descripcion');
+  }
+
 }
