@@ -102,7 +102,7 @@ class CursoP extends StatelessWidget {
                 FlatButton(
                   child: Icon(Icons.school),
                   onPressed: (){
-                    print(c.idCurso);
+                    //print(c.idCurso);
                     Navigator.pushNamed(context, 'alumno', arguments: c.idCurso);
                   },
                 ),
@@ -110,6 +110,7 @@ class CursoP extends StatelessWidget {
                   child: Icon(Icons.book),
                   onPressed: (){
                     print(c.idMateria.toString()+' '+c.idPeriodo.toString());
+                    Navigator.pushNamed(context, 'silabo', arguments: ['curso', c.idCurso.toString()] );
                   },
                 )
               ],

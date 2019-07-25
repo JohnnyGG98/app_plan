@@ -57,6 +57,10 @@ class AlumnoM {
     return nombre + ' ' + segNombre+ ' ' + apellido + ' ' + segApellido; 
   }
 
+  String getNombreCorto(){
+    return nombre + ' ' + apellido; 
+  }
+
   String getUrlFoto(){
     return ConsApi.path+'/persona/verfoto/'+this.identificacion;
   }

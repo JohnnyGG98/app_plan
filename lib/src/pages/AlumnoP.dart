@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:plan/src/providers/AlumnoPV.dart';
+import 'package:plan/src/utils/Widgets.dart';
 
 class AlumnoP extends StatelessWidget {
   final almn = new AlumnoPV();
@@ -90,42 +92,77 @@ class AlumnoP extends StatelessWidget {
 
   void _mostrarInformacionAlumno(BuildContext ct, AlumnoM a){
     showDialog(
-      context: ct,
+      context: ct,      
       barrierDismissible: true,
       builder: (context){
-        return AlertDialog(
-          title: Text('Informacion de: ${a.identificacion}'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Image.network(a.getUrlFoto()),
-              Divider(),
-              _info('Cedula', a.identificacion),
-              _info('Nombre', a.getNombreCompleto()),
-              _info('Correo:', a.correo),
-              _info('Celular', a.celular),
-              _info('Telefono', a.telefono),
-
-            ],
+        return AlertDialog(   
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0))
           ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Salir'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              color: Colors.black,
-              textColor: Colors.white,
+          elevation: 5.0,
+          contentPadding: EdgeInsets.only(top: 0.0, bottom: 15.0),
+          content: Container(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    color:  Colors.blue,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0)
+                    )
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 10.0
+                  ),
+                  width: double.maxFinite,
+                  child: MisWidgets.info('Informacion de:', a.getNombreCorto()),
+                ),
+                SizedBox(height: 15.0,),
+                Expanded(
+                  child: _listaInformacion(a),
+                )
+              ],
             ),
-          ],
-          backgroundColor: Colors.blueGrey,
+          ),
+          backgroundColor: Colors.white,
         );
       }
     );
-  } 
+  }
 
-  Widget _info(String titulo, String descripcion){
-    return Text('$titulo: $descripcion');
+  Widget _listaInformacion(AlumnoM a){
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: ListView(
+        children: <Widget>[
+          _foto(a.id, a.getUrlFoto()),
+          SizedBox(height: 10.0,),
+          Divider(color: Colors.black, height: 5.0,),
+          SizedBox(height: 10.0,),
+          MisWidgets.info('Cedula:', a.identificacion),
+          MisWidgets.info('Nombre:', a.getNombreCompleto()),
+          MisWidgets.info('Correo:', a.correo),
+          MisWidgets.info('Celular:', a.celular),
+          MisWidgets.info('Telefono:', a.telefono),
+        ],
+      ),
+    );
+  }
+
+  Widget _foto(int id, String url){
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15.0),
+      child: FadeInImage(
+        image: NetworkImage(url),
+        placeholder: AssetImage('assets/no-image.jpg'),
+        fit: BoxFit.cover,
+      ),
+    );
   }
 
 }
