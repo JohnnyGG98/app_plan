@@ -85,7 +85,6 @@ class _HomePState extends State<HomeP> {
   Future<bool> _tenemosConexion() async {
     try{
       if(!_conectado){
-        print('Vamos a comprobar si tenemos conexion ->tenemos conexion');
         final r = await http.get(ConsApi.path+'alumno/buscar/johnny');
         if(r.body.isNotEmpty){
           print('Estamos conectados');
@@ -468,7 +467,7 @@ class _HomePState extends State<HomeP> {
     carreras.forEach((c){
       listCarreras.add(
         DropdownMenuItem(
-          child: _stlItem(c.nombre),
+          child: _stlItem(c.codigo),
           value: c.id.toString(),
         )
       );
@@ -572,13 +571,10 @@ class _HomePState extends State<HomeP> {
               child: _txtBtns('Silabo'),
               onPressed: (){
                 if(_periodoSelec != '0' && _cursoNombreSelec == '0' && _materiaSelec == '0'){
-                  print('Buscamos solo por periodo: '+_periodoSelec);
                   _llamarPageSilabo(['periodo', _periodoSelec]);
                 }else if(_periodoSelec != '0' && _cursoNombreSelec != '0' && _materiaSelec == '0'){
-                  print('Buscamos por periodo: '+_periodoSelec+ ' y nombre curso: $_cursoNombreSelec');
                   _llamarPageSilabo(['nombre', _cursoNombreSelec+'-'+_periodoSelec]);
                 }else{
-                  print('Buscamos por curso: $_materiaSelec');
                   _llamarPageSilabo(['curso', _materiaSelec]);
                 }
               },

@@ -25,6 +25,10 @@ class CursoPV {
   }
 
   Future<List<CursoM>> buscar(String query) async {
+    query = quitarAsentos(query);
+    print('-------------');
+    print(query);
+    print('-------------');
     final url = _url+'buscar/'+query;
     print(url);
     return await _obtenerCursos(url);
@@ -66,6 +70,21 @@ class CursoPV {
     final decodedata = json.decode(res.body);
     final materias = Materias.fromJsonList(decodedata['items']);
     return materias.materias;
+  }
+
+  String quitarAsentos(String txt){
+    txt = txt.replaceAll('Á','A');
+    txt = txt.replaceAll('á','a');
+    txt = txt.replaceAll('É','E');
+    txt = txt.replaceAll('Í','I');
+    txt = txt.replaceAll('Ó','O');
+    txt = txt.replaceAll('Ú','U');
+    txt = txt.replaceAll('á','a');
+    txt = txt.replaceAll('é','e');
+    txt = txt.replaceAll('í','i');
+    txt = txt.replaceAll('ó','o');
+    txt = txt.replaceAll('ú','u');
+    return txt;
   }
 
 }

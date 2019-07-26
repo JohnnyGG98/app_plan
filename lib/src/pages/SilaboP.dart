@@ -32,21 +32,18 @@ class _SilaboPState extends State<SilaboP> {
     switch (param[0]) {
       case 'curso':
         {
-          //print('Buscaremos por curso: '+param[1]);
           silabos = slpv.getPorCurso(param[1].toString());
           titulo = 'Silabo: ' + param[1].toString();
         }
         break;
       case 'nombre':
         {
-          //print('Buscaremos por nombre: '+param[1]);
           silabos = slpv.getPorNombreCursoPeriodo(param[1].toString());
           titulo = 'Silabo Curso: ' + param[1].toString().split('-')[0];
         }
         break;
       case 'periodo':
         {
-          //print('Buscaremos por periodo: '+param[1]);
           silabos = slpv.getPorPeriodo(param[1].toString());
           titulo = 'Silabo por Periodo: ' + param[1].toString();
         }
@@ -97,7 +94,7 @@ class _SilaboPState extends State<SilaboP> {
       String materiaNombre, String prdLectivoNombre, String idSilabo) {
     final wt = Card(
       elevation: 10.0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: Column(
         children: <Widget>[
           ListTile(
@@ -328,7 +325,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
           _currentPage > 0
               ? FloatingActionButton.extended(
                   backgroundColor: Colors.red,
-                  label: Text("Go to ${_currentPage - 1}"),
+                  label: Text("Anterior ${_currentPage - 1}"),
                   onPressed: () {
                     _currentPage -= 1;
                     _pdfViewController.setPage(_currentPage);
@@ -338,7 +335,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
           _currentPage + 1 < _totalPages
               ? FloatingActionButton.extended(
                   backgroundColor: Colors.green,
-                  label: Text("Go to ${_currentPage + 1}"),
+                  label: Text("Siguiente ${_currentPage + 1}"),
                   onPressed: () {
                     _currentPage += 1;
                     _pdfViewController.setPage(_currentPage);
