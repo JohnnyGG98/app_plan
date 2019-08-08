@@ -58,7 +58,7 @@ class _SilaboPState extends State<SilaboP> {
     return Scaffold(
       appBar: AppBar(
         title: Text(titulo),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.blueGrey,
       ),
       body: _listaSilabos(silabos),
     );
