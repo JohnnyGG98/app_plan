@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:plan/src/providers/AlumnoPV.dart';
+import 'package:plan/src/utils/Abrir.dart';
 import 'package:plan/src/utils/Widgets.dart';
 
 class AlumnoP extends StatelessWidget {
@@ -149,6 +150,23 @@ class AlumnoP extends StatelessWidget {
           MisWidgets.info('Correo:', a.correo),
           MisWidgets.info('Celular:', a.celular),
           MisWidgets.info('Telefono:', a.telefono),
+          Row(
+            children: <Widget>[
+              FlatButton(
+                
+                child: Text('Correo'),
+                onPressed: (){
+                  abrirEmail(a.correo);
+                },
+              ),
+              FlatButton(
+                child: Text('Mensaje'),
+                onPressed: (){
+                  abrir(a.celular);
+                },
+              )
+            ],
+          )
         ],
       ),
     );
