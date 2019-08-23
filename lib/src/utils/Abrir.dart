@@ -8,11 +8,12 @@ abrirURL(url) async {
   }
 }
 
-abrirEmail(email) async {
-  if(await canLaunch(email)){
-    await launch(email);
+abrirEmail(String email) async {
+  String urlemail = 'mailto:$email?subject=Mensaje&body=PLAN';
+  if(await canLaunch(urlemail)){
+    await launch(urlemail);
   } else {
-    throw 'No logramos abrir el email: $email';
+    throw 'No logramos abrir el email: $urlemail';
   }
 }
 
