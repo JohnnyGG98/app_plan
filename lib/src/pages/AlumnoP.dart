@@ -110,7 +110,7 @@ class AlumnoP extends StatelessWidget {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    color:  Colors.blue,
+                    color:  Colors.blueGrey,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20.0),
                       topRight: Radius.circular(20.0)

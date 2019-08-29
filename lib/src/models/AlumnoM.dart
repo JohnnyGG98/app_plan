@@ -62,7 +62,7 @@ class AlumnoM {
   }
 
   String getUrlFoto(){
-    return ConsApi.path+'/persona/verfoto/'+this.identificacion;
+    return ConsApi.path+'v0/persona/verfoto/'+this.identificacion;
   }
 
 }

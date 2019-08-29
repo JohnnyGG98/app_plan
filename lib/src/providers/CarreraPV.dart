@@ -9,7 +9,7 @@ export 'package:plan/src/models/CarreraM.dart';
 
 class CarreraPV {
 
-  String _url = ConsApi.path+'carrera/';
+  String _url = ConsApi.path+'v0/carrera/';
 
 
   Future<List<CarreraM>> _obtenerCarrera(url) async{

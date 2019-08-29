@@ -1,3 +1,5 @@
+import 'package:plan/src/utils/ConsApi.dart';
+
 class Silabos{
 
   List<SilaboM> silabos = new List(); 
@@ -49,6 +51,8 @@ class SilaboM{
 
   }
 
-
+  String getUrlPDF(){
+    return ConsApi.path+'v0/silabo/verpdf/'+this.idSilabo.toString();
+  }
 
 }

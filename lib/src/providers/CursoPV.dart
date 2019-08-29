@@ -8,7 +8,7 @@ export 'package:plan/src/models/CursoM.dart';
 import 'package:plan/src/utils/ConsApi.dart';
 
 class CursoPV {
-  String _url = ConsApi.path+'curso/';
+  String _url = ConsApi.path+'v0/curso/';
 
   Future<List<CursoM>> _obtenerCursos(url) async {
     final res = await http.get(url);
@@ -26,17 +26,12 @@ class CursoPV {
 
   Future<List<CursoM>> buscar(String query) async {
     query = quitarAsentos(query);
-    print('-------------');
-    print(query);
-    print('-------------');
     final url = _url+'buscar/'+query;
-    print(url);
     return await _obtenerCursos(url);
   }
 
   Future<List<CursoM>> getPorPeriodo(int idPeriodo) async {
     final url = _url+'periodo/'+idPeriodo.toString();
-    print(url);
     return await _obtenerCursos(url);
   }
 

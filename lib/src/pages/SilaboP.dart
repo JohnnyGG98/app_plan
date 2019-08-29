@@ -77,7 +77,7 @@ class _SilaboPState extends State<SilaboP> {
               itemCount: slbs.length,
               itemBuilder: (BuildContext context, int i) {
                 return _listarSilabo('${slbs[i].materiaNombre}',
-                    '${slbs[i].prdLectivoNombre}', '${slbs[i].idSilabo}');
+                    '${slbs[i].prdLectivoNombre}', '${slbs[i].idSilabo}', slbs[i].getUrlPDF());
               },
             );
           } else {
@@ -91,7 +91,7 @@ class _SilaboPState extends State<SilaboP> {
   }
 
   Widget _listarSilabo(
-      String materiaNombre, String prdLectivoNombre, String idSilabo) {
+      String materiaNombre, String prdLectivoNombre, String idSilabo, String urlSilabo) {
     final wt = Card(
       elevation: 10.0,
       //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -114,7 +114,6 @@ class _SilaboPState extends State<SilaboP> {
                   ],
                 ),
                 onPressed: () {
-                  urlSilabo = ConsApi.path + "//silabo//verpdf/" + idSilabo;
                   getFileFromUrl(urlSilabo).then((f) {
                     setState(() {
                       urlPDFPath = f.path;
@@ -284,7 +283,8 @@ class _PdfViewPageState extends State<PdfViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Document"),
+        title: Text("Silabo"),
+        backgroundColor: Colors.blueGrey,
       ),
       body: Stack(
         children: <Widget>[
