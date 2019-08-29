@@ -101,7 +101,10 @@ class AlumnoP extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(25.0))
           ),
           elevation: 5.0,
-          contentPadding: EdgeInsets.only(top: 0.0, bottom: 15.0),
+          contentPadding: EdgeInsets.only(
+            top: 0.0,   
+            bottom: 15.0
+          ),
           content: Container(
             width: double.maxFinite,
             child: Column(

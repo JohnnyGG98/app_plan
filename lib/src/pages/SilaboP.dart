@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:plan/src/models/ActividadM.dart';
 import 'package:plan/src/models/SilaboM.dart';
 import 'package:plan/src/providers/SilaboPV.dart';
 import 'package:plan/src/utils/ConsApi.dart';
@@ -64,6 +65,80 @@ class _SilaboPState extends State<SilaboP> {
     );
   }
 
+  void _verActividades(BuildContext ct, SilaboM s){
+    showDialog(
+      context: ct,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25.0))
+          ),
+          elevation: 5.0,
+          contentPadding: EdgeInsets.only(
+            top: 0.0,   
+            bottom: 15.0
+          ),
+          content: Container(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0)
+                    )
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 10.0
+                  ),
+                  width: double.maxFinite,
+                  child: ListTile(
+                    title: Text(s.materiaNombre),
+                    subtitle: Text(s.cursos),
+                  ),
+                ),
+                SizedBox(height: 15.0,),
+                Expanded(
+                  child: informacionActividades(s.idSilabo),
+                )
+              ],
+            ),
+          ),
+        );
+      }
+    );
+  }
+
+  Widget informacionActividades(int idSilabo){
+    return FutureBuilder(
+      future: slpv.getActividades(idSilabo.toString()),
+      builder: (BuildContext context, AsyncSnapshot<List<ActividadM>> snapshot){
+        if(snapshot.hasData){
+          final actividades = snapshot.data;
+          return ListView.builder(
+            itemCount: actividades.length,
+            itemBuilder: (BuildContext context, int i){
+              return ListTile(
+                title: Text(actividades[i].titulo),
+                subtitle: Text(actividades[i].indicador),
+              );
+            },
+          );
+        }else{
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
   Widget _listaSilabos(Future<List<SilaboM>> silabos) {
     return FutureBuilder(
       future: silabos,
@@ -76,8 +151,14 @@ class _SilaboPState extends State<SilaboP> {
             return ListView.builder(
               itemCount: slbs.length,
               itemBuilder: (BuildContext context, int i) {
-                return _listarSilabo('${slbs[i].materiaNombre}',
-                    '${slbs[i].prdLectivoNombre}', '${slbs[i].idSilabo}', slbs[i].getUrlPDF());
+                return _listarSilabo(
+                  '${slbs[i].materiaNombre}',
+                  '${slbs[i].prdLectivoNombre}', 
+                  '${slbs[i].idSilabo}', 
+                  slbs[i].getUrlPDF(),
+                  slbs[i],
+                  context
+                );
               },
             );
           } else {
@@ -91,7 +172,13 @@ class _SilaboPState extends State<SilaboP> {
   }
 
   Widget _listarSilabo(
-      String materiaNombre, String prdLectivoNombre, String idSilabo, String urlSilabo) {
+      String materiaNombre, 
+      String prdLectivoNombre, 
+      String idSilabo, 
+      String urlSilabo, 
+      SilaboM s, 
+      BuildContext ct
+  ) {
     final wt = Card(
       elevation: 10.0,
       //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
@@ -147,10 +234,13 @@ class _SilaboPState extends State<SilaboP> {
                   // Replace with a Row for horizontal icon + text
                   children: <Widget>[
                     Icon(Icons.library_books, color: Colors.blue),
-                    Text("Tareas")
+                    Text("Tareas"),
+                    
                   ],
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _verActividades(ct, s);
+                },
               )
             ],
           )
