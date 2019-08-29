@@ -110,7 +110,7 @@ class AlumnoP extends StatelessWidget {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    color:  Colors.blueGrey,
+                    color:  Colors.blue,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20.0),
                       topRight: Radius.circular(20.0)
@@ -151,18 +151,25 @@ class AlumnoP extends StatelessWidget {
           MisWidgets.info('Celular:', a.celular),
           MisWidgets.info('Telefono:', a.telefono),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, 
             children: <Widget>[
-              FlatButton(
-                
-                child: Text('Correo'),
+
+              IconButton(
+                icon: Icon(Icons.email, color: Colors.blue,),
                 onPressed: (){
                   abrirEmail(a.correo);
                 },
               ),
-              FlatButton(
-                child: Text('Mensaje'),
+              IconButton(
+                icon: Icon(Icons.sms, color: Colors.blue,),
                 onPressed: (){
-                  abrir(a.celular);
+                  abrir('sms:'+a.celular);
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.phone_in_talk, color: Colors.blue,),
+                onPressed: (){
+                  abrir('tel:'+a.celular);
                 },
               )
             ],
