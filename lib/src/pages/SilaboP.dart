@@ -127,6 +127,10 @@ class _SilaboPState extends State<SilaboP> {
               return ListTile(
                 title: Text(actividades[i].titulo),
                 subtitle: Text(actividades[i].indicador),
+                trailing: CircleAvatar(
+                  child: Text(actividades[i].valoracion),
+                  backgroundColor: Colors.blue,
+                ),
               );
             },
           );
