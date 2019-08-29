@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 
 class PeriodoPV {
-  String _url = ConsApi.path+'periodo/';
+  String _url = ConsApi.path+'v0/periodo/';
 
   Future<List<PeriodoM>> _obtenerPeriodo(url) async {
     final res = await http.get(url);
