@@ -110,7 +110,6 @@ class LoginPage extends StatelessWidget {
                 color: Colors.blueGrey,
               ),
               labelText: 'Contraseña:',
-              counterText: snapshot.data,
               errorText: snapshot.error
             ),
             onChanged: bloc.changePassword,
@@ -121,10 +120,6 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _crearBtn(LoginB bloc) {
-
-    // snapshot.hasData
-    // 
-
     return StreamBuilder(
       stream: bloc.formValidLogin,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
