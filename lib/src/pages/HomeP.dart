@@ -6,6 +6,7 @@ import 'package:plan/src/providers/CarreraPV.dart';
 import 'package:plan/src/providers/CursoPV.dart';
 import 'package:plan/src/providers/PeriodoPV.dart';
 import 'package:http/http.dart' as http;
+import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/utils/ConsApi.dart';
 import 'package:plan/src/utils/Widgets.dart';
 
@@ -38,6 +39,7 @@ class _HomePState extends State<HomeP> {
 
   @override
   Widget build(BuildContext context) {
+
     //Cargamos el item inicial de todos los combos
     listPeriodo = new List();
     if(_carreraSelec != '0'){
@@ -60,10 +62,12 @@ class _HomePState extends State<HomeP> {
     }
 
     if(_cursoNombreSelec != '0' && _materiaSelec == '0'){
-      print('Buscando materiasss....');
       materias = curpv.getMateriasPorNombreCursoPeriodo(_cursoNombreSelec, int.parse(_periodoSelec));
     }
 
+    // Datos del login 
+    final bloc = Provider.of(context);
+    print('Usuario logeado ${bloc.usuario}');
     return Scaffold(
       body: PageView(
         scrollDirection: Axis.vertical,
@@ -75,7 +79,6 @@ class _HomePState extends State<HomeP> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.signal_wifi_off),
         onPressed: (){
-          print('Ver contenido ofline');
           Navigator.pushNamed(context, 'offline');
         },
       ),

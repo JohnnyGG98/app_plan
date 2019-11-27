@@ -28,6 +28,7 @@ dependencies:
   path_provider:
   dio: any
   url_launcher: ^5.1.2
+  rxdart: ^0.22.6
 
 dev_dependencies:
   flutter_test:

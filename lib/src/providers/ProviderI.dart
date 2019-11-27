@@ -5,11 +5,27 @@ export 'package:plan/src/bloc/LoginB.dart';
 
 class Provider extends InheritedWidget {
 
-  final loginBloc = LoginB();
+  static Provider _instancia; 
 
-  Provider({Key key, Widget child})
+  factory Provider({Key key, Widget child}) {
+    if (_instancia == null) {
+      _instancia = new Provider._internal(
+        key: key,
+        child: child,
+      );
+    }
+    return _instancia;
+  }
+  
+  Provider._internal({Key key, Widget child})
     : super(key: key, child: child);
 
+
+  final loginBloc = LoginB();
+  /*
+  Provider({Key key, Widget child})
+    : super(key: key, child: child);
+*/
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 

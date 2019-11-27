@@ -40,3 +40,21 @@ class MisWidgets {
     );
   }
 }
+
+void mostrarError(BuildContext context, String msg) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Error'),
+        content: Text(msg),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Ok'),
+            onPressed: () => Navigator.of(context).pop(),
+          )
+        ],
+      );
+    }
+  );
+}

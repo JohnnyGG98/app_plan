@@ -2,8 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:plan/src/providers/ProviderI.dart';
+import 'package:plan/src/providers/UsuarioPV.dart';
+import 'package:plan/src/utils/Widgets.dart';
 
 class LoginPage extends StatelessWidget {
+
+  final usuarioPV = new UsuarioPV();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +62,7 @@ class LoginPage extends StatelessWidget {
                 SizedBox(height: 25.0),
                 _crearPassword(bloc),
                 SizedBox(height: 25.0),
-                _crearBtn(),
+                _crearBtn(bloc),
               ],
             ),
           )
@@ -115,28 +120,46 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _crearBtn() {
-    return RaisedButton(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 80.0,
-          vertical: 10.0
-        ),
-        child: Text(
-          'Ingresar',
-          style: TextStyle(
-            fontSize: 20.0
+  Widget _crearBtn(LoginB bloc) {
+
+    // snapshot.hasData
+    // 
+
+    return StreamBuilder(
+      stream: bloc.formValidLogin,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return RaisedButton(
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 80.0,
+              vertical: 10.0
+            ),
+            child: Text(
+              'Ingresar',
+              style: TextStyle(
+                fontSize: 20.0
+              ),
+            ),
           ),
-        ),
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0)
-      ),
-      elevation: 0.0,
-      color: Colors.blueGrey,
-      textColor: Colors.white,
-      onPressed: () {},
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0)
+          ),
+          elevation: 0.0,
+          color: Colors.blueGrey,
+          textColor: Colors.white,
+          onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+        );
+      },
     );
+  }
+
+  _login(LoginB bloc, BuildContext context) async {
+    bool res = await usuarioPV.login(bloc.usuario, bloc.password);
+    if (res) {
+      Navigator.pushReplacementNamed(context, 'home');
+    } else {
+      mostrarError(context, 'Usuario o contraseña incorrectas.');
+    }
   }
 
   Widget _crearFondo(BuildContext context) {
