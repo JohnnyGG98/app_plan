@@ -14,7 +14,7 @@ class MisWidgets {
   );
 
   static Widget cargando(String msg){
-    return Container(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

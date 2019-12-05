@@ -7,6 +7,7 @@ import 'package:plan/src/pages/LoginP.dart';
 import 'package:plan/src/pages/OfflineP.dart';
 import 'package:plan/src/pages/PeriodoP.dart';
 import 'package:plan/src/pages/SilaboP.dart';
+import 'package:plan/src/pages/asistencia/AlumnosAsistenciaP.dart';
 import 'package:plan/src/providers/ProviderI.dart';
 
 void main() => runApp(MyApp());
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
           'alumno': (BuildContext ct) => AlumnoP(),
           'alumnoCurso': (BuildContext ct) => AlumnoP.fromCurso(idCurso: 455,),
           'offline': (BuildContext ct) => OfflineP(),
-          'silabo': (BuildContext ct) => SilaboP()
+          'silabo': (BuildContext ct) => SilaboP(),
+          'listaasistencia':(BuildContext ct) => AlumnosAsistenciaP(),
         },
         theme: ThemeData(
           primaryColor: Colors.blueGrey

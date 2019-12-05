@@ -27,11 +27,9 @@ class OfflineP extends StatelessWidget {
     return ListView(
       children: <Widget>[
         SizedBox(height: 300,),
+        _estiloBtn('Asistencia'),
+        SizedBox(height: 20.0,),
         _estiloBtn('Cursos'),
-        SizedBox(height: 20.0,),
-        _estiloBtn('Silabos'),
-        SizedBox(height: 20.0,),
-        _estiloBtn('Alumnos'),
         SizedBox(height: 20.0,),
       ],
     );
