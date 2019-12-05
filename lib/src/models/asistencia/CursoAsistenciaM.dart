@@ -4,6 +4,7 @@ class CursoAsistenciaM {
   String materia; 
   String curso;
   int dia; 
+  int horas; 
 
   CursoAsistenciaM.fromJSONMap(Map<String, dynamic> json){
     idCurso = json['id_curso'];
@@ -11,6 +12,7 @@ class CursoAsistenciaM {
     materia = json['materia_nombre'];
     curso = json['curso_nombre'];
     dia = json['dia_sesion'];
+    horas = json['horas'];
   }
 
 }

@@ -78,7 +78,7 @@ class _HomeAsistenciaPState extends State<HomeAsistenciaP> {
                     Navigator.pushNamed(
                       context,
                       'listaasistencia',
-                      arguments: c.idCurso
+                      arguments: c
                     );
                   },
                 ),
@@ -89,7 +89,7 @@ class _HomeAsistenciaPState extends State<HomeAsistenciaP> {
                     Navigator.pushNamed(
                       context,
                       'listaasistencia',
-                      arguments: c.idCurso
+                      arguments: c
                     );
                   },
                 )

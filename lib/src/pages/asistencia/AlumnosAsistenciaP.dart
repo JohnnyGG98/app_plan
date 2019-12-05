@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/AlumnoAsistenciaM.dart';
+import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaPV.dart';
 
 class AlumnosAsistenciaP extends StatefulWidget {
@@ -13,25 +14,58 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
   Future<List<AlumnoAsistenciaM>> alumnos;
   final fecha = new DateTime.now();
   List<DropdownMenuItem<String>> opts;
+  CursoAsistenciaM curso; 
 
   @override
   Widget build(BuildContext context) {
 
     if (alumnos == null) {
-      final int idCurso = ModalRoute.of(context).settings.arguments;
-      alumnos = APV.getListado(idCurso, fecha.day.toString() + '/' + fecha.month.toString() + '/' + fecha.year.toString());
-      opts = _getFaltas(5);
+      curso = ModalRoute.of(context).settings.arguments;
+      alumnos = APV.getListado(
+        curso.idCurso, 
+        fecha.day.toString() + '/' + 
+        fecha.month.toString() + '/' + 
+        fecha.year.toString()
+      );
+      opts = _getFaltas(curso.horas);
     } 
     
     return Scaffold(
       appBar: AppBar(
         title: Text('Listado alumnos '),
       ),
-      body: _listaAlumnos(alumnos),
+      body: _page(),
     );
   }
 
-  Widget _listaAlumnos(Future<List<AlumnoAsistenciaM>> alumnos){
+  Widget _page() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 2.0,
+        vertical: 3.0
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          ListTile(
+            title: Text(
+              curso.materia + ' ' + 
+              curso.curso
+            ),
+            leading: CircleAvatar(
+              child: Text(curso.horas.toString()),
+              backgroundColor: Colors.blueGrey,
+            ),
+          ),
+
+          SizedBox(height: 5),
+          _listaAlumnos(),
+        ],
+      ),
+    );
+  }
+
+  Widget _listaAlumnos(){
     return FutureBuilder(
       future: alumnos,
       builder: (BuildContext context, AsyncSnapshot<List<AlumnoAsistenciaM>> snapshot){
@@ -40,23 +74,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
           return ListView.builder(
             itemCount: als.length,
             itemBuilder: (BuildContext context, int i){
-              return Card(
-                child: ListTile(
-                  title: Text(als[i].alumno),
-                  trailing: DropdownButton(
-                    value: als[i].numFalta.toString(),
-                    items: opts,
-                    onChanged: ((s) {
-                      setState(() {
-                        als[i].numFalta = int.parse(s);
-                        print('FALTAAAAA');
-                        APV.actualizar(als[i].idAsistencia, als[i].numFalta);
-                      });
-                    }),
-
-                  ),
-                ),
-              );
+              return _alumno(als[i]);
             },
           );
         }else{
@@ -86,5 +104,26 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
       );
     }
     return opts;
+  }
+
+  Widget _alumno(AlumnoAsistenciaM a) {
+    return Card(
+      child: ListTile(
+        title: Text(a.alumno),
+        trailing: DropdownButton(
+          value: a.numFalta.toString(),
+          items: opts,
+          onChanged: ((s) {
+            setState(() {
+              a.numFalta = int.parse(s);
+              APV.actualizar(
+                a.idAsistencia, 
+                a.numFalta
+              );
+            });
+          }),
+        ),
+      ),
+    );
   }
 }
