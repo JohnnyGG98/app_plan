@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
+import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/providers/asistencia/CursoAsistenciaPV.dart';
 
@@ -11,6 +12,7 @@ class HomeAsistenciaP extends StatefulWidget {
 class _HomeAsistenciaPState extends State<HomeAsistenciaP> {
 
   final CAPV = new CursoAsistenciaPV();
+  final fecha = new DateTime.now();
   Future<List<CursoAsistenciaM>> cursos;
 
   @override
@@ -75,10 +77,15 @@ class _HomeAsistenciaPState extends State<HomeAsistenciaP> {
                   child: Icon(Icons.format_list_numbered_rtl),
                   onPressed: (){
                     print('Id Curso: ' + c.idCurso.toString());
+                    AsistenciaParam asistencia = AsistenciaParam();
+                    asistencia.curso = c;
+                    asistencia.fecha = fecha.day.toString() + '/' + 
+                      fecha.month.toString() + '/' + 
+                      fecha.year.toString();
                     Navigator.pushNamed(
                       context,
                       'listaasistencia',
-                      arguments: c
+                      arguments: asistencia
                     );
                   },
                 ),

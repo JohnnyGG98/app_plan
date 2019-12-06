@@ -10,7 +10,7 @@ class FechasClasePV {
   final String _url = ConsApi.path + 'v2/sesion/';
   final fcbd = new FechasClaseBD();
 
-  Future<List<FechasClaseM>> getFechas(String identificacion) async {
+  Future<List<FechasClaseM>> getFechasDocente(String identificacion) async {
     String url = _url + '?identificacion=' + identificacion;
     final res = await http.get(url);
 
@@ -19,10 +19,23 @@ class FechasClasePV {
     return fcs.fcs;
   }
 
+  Future<List<FechasClaseM>> getFechasCurso(int idCurso) async {
+    String url = _url + '?idCurso=' + idCurso.toString();
+    final res = await http.get(url);
+
+    final data = json.decode(res.body); 
+    final fcs = FechasClases.fromJsonList(data['items']); 
+    return fcs.fcs;
+  }
+
+  Future<List<FechasClaseM>> getFechasLocal(int idCurso) async {
+    return fcbd.getByCurso(idCurso);
+  }
+
   Future<bool> descargarFechas(String identificacion) async {
     fcbd.deleteAll();
 
-    List<FechasClaseM> fcs = await getFechas(identificacion); 
+    List<FechasClaseM> fcs = await getFechasDocente(identificacion); 
 
     Future<bool> des;
 

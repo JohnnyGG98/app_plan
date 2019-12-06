@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
+import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
 
 class HomeAsistenciaOfflineP extends StatefulWidget {
@@ -10,6 +11,7 @@ class HomeAsistenciaOfflineP extends StatefulWidget {
 class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
   // Provider  
   final apv = new AsistenciaOfflinePV();
+  final fecha = new DateTime.now();
   int currentIndex = 0;
   Future<List<CursoAsistenciaM>> cursosDia, cursos; 
  
@@ -121,10 +123,15 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
                   child: Icon(Icons.format_list_numbered_rtl),
                   onPressed: (){
                     print('Id Curso: ' + c.idCurso.toString());
+                    AsistenciaParam asistencia = AsistenciaParam();
+                    asistencia.curso = c;
+                    asistencia.fecha = fecha.day.toString() + '/' + 
+                      fecha.month.toString() + '/' + 
+                      fecha.year.toString();
                     Navigator.pushNamed(
                       context,
                       'asistenciaoffline',
-                      arguments: c
+                      arguments: asistencia
                     );
                   },
                 ),

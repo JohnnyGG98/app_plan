@@ -3,26 +3,30 @@ import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
 import 'package:plan/src/models/asistencia/FechasClaseM.dart';
 import 'package:plan/src/providers/asistencia/FechasClasePV.dart';
 
-class FechasOfflineP extends StatelessWidget {
+
+class FechasP extends StatelessWidget {
+
   final fcpv = new FechasClasePV();
-  Future<List<FechasClaseM>> fechas; 
+  Future<List<FechasClaseM>> fechas;
+
   CursoAsistenciaM curso; 
 
   @override
   Widget build(BuildContext context) {
-    curso = ModalRoute.of(context).settings.arguments; 
-    fechas = fcpv.getFechasLocal(curso.idCurso);
+    curso = ModalRoute.of(context).settings.arguments;
+    fechas = fcpv.getFechasCurso(curso.idCurso);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Fechas ' + 
-          curso.curso 
+          'Fechas' + 
+          curso.curso
         ),
       ),
       body: _page(),
     );
   }
+
 
   Widget _page() {
     return FutureBuilder(

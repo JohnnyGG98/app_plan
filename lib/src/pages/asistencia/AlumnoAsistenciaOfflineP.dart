@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/AsistenciaOfflineM.dart';
-import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
+import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart'; 
 
 class AlumnoAsistenciaOfflineP extends StatefulWidget {
@@ -11,30 +11,28 @@ class AlumnoAsistenciaOfflineP extends StatefulWidget {
 class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
 
   final aopv = new AsistenciaOfflinePV();
-  final fecha = new DateTime.now();
+  
   Future<List<AsistenciaOfflineM>> alumnos;
   List<DropdownMenuItem<String>> opts;
-  CursoAsistenciaM curso; 
+  AsistenciaParam param; 
 
   @override
   Widget build(BuildContext context) {
 
     if (alumnos == null) {
-      curso = ModalRoute.of(context).settings.arguments; 
+      param.curso = ModalRoute.of(context).settings.arguments; 
       alumnos = aopv.getLista(
-        curso.idCurso, 
-        fecha.day.toString() + '/' + 
-        fecha.month.toString() + '/' + 
-        fecha.year.toString()
+        param.curso.idCurso, 
+        param.fecha
       );
-      opts = _getFaltas(curso.horas);
+      opts = _getFaltas(param.curso.horas);
     }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          curso.curso + ' ' + 
-          curso.materia 
+          param.curso.curso + ' ' + 
+          param.curso.materia 
         ),
       ),
       body: _page(),
