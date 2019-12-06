@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
+import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
 
 class HomeAsistenciaOfflineP extends StatefulWidget {
@@ -13,11 +14,10 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
   int currentIndex = 0;
 
   Future<List<CursoAsistenciaM>> cursosDia, cursos; 
-
-  Future<bool> des;
  
   @override
   Widget build(BuildContext context) {
+
 
     if (currentIndex == 0 && cursosDia == null) {
       cursosDia = apv.getCursosPorDia();
@@ -28,14 +28,15 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Asistencia Offline'),
+      ),
       body: _cargarPagina(currentIndex),
       bottomNavigationBar: _crearBarra(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.cloud_download),
         onPressed: () {
-          setState(() {
-            currentIndex = 3;
-          });
+          Navigator.pushNamed(context, 'descarga');
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -46,7 +47,6 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
     switch(pagActual) {
       case 0: return _lista(cursosDia);
       case 1: return _lista(cursos);
-      case 3: return _descargando();
       default: 
       return _lista(cursosDia);
     }
@@ -66,39 +66,6 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
           );
         } else {
           return Center (child: CircularProgressIndicator(),);
-        }
-      },
-    );
-  }
-
-  Widget _descargando() {
-    
-    return FutureBuilder(
-      future: des,
-      builder:(BuildContext context, AsyncSnapshot<bool> snapshot){
-        if (snapshot.hasData) {
-          final res = snapshot.data;
-          if (res) {
-
-            cursos = null; 
-            cursosDia = null;
-
-            return Center(
-              child: Column(
-                children: <Widget>[
-                  Text('Descargamos todo correctamente.')
-                ],
-              ),
-            );
-          } else {
-            return Center(
-              child: Text('Tuvimos un error al descargar los cursos vuelvalo a intentar mas tarde.'),
-            );
-          }
-        } else {
-          return Center (
-            child: CircularProgressIndicator()
-          );
         }
       },
     );

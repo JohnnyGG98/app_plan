@@ -19,20 +19,20 @@ class BD {
 
     Directory docsDir = await getApplicationDocumentsDirectory();
 
-    final String path = join(docsDir.path, 'plan.db');
+    final String path = join(docsDir.path, 'plann.db');
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onOpen: (db) {},
       onCreate:  (Database db, int version ) async {
         await db.execute(
           'CREATE TABLE cursoasistencia ('
-          ' id_curso INTEGER '
-          ' periodo TEXT,'
-          ' materia TEXT,'
-          ' curso TEXT,'
-          ' dia INTEGER,'
+          ' id_curso INTEGER, '
+          ' periodo TEXT, '
+          ' materia TEXT, '
+          ' curso TEXT, '
+          ' dia INTEGER, '
           ' horas INTEGER '
           '); '
           'CREATE TABLE alumnocursoasistencia( '

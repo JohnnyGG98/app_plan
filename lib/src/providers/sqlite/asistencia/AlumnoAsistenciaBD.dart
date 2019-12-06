@@ -4,13 +4,13 @@ import 'package:plan/src/providers/sqlite/BD.dart';
 
 class AlumnoAsistenciaBD extends BD {
 
-  guardar(AlumnoCursoAsistenciaM ac) async {
+  Future<bool> guardar(AlumnoCursoAsistenciaM ac) async {
     final db = await database; 
     final res = await db.insert(
       'alumnocursoasistencia', 
       ac.toJson()
     );
-    return res; 
+    return res > 0; 
   }
 
   Future<List<AlumnoCursoAsistenciaM>> getByCurso(int idCurso) async {

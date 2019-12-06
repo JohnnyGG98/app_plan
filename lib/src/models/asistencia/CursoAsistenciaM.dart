@@ -22,24 +22,24 @@ class CursoAsistenciaM {
     materia = json['materia_nombre'];
     curso = json['curso_nombre'];
     dia = json['dia_sesion'];
-    horas = json['horas'];
+    horas = int.parse(json['horas']);
   }
 
   factory CursoAsistenciaM.getFromJson(Map<String, dynamic> json) => new CursoAsistenciaM(
     idCurso: json['id_curso'],
-    periodo: json['prd_lectivo_nombre'],
-    materia: json['materia_nombre'],
-    curso: json['curso_nombre'],
-    dia: json['dia_sesion'],
+    periodo: json['periodo'],
+    materia: json['materia'],
+    curso: json['curso'],
+    dia: json['dia'],
     horas: json['horas']
   );
 
   Map<String, dynamic> toJson() => {
     "id_curso": idCurso,
-    "prd_lectivo_nombre": periodo,
-    "materia_nombre": materia,
-    "curso_nombre": curso,
-    "dia_sesion": dia,
+    "periodo": periodo,
+    "materia": materia,
+    "curso": curso,
+    "dia": dia,
     "horas": horas
   };
 

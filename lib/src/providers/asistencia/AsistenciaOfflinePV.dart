@@ -15,7 +15,7 @@ class AsistenciaOfflinePV {
 
   Future<bool> descargarCursosDocente(String identificacion) async {
     final String url = _url + 'cursos/' + identificacion;
-    bool des = false;
+    Future<bool> des;
     cabd.deleteAll();
 
     final res = await http.get(url);
@@ -32,7 +32,7 @@ class AsistenciaOfflinePV {
 
   Future<bool> descargarAlumnosDocente(String identificacion) async {
     final String url = _url + 'alumnos/' + identificacion;
-    bool des = false; 
+    Future<bool> des;
     aabd.deleteAll();
 
     final res = await http.get(url);

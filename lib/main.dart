@@ -8,6 +8,7 @@ import 'package:plan/src/pages/OfflineP.dart';
 import 'package:plan/src/pages/PeriodoP.dart';
 import 'package:plan/src/pages/SilaboP.dart';
 import 'package:plan/src/pages/asistencia/AlumnosAsistenciaP.dart';
+import 'package:plan/src/pages/asistencia/DescargaP.dart';
 import 'package:plan/src/pages/asistencia/HomeAsistenciaOfflineP.dart';
 import 'package:plan/src/providers/ProviderI.dart';
 
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
           'silabo': (BuildContext ct) => SilaboP(),
           'listaasistencia':(BuildContext ct) => AlumnosAsistenciaP(),
           'cursosoffline': (BuildContext ct) => HomeAsistenciaOfflineP(),
+          'descarga': (BuildContext ct) => DescargaP()
         },
         theme: ThemeData(
           primaryColor: Colors.blueGrey

@@ -32,7 +32,14 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
     
     return Scaffold(
       appBar: AppBar(
-        title: Text('Listado alumnos '),
+        title: Text(
+          curso.materia + ' ' + 
+          curso.curso
+        ),
+        /*leading: CircleAvatar(
+          child: Text(curso.horas.toString()),
+          backgroundColor: Colors.blueGrey,
+        ),*/
       ),
       body: _page(),
     );
@@ -44,24 +51,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
         horizontal: 2.0,
         vertical: 3.0
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          ListTile(
-            title: Text(
-              curso.materia + ' ' + 
-              curso.curso
-            ),
-            leading: CircleAvatar(
-              child: Text(curso.horas.toString()),
-              backgroundColor: Colors.blueGrey,
-            ),
-          ),
-
-          SizedBox(height: 5),
-          _listaAlumnos(),
-        ],
-      ),
+      child: _listaAlumnos(),
     );
   }
 
