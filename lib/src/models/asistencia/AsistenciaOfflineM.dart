@@ -1,6 +1,7 @@
 
 class AsistenciaOfflineM {
 
+  int id;
   int idCurso; 
   int idAlmnCurso;
   String alumno; 
@@ -8,6 +9,7 @@ class AsistenciaOfflineM {
   String fecha; 
 
   AsistenciaOfflineM({
+    this.id,
     this.idCurso,
     this.idAlmnCurso,
     this.alumno,
@@ -16,6 +18,7 @@ class AsistenciaOfflineM {
   }); 
 
   AsistenciaOfflineM.fromJSONMap(Map<String, dynamic> json){
+    id = json['id'];
     idCurso = json['id_curso'];
     idAlmnCurso = json['id_almn_curso'];
     alumno = json['alumno'];
@@ -24,6 +27,7 @@ class AsistenciaOfflineM {
   }
 
   factory AsistenciaOfflineM.getFromJson(Map<String, dynamic> json) => new AsistenciaOfflineM(
+    id: json['id'],
     idCurso: json['id_curso'],
     idAlmnCurso: json['id_almn_curso'],
     alumno: json['alumno'],
@@ -32,8 +36,9 @@ class AsistenciaOfflineM {
   );
 
   Map<String, dynamic> toJson() => {
-    "idCurso": idCurso,
-    "idAlmnCurso": idAlmnCurso,
+    "id": id,
+    "id_curso": idCurso,
+    "id_almn_curso": idAlmnCurso,
     "alumno": alumno,
     "horas": horas,
     "fecha": fecha

@@ -15,7 +15,7 @@ class OfflineP extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             Center(child: logo,),
-            _opciones(),
+            _opciones(context),
           ],
         ),
         color: Colors.white,
@@ -23,19 +23,29 @@ class OfflineP extends StatelessWidget {
     );
   }
 
-  Widget _opciones(){
+  Widget _opciones(BuildContext context){
     return ListView(
       children: <Widget>[
         SizedBox(height: 300,),
-        _estiloBtn('Asistencia'),
+        _estiloBtn(
+          'Asistencia', 
+          (){
+            Navigator.pushNamed(context, 'cursosoffline');
+          }
+        ),
         SizedBox(height: 20.0,),
-        _estiloBtn('Cursos'),
+        _estiloBtn(
+          'Cursos',
+          (){
+            Navigator.pushNamed(context, 'cursosoffline');
+          }
+        ),
         SizedBox(height: 20.0,),
       ],
     );
   }
 
-  Widget _estiloBtn(String opt){
+  Widget _estiloBtn(String opt, function){
     return Center(
       child: Container(
         width: 350.0,
@@ -52,7 +62,7 @@ class OfflineP extends StatelessWidget {
             style: TextStyle(fontSize: 25.0),
             ),
           ),
-          onPressed: (){},
+          onPressed: function,
         ),
       )
     );

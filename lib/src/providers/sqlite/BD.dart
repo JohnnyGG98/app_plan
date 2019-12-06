@@ -19,7 +19,7 @@ class BD {
 
     Directory docsDir = await getApplicationDocumentsDirectory();
 
-    final String path = join(docsDir.path, 'examen.db');
+    final String path = join(docsDir.path, 'plan.db');
 
     return await openDatabase(
       path,
@@ -28,7 +28,6 @@ class BD {
       onCreate:  (Database db, int version ) async {
         await db.execute(
           'CREATE TABLE cursoasistencia ('
-          ' id INTEGER PRIMARY KEY, '
           ' id_curso INTEGER '
           ' periodo TEXT,'
           ' materia TEXT,'
@@ -37,18 +36,16 @@ class BD {
           ' horas INTEGER '
           '); '
           'CREATE TABLE alumnocursoasistencia( '
-          'id INTEGER PRIMARY KEY, '
-          'id_curso INTEGER, '
-          'id_almn_curso INTEGER, '
-          'alumno TEXT '
+          ' id_curso INTEGER, '
+          ' id_almn_curso INTEGER, '
+          ' alumno TEXT '
           '); '
           'CREATE TABLE asistenciaoffline ( '
-          'id INTEGER PRIMARY KEY, '
-          'id_curso INTEGER, '
-          'id_almn_curso INTEGER, '
-          'alumno TEXT, '
-          'horas INTEGER, '
-          'fecha TEXT '
+          ' id_curso INTEGER, '
+          ' id_almn_curso INTEGER, '
+          ' alumno TEXT, '
+          ' horas INTEGER, '
+          ' fecha TEXT '
           '); '
         );
       }
