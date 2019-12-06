@@ -13,7 +13,7 @@ class AsistenciaOfflineBD extends BD {
     return res;
   }
 
-  editar(AsistenciaOfflineM ao) async {
+  Future<bool> editar(AsistenciaOfflineM ao) async {
     final db = await database; 
     final res = await db.update(
       'asistenciaoffline', 
@@ -21,13 +21,13 @@ class AsistenciaOfflineBD extends BD {
       where: 'id = ?',
       whereArgs: [ao.id]
     );
-    return res;
+    return res > 0;
   }
 
   Future<List<AsistenciaOfflineM>> getByCursoFecha(int idCurso, String fecha) async {
     final db = await database;
     final res = await db.query(
-      '',
+      'asistenciaoffline',
       where: 'id_curso = ? '
       'AND fecha = ?',
       whereArgs: [
@@ -37,6 +37,25 @@ class AsistenciaOfflineBD extends BD {
     );
 
     List<AsistenciaOfflineM> list = res.isNotEmpty ? res.map((m) => AsistenciaOfflineM.getFromJson(m)).toList() : [];
+
+    return list;
+  }
+
+  Future<List<String>> getFechasByCurso(int idCurso) async {
+    final db = await database;
+    final res = await db.query(
+      'asistenciaoffline',
+      columns: [
+        'fecha'
+      ],
+      orderBy: 'fecha',
+      where: 'id_curso = ?',
+      whereArgs: [
+        idCurso
+      ]
+    );
+
+    List<String> list = res.isNotEmpty ? res.map((f) => f['fecha']).toList() : []; 
 
     return list;
   }

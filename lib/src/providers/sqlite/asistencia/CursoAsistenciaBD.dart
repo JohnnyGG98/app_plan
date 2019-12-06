@@ -27,7 +27,16 @@ class CursoAsistenciaBD extends BD {
 
   Future<List<CursoAsistenciaM>> getTodos() async {
     final db = await database;
-    final res = await db.query('cursoasistencia');
+    final res = await db.query(
+      'cursoasistencia',
+      columns: [
+        'id_curso',
+        'periodo',
+        'materia',
+        'curso'
+      ],
+      groupBy: 'id_curso, periodo, materia, curso '
+    );
     List<CursoAsistenciaM> list = res.isNotEmpty 
       ? res.map((m) => CursoAsistenciaM.getFromJson(m)).toList()
       : [];

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:plan/src/models/asistencia/AlumnoAsistenciaM.dart';
+import 'package:plan/src/models/asistencia/AsistenciaOfflineM.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
-import 'package:plan/src/providers/asistencia/AsistenciaPV.dart';
+import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart'; 
 
-class AlumnosAsistenciaP extends StatefulWidget {
-  
-  @override
-  _AlumnosAsistenciaPState createState() => _AlumnosAsistenciaPState();
+class AlumnoAsistenciaOfflineP extends StatefulWidget {
+
+  _AlumnoAsistenciaOfflinePState createState() => _AlumnoAsistenciaOfflinePState();
 }
 
-class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
-  final APV = new AsistenciaPV();
-  Future<List<AlumnoAsistenciaM>> alumnos;
+class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
+
+  final aopv = new AsistenciaOfflinePV();
   final fecha = new DateTime.now();
+  Future<List<AsistenciaOfflineM>> alumnos;
   List<DropdownMenuItem<String>> opts;
   CursoAsistenciaM curso; 
 
@@ -20,21 +20,21 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
   Widget build(BuildContext context) {
 
     if (alumnos == null) {
-      curso = ModalRoute.of(context).settings.arguments;
-      alumnos = APV.getListado(
+      curso = ModalRoute.of(context).settings.arguments; 
+      alumnos = aopv.getLista(
         curso.idCurso, 
         fecha.day.toString() + '/' + 
         fecha.month.toString() + '/' + 
         fecha.year.toString()
       );
       opts = _getFaltas(curso.horas);
-    } 
-    
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           curso.curso + ' ' + 
-          curso.materia
+          curso.materia 
         ),
       ),
       body: _page(),
@@ -54,7 +54,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
   Widget _listaAlumnos(){
     return FutureBuilder(
       future: alumnos,
-      builder: (BuildContext context, AsyncSnapshot<List<AlumnoAsistenciaM>> snapshot){
+      builder: (BuildContext context, AsyncSnapshot<List<AsistenciaOfflineM>> snapshot){
         if(snapshot.hasData){
           final als = snapshot.data;
           return ListView.builder(
@@ -71,6 +71,28 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
       },
     );
   }
+
+
+  Widget _alumno(AsistenciaOfflineM a) {
+    return Card(
+      child: ListTile(
+        title: Text(a.alumno),
+        trailing: DropdownButton(
+          value: a.horas,
+          items: opts,
+          onChanged: ((s) {
+            setState(() {
+              a.horas = int.parse(s);
+              aopv.actualizarFaltas(a);
+            });
+          }),
+        ),
+      ),
+    );
+  }
+
+
+  // Esto es una copia de AlumnosAsistenciaP 
 
   List<DropdownMenuItem<String>> _getFaltas(int limite) {
     List<DropdownMenuItem<String>> opts = new List();
@@ -92,25 +114,4 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
     return opts;
   }
 
-  Widget _alumno(AlumnoAsistenciaM a) {
-    return Card(
-      child: ListTile(
-        title: Text(a.alumno),
-        trailing: DropdownButton(
-          value: a.numFalta.toString(),
-          items: opts,
-          onChanged: ((s) {
-            setState(() {
-              a.numFalta = int.parse(s);
-              APV.actualizar(
-                a.idAsistencia, 
-                a.numFalta
-              );
-            });
-          }),
-        ),
-      ),
-    );
-  }
-  
 }

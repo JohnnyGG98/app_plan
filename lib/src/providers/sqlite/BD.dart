@@ -23,7 +23,7 @@ class BD {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 4,
       onOpen: (db) {},
       onCreate:  (Database db, int version ) async {
         await db.execute(
@@ -41,11 +41,18 @@ class BD {
           ' alumno TEXT '
           '); '
           'CREATE TABLE asistenciaoffline ( '
+          ' id INTEGER PRIMARY KEY, '
           ' id_curso INTEGER, '
           ' id_almn_curso INTEGER, '
           ' alumno TEXT, '
           ' horas INTEGER, '
           ' fecha TEXT '
+          '); '
+          'CREATE TABLE fechasclase ( '
+          ' id_curso INTEGER, '
+          ' fecha TEXT, '
+          ' dia INTEGER, '
+          ' horas INTEGER '
           '); '
         );
       }

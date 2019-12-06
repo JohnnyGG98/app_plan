@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
-import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
 
 class HomeAsistenciaOfflineP extends StatefulWidget {
@@ -12,12 +11,10 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
   // Provider  
   final apv = new AsistenciaOfflinePV();
   int currentIndex = 0;
-
   Future<List<CursoAsistenciaM>> cursosDia, cursos; 
  
   @override
   Widget build(BuildContext context) {
-
 
     if (currentIndex == 0 && cursosDia == null) {
       cursosDia = apv.getCursosPorDia();
@@ -126,22 +123,11 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
                     print('Id Curso: ' + c.idCurso.toString());
                     Navigator.pushNamed(
                       context,
-                      'listaasistencia',
+                      'asistenciaoffline',
                       arguments: c
                     );
                   },
                 ),
-                FlatButton(
-                  child: Icon(Icons.calendar_today),
-                  onPressed: (){
-                    print('Id Curso' + c.idCurso.toString());
-                    Navigator.pushNamed(
-                      context,
-                      'listaasistencia',
-                      arguments: c
-                    );
-                  },
-                )
               ],
             ),
           ],
@@ -149,4 +135,5 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
       ),
     );
   }
+
 }
