@@ -83,27 +83,19 @@ class _DescargaPState extends State<DescargaP> {
   }
 
   descargar(String identificacion) async {
-    switch(numDescarga) {
-      case 0: 
+      mensaje = 'Descargando...';
       des = apv.descargarCursosDocente(identificacion);
-      mensaje = 'Descargando cursos...';
-      mensajeFin = 'Descargamos todos sus cursos.';
-      break; 
-      case 1: 
+      //mensaje = 'Descargando cursos...';
+      //mensajeFin = 'Descargamos todos sus cursos.';
       des = apv.descargarAlumnosDocente(identificacion);
-      mensaje = 'Descargando alumnos...';
-      mensajeFin = 'Descargamos todos sus alumnos.';
-      break; 
-      case 2: 
+      //mensaje = 'Descargando alumnos...';
+      //mensajeFin = 'Descargamos todos sus alumnos.';
       des = fcpv.descargarFechas(identificacion);
-      mensaje = 'Descargando fechas...';
-      mensajeFin = 'Descargamos fechas correctamente.';
-      break;
-      default: 
+      //mensaje = 'Descargando fechas...';
+      //mensajeFin = 'Descargamos fechas correctamente.';
       mensajeFin = 'Descargamos todo correctamente.';
       fin = true;
-      break;
-    }
+
   }
 
 }

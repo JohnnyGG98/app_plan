@@ -7,7 +7,7 @@ class UsuarioPV {
 
   Future<bool> login (String usuario, String password) async {
     final data = {
-      'user' : usuario,
+      'user': usuario,
       'pass': password,
       'login': 'true'
     };

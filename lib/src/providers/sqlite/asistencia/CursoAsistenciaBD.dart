@@ -35,7 +35,8 @@ class CursoAsistenciaBD extends BD {
         'materia',
         'curso'
       ],
-      groupBy: 'id_curso, periodo, materia, curso '
+      groupBy: 'id_curso, periodo, materia, curso ',
+      orderBy: 'curso, id_curso DESC'
     );
     List<CursoAsistenciaM> list = res.isNotEmpty 
       ? res.map((m) => CursoAsistenciaM.getFromJson(m)).toList()

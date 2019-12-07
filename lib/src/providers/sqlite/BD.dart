@@ -19,11 +19,13 @@ class BD {
 
     Directory docsDir = await getApplicationDocumentsDirectory();
 
-    final String path = join(docsDir.path, 'plann.db');
+    print('DIR DOC: ' + docsDir.path);
+
+    final String path = join(docsDir.path, 'plandos.db');
 
     return await openDatabase(
       path,
-      version: 4,
+      version: 3,
       onOpen: (db) {},
       onCreate:  (Database db, int version ) async {
         await db.execute(
@@ -55,6 +57,8 @@ class BD {
           ' horas INTEGER '
           '); '
         );
+
+        print('CREADA');
       }
     );
   }
