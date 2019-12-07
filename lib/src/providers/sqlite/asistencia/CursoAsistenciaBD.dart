@@ -1,4 +1,6 @@
 
+import 'dart:core';
+
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
 import 'package:plan/src/providers/sqlite/BD.dart';
 
@@ -19,10 +21,24 @@ class CursoAsistenciaBD extends BD {
         diaSemana
       ]
     );
+    print('Cursos asistencia select ');
     List<CursoAsistenciaM> list = res.isNotEmpty 
       ? res.map((m) => CursoAsistenciaM.getFromJson(m)).toList()
       : [];
     return list;
+  }
+
+  Future<CursoAsistenciaM> getCurso(int idCurso) async {
+    final db = await database;
+    final res = await db.query(
+      'cursoasistencia',
+      where: 'id_curso = ?',
+      whereArgs: [
+        idCurso
+      ]
+    );
+    
+    return res.isNotEmpty ? CursoAsistenciaM.getFromJson(res.first) : null;
   }
 
   Future<List<CursoAsistenciaM>> getTodos() async {

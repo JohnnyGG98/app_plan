@@ -43,13 +43,13 @@ class _DescargaPState extends State<DescargaP> {
 
                     fin ? 
                       FlatButton(
-                      child: Icon(Icons.arrow_back_ios),
+                      child: Icon(Icons.arrow_back_ios, size: 50.0,),
                       onPressed: (){
                         Navigator.pop(context);
                       },
                     ) : 
                     FlatButton(
-                    child: Icon(Icons.play_arrow),
+                    child: Icon(Icons.play_arrow, size: 50.0,),
                     onPressed: (){
                       setState(() {
                         numDescarga++;
@@ -84,18 +84,36 @@ class _DescargaPState extends State<DescargaP> {
 
   descargar(String identificacion) async {
       mensaje = 'Descargando...';
-      des = apv.descargarCursosDocente(identificacion);
-      //mensaje = 'Descargando cursos...';
-      //mensajeFin = 'Descargamos todos sus cursos.';
-      des = apv.descargarAlumnosDocente(identificacion);
-      //mensaje = 'Descargando alumnos...';
-      //mensajeFin = 'Descargamos todos sus alumnos.';
-      des = fcpv.descargarFechas(identificacion);
-      //mensaje = 'Descargando fechas...';
-      //mensajeFin = 'Descargamos fechas correctamente.';
+
+      des = apv.descargarTodo(identificacion);
       mensajeFin = 'Descargamos todo correctamente.';
       fin = true;
+      /*
+      switch(numDescarga) {
+        case 0:
+          des = apv.descargarCursosDocente(identificacion);
+          mensaje = 'Descargando cursos...';
+          mensajeFin = 'Descargamos todos sus cursos.';
+        break; 
 
+        case 1:
+          des = apv.descargarAlumnosDocente(identificacion);
+          mensaje = 'Descargando alumnos...';
+          mensajeFin = 'Descargamos todos sus alumnos.';
+        break;
+
+        case 2: 
+          des = fcpv.descargarFechas(identificacion);
+          mensaje = 'Descargando fechas...';
+          mensajeFin = 'Descargamos fechas correctamente.';
+        break;
+
+        default:
+          mensajeFin = 'Descargamos todo correctamente.';
+          fin = true;
+        break;
+
+      }*/
   }
 
 }

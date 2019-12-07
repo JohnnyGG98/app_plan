@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:plan/src/models/asistencia/AlumnoCursoAsistenciaM.dart';
 import 'package:plan/src/models/asistencia/AsistenciaOfflineM.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
+import 'package:plan/src/models/asistencia/FechasClaseM.dart';
+import 'package:plan/src/providers/asistencia/FechasClasePV.dart';
 import 'package:plan/src/providers/sqlite/asistencia/AlumnoAsistenciaBD.dart';
 import 'package:plan/src/providers/sqlite/asistencia/AsistenciaOfflineBD.dart';
 
@@ -17,8 +19,16 @@ class AsistenciaOfflinePV {
   final aabd = new AlumnoAsistenciaBD();
   final aobd = new AsistenciaOfflineBD();
   final fcbd = new FechasClaseBD();
+  final fcpv = new FechasClasePV();
 
-  Future<bool> descargarCursosDocente(String identificacion) async {
+  Future<bool> descargarTodo(String identificacion) async {
+    await _descargarAlumnosDocente(identificacion);
+    await _descargarCursosDocente(identificacion);
+    await _descargarFechas(identificacion);
+    return true;
+  }
+
+  Future<bool> _descargarCursosDocente(String identificacion) async {
     final String url = _url + 'cursos/' + identificacion;
     Future<bool> des;
     cabd.deleteAll();
@@ -35,24 +45,41 @@ class AsistenciaOfflinePV {
     return des;
   }
 
-  Future<bool> descargarAlumnosDocente(String identificacion) async {
+  Future<bool> _descargarAlumnosDocente(String identificacion) async {
     final String url = _url + 'alumnos/' + identificacion;
     Future<bool> des;
     aabd.deleteAll();
+
+    print('Descargaremos alumnos docente');
 
     final res = await http.get(url);
     final data = json.decode(res.body);
 
     final aas = AlumnoCursoAsistencias.fromJsonList(data['items']);
 
-    aas.acs.forEach((a) => {
+     aas.acs.forEach((a) => {
       des = aabd.guardar(a)
     });
     return des;
   }
 
+  Future<bool> _descargarFechas(String identificacion) async {
+    fcbd.deleteAll();
+    print('Descargamos fechas docentes...');
+    List<FechasClaseM> fcs = await fcpv.getFechasDocente(identificacion); 
+    Future<bool> des;
+    fcs.forEach((c) => {
+      des = fcbd.guardar(c)
+    });
+    return des;
+  }  
+
   Future<List<CursoAsistenciaM>> getCursosAll() {
     return cabd.getTodos();
+  }
+
+  Future<CursoAsistenciaM> getCursoById(int idCurso) async {
+    return cabd.getCurso(idCurso);
   }
 
   Future<List<CursoAsistenciaM>> getCursosPorDia() {
@@ -86,7 +113,6 @@ class AsistenciaOfflinePV {
     }
 
     lista =  await aobd.getByCursoFecha(idCurso, fecha);
-
     return lista; 
   }
 

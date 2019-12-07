@@ -12,6 +12,7 @@ class HomeAsistenciaOfflineP extends StatefulWidget {
 class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
   // Provider  
   final apv = new AsistenciaOfflinePV();
+  final fecha = new DateTime.now();
   int currentIndex = 0;
   Future<List<CursoAsistenciaM>> cursosDia, cursos; 
  
@@ -44,14 +45,45 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
 
   Widget _cargarPagina(int pagActual) {
     switch(pagActual) {
-      case 0: return _lista(cursosDia);
-      case 1: return _lista(cursos);
+      case 0: return _listaDia(cursosDia);
+      case 1: return _listaFechas(cursos);
       default: 
-      return _lista(cursosDia);
+      return _listaFechas(cursos);
     }
   }
 
-  Widget _lista(Future<List<CursoAsistenciaM>> cursos) {
+  FlatButton _btnFechas(CursoAsistenciaM c) {
+    return FlatButton(
+      child: Icon(Icons.calendar_today),
+      onPressed: (){
+        Navigator.pushNamed(
+          context,
+          'fechasoffline',
+          arguments: c
+        );
+      },
+    );
+  }
+
+  FlatButton _btnDia(CursoAsistenciaM c) {
+    return FlatButton(
+      child: Icon(Icons.format_list_numbered_rtl),
+      onPressed: (){
+        AsistenciaParam asistencia = AsistenciaParam();
+        asistencia.curso = c;
+        asistencia.fecha = fecha.day.toString() + '/' + 
+          fecha.month.toString() + '/' + 
+          fecha.year.toString();
+        Navigator.pushNamed(
+          context,
+          'asistenciaoffline',
+          arguments: asistencia
+        );
+      },
+    );
+  }
+
+  Widget _listaDia(Future<List<CursoAsistenciaM>> cursos) {
     return FutureBuilder(
       future: cursos,
       builder:(BuildContext context, AsyncSnapshot<List<CursoAsistenciaM>> snapshot){
@@ -60,11 +92,33 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
           return ListView.builder(
             itemCount: cs.length,
             itemBuilder: (BuildContext context, int i){
-              return cartaCursosAsistencia(
+              return cartaCursosAsistenciaBtn(
                 cs[i], 
                 context,
-                'asistenciaoffline',
-                'fechasoffline'
+                _btnDia(cs[i])
+              );
+            },
+          );
+        } else {
+          return Center (child: CircularProgressIndicator(),);
+        }
+      },
+    );
+  }
+
+  Widget _listaFechas(Future<List<CursoAsistenciaM>> cursos) {
+    return FutureBuilder(
+      future: cursos,
+      builder:(BuildContext context, AsyncSnapshot<List<CursoAsistenciaM>> snapshot){
+        if (snapshot.hasData) {
+          final cs = snapshot.data;
+          return ListView.builder(
+            itemCount: cs.length,
+            itemBuilder: (BuildContext context, int i){
+              return cartaCursosAsistenciaBtn(
+                cs[i], 
+                context,
+                _btnFechas(cs[i])
               );
             },
           );

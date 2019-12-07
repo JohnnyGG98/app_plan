@@ -5,7 +5,7 @@ class AsistenciaOfflineM {
   int idCurso; 
   int idAlmnCurso;
   String alumno; 
-  int horas; 
+  int horas = 0; 
   String fecha; 
 
   AsistenciaOfflineM({

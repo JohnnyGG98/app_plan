@@ -21,15 +21,25 @@ class BD {
 
     print('DIR DOC: ' + docsDir.path);
 
-    final String path = join(docsDir.path, 'plandos.db');
+    final String path = join(docsDir.path, 'plantres.db');
 
     return await openDatabase(
       path,
-      version: 3,
+      version: 1,
       onOpen: (db) {},
       onCreate:  (Database db, int version ) async {
-        await db.execute(
-          '''
+        List<String> scripts  = _script.trim().split(';');
+        scripts.forEach((s) async {
+          if (s.isNotEmpty && s.length > 0) {
+            await db.execute(s.trim());
+          }
+        });
+      }
+    );
+  }
+
+
+  String _script = '''
           CREATE TABLE cursoasistencia (
            id_curso INTEGER, 
            periodo TEXT, 
@@ -41,8 +51,8 @@ class BD {
           CREATE TABLE alumnocursoasistencia( 
            id_curso INTEGER, 
            id_almn_curso INTEGER, 
-           alumno TEXT '
-          ); '
+           alumno TEXT 
+          );  
           CREATE TABLE asistenciaoffline ( 
            id INTEGER PRIMARY KEY, 
            id_curso INTEGER, 
@@ -50,18 +60,12 @@ class BD {
            alumno TEXT, 
            horas INTEGER, 
            fecha TEXT 
-          ); 
+          );  
           CREATE TABLE fechasclase ( 
            id_curso INTEGER, 
            fecha TEXT, 
            dia INTEGER, 
            horas INTEGER
-          ); '''
-        );
-
-        print('CREADA');
-      }
-    );
-  }
+          ); ''';
 
 }

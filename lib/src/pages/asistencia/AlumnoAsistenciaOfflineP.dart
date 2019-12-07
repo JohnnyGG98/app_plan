@@ -14,21 +14,12 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
   final aopv = new AsistenciaOfflinePV();
   
   Future<List<AsistenciaOfflineM>> alumnos;
-  List<DropdownMenuItem<String>> opts;
+  List<DropdownMenuItem<String>> _opts;
   AsistenciaParam param; 
 
   @override
-  Widget build(BuildContext context) {
-
-    if (alumnos == null) {
-      param.curso = ModalRoute.of(context).settings.arguments; 
-      alumnos = aopv.getLista(
-        param.curso.idCurso, 
-        param.fecha
-      );
-      opts = getCmbFaltas(param.curso.horas);
-    }
-
+  Widget build(BuildContext context) {    
+    _iniciar();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -38,6 +29,26 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
       ),
       body: _page(),
     );
+  }
+
+  _iniciar() async {
+    if (alumnos == null) {
+      param = ModalRoute.of(context).settings.arguments; 
+
+      if (param.curso.horas != null) {
+        _opts = getCmbFaltas(param.curso.horas);
+      } else {
+        param.curso = await aopv.getCursoById(param.curso.idCurso);
+        _opts = getCmbFaltas(param.curso.horas);
+      }
+    
+      alumnos = aopv.getLista(
+        param.curso.idCurso, 
+        param.fecha
+      ); 
+
+      setState(() {});
+    }
   }
 
   Widget _page() {
@@ -77,8 +88,8 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
       child: ListTile(
         title: Text(a.alumno),
         trailing: DropdownButton(
-          value: a.horas,
-          items: opts,
+          value: a.horas.toString(),
+          items: _opts,
           onChanged: ((s) {
             setState(() {
               a.horas = int.parse(s);
