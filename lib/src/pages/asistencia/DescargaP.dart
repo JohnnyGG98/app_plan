@@ -16,7 +16,9 @@ class _DescargaPState extends State<DescargaP> {
   final fcpv = new FechasClasePV();
 
   String mensaje = '';
+  String mensajeFin = '';
   int numDescarga = 0;
+  bool fin = false; 
 
   @override
   Widget build(BuildContext context) {
@@ -31,28 +33,32 @@ class _DescargaPState extends State<DescargaP> {
           if (snapshot.hasData) {
             final res = snapshot.data;
             if (res) {
-
-              setState(() {
-                numDescarga++;
-              });
-
+             
               return Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('Descargamos todo correctamente.'),
+                    Text(mensajeFin),
 
-                    FlatButton(
+                    fin ? 
+                      FlatButton(
                       child: Icon(Icons.arrow_back_ios),
                       onPressed: (){
                         Navigator.pop(context);
                       },
-                    ),
-
+                    ) : 
+                    FlatButton(
+                    child: Icon(Icons.play_arrow),
+                    onPressed: (){
+                      setState(() {
+                        numDescarga++;
+                      });
+                    }),
                   ],
                 ),
               );
+              
             } else {
               return Center(
                 child: Text('Tuvimos un error al descargar los cursos vuelvalo a intentar mas tarde.'),
@@ -81,20 +87,21 @@ class _DescargaPState extends State<DescargaP> {
       case 0: 
       des = apv.descargarCursosDocente(identificacion);
       mensaje = 'Descargando cursos...';
+      mensajeFin = 'Descargamos todos sus cursos.';
       break; 
       case 1: 
       des = apv.descargarAlumnosDocente(identificacion);
       mensaje = 'Descargando alumnos...';
+      mensajeFin = 'Descargamos todos sus alumnos.';
       break; 
       case 2: 
       des = fcpv.descargarFechas(identificacion);
       mensaje = 'Descargando fechas...';
+      mensajeFin = 'Descargamos fechas correctamente.';
       break;
       default: 
-      des = await Future.delayed(
-        Duration(seconds: 2)
-      );
-      mensaje = 'Descargando...';
+      mensajeFin = 'Descargamos todo correctamente.';
+      fin = true;
       break;
     }
   }

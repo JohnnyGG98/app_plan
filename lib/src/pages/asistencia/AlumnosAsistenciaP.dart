@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/AlumnoAsistenciaM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaPV.dart';
+import 'package:plan/src/utils/AsistenciaComponentes.dart';
 
 class AlumnosAsistenciaP extends StatefulWidget {
   
@@ -15,6 +16,8 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
   List<DropdownMenuItem<String>> opts;
   AsistenciaParam param; 
 
+  TextStyle textSize = TextStyle(fontSize: 14);
+
   @override
   Widget build(BuildContext context) {
 
@@ -24,7 +27,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
         param.curso.idCurso, 
         param.fecha
       );
-      opts = _getFaltas(param.curso.horas);
+      opts =getCmbFaltas(param.curso.horas);
     } 
     
     return Scaffold(
@@ -42,7 +45,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 2.0,
-        vertical: 3.0
+        vertical: 0.0
       ),
       child: _listaAlumnos(),
     );
@@ -57,7 +60,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
           return ListView.builder(
             itemCount: als.length,
             itemBuilder: (BuildContext context, int i){
-              return _alumno(als[i]);
+              return _alumno(als[i], i);
             },
           );
         }else{
@@ -69,43 +72,28 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
     );
   }
 
-  List<DropdownMenuItem<String>> _getFaltas(int limite) {
-    List<DropdownMenuItem<String>> opts = new List();
-    opts.add(
-      DropdownMenuItem(
-         child: Text('Horas'),
-         value: '0',
-      )
-    );
-
-    for(var i = 1; i <= limite; i++) {
-      opts.add(
-        DropdownMenuItem(
-          child: Text(i.toString() + ' Hora'),
-          value: i.toString(),
-        )
-      );
-    }
-    return opts;
-  }
-
-  Widget _alumno(AlumnoAsistenciaM a) {
-    return Card(
-      child: ListTile(
-        title: Text(a.alumno),
-        trailing: DropdownButton(
-          value: a.numFalta.toString(),
-          items: opts,
-          onChanged: ((s) {
-            setState(() {
-              a.numFalta = int.parse(s);
-              APV.actualizar(
-                a.idAsistencia, 
-                a.numFalta
-              );
-            });
-          }),
-        ),
+  Widget _alumno(AlumnoAsistenciaM a, int pos) {
+    return ListTile(
+      title: Text(
+        a.alumno,
+        style: textSize,
+      ),
+      leading: CircleAvatar(
+        child: Text((pos + 1).toString()),
+        backgroundColor: Colors.blueGrey,
+      ),
+      trailing: DropdownButton(
+        value: a.numFalta.toString(),
+        items: opts,
+        onChanged: ((s) {
+          setState(() {
+            a.numFalta = int.parse(s);
+            APV.actualizar(
+              a.idAsistencia, 
+              a.numFalta
+            );
+          });
+        }),
       ),
     );
   }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/AsistenciaOfflineM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
-import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart'; 
+import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
+import 'package:plan/src/utils/AsistenciaComponentes.dart'; 
 
 class AlumnoAsistenciaOfflineP extends StatefulWidget {
 
@@ -25,7 +26,7 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
         param.curso.idCurso, 
         param.fecha
       );
-      opts = _getFaltas(param.curso.horas);
+      opts = getCmbFaltas(param.curso.horas);
     }
 
     return Scaffold(
@@ -43,7 +44,7 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 2.0,
-        vertical: 3.0
+        vertical: 0.0
       ),
       child: _listaAlumnos(),
     );
@@ -87,29 +88,6 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
         ),
       ),
     );
-  }
-
-
-  // Esto es una copia de AlumnosAsistenciaP 
-
-  List<DropdownMenuItem<String>> _getFaltas(int limite) {
-    List<DropdownMenuItem<String>> opts = new List();
-    opts.add(
-      DropdownMenuItem(
-         child: Text('Horas'),
-         value: '0',
-      )
-    );
-
-    for(var i = 1; i <= limite; i++) {
-      opts.add(
-        DropdownMenuItem(
-          child: Text(i.toString() + ' Hora'),
-          value: i.toString(),
-        )
-      );
-    }
-    return opts;
   }
 
 }

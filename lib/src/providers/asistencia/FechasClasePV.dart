@@ -11,7 +11,7 @@ class FechasClasePV {
   final fcbd = new FechasClaseBD();
 
   Future<List<FechasClaseM>> getFechasDocente(String identificacion) async {
-    String url = _url + '?identificacion=' + identificacion;
+    String url = _url + 'fechas?identificacion=' + identificacion;
     final res = await http.get(url);
 
     final data = json.decode(res.body); 
@@ -20,7 +20,8 @@ class FechasClasePV {
   }
 
   Future<List<FechasClaseM>> getFechasCurso(int idCurso) async {
-    String url = _url + '?idCurso=' + idCurso.toString();
+    String url = _url + 'fechas?idCurso=' + idCurso.toString();
+    print('Fechas: ' + url);
     final res = await http.get(url);
 
     final data = json.decode(res.body); 

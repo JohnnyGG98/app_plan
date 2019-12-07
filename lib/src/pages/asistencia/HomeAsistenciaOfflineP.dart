@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
+import 'package:plan/src/utils/AsistenciaComponentes.dart';
 
 class HomeAsistenciaOfflineP extends StatefulWidget {
 
@@ -11,7 +12,6 @@ class HomeAsistenciaOfflineP extends StatefulWidget {
 class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
   // Provider  
   final apv = new AsistenciaOfflinePV();
-  final fecha = new DateTime.now();
   int currentIndex = 0;
   Future<List<CursoAsistenciaM>> cursosDia, cursos; 
  
@@ -60,7 +60,12 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
           return ListView.builder(
             itemCount: cs.length,
             itemBuilder: (BuildContext context, int i){
-              return _carta(cs[i], context);
+              return cartaCursosAsistencia(
+                cs[i], 
+                context,
+                'asistenciaoffline',
+                'fechasoffline'
+              );
             },
           );
         } else {
@@ -88,58 +93,6 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
           title: Text('Todos')
         )
       ],
-    );
-  }
-
-  // Duplicado de la clase home asistencia  
-  Widget _carta(CursoAsistenciaM c, BuildContext context){
-    TextStyle s = TextStyle(
-      fontSize: 20.0
-    );
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.only(
-          top: 5.0,
-          right: 5.0,
-          left: 15.0,
-          bottom: 10.0
-        ),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(c.materia, style: s,),
-                  Text(c.periodo),       
-                  Text(c.curso),
-                ],
-              )
-              
-            ),
-            Column(
-              children: <Widget>[
-                FlatButton(
-                  child: Icon(Icons.format_list_numbered_rtl),
-                  onPressed: (){
-                    print('Id Curso: ' + c.idCurso.toString());
-                    AsistenciaParam asistencia = AsistenciaParam();
-                    asistencia.curso = c;
-                    asistencia.fecha = fecha.day.toString() + '/' + 
-                      fecha.month.toString() + '/' + 
-                      fecha.year.toString();
-                    Navigator.pushNamed(
-                      context,
-                      'asistenciaoffline',
-                      arguments: asistencia
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 

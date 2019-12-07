@@ -7,7 +7,6 @@ class AsistenciaPV {
 
   String _url = ConsApi.path + 'v2/asistencia/';
 
-
   Future<List<AlumnoAsistenciaM>> getListado(int idCurso, String fecha) async {
     final res = await http.get(_url + 'lista/' + idCurso.toString() + '?fecha=' + fecha);
 

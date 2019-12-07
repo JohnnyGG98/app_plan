@@ -11,6 +11,7 @@ import 'package:plan/src/pages/asistencia/AlumnoAsistenciaOfflineP.dart';
 import 'package:plan/src/pages/asistencia/AlumnosAsistenciaP.dart';
 import 'package:plan/src/pages/asistencia/DescargaP.dart';
 import 'package:plan/src/pages/asistencia/FechasOfflineP.dart';
+import 'package:plan/src/pages/asistencia/FechasP.dart';
 import 'package:plan/src/pages/asistencia/HomeAsistenciaOfflineP.dart';
 import 'package:plan/src/providers/ProviderI.dart';
 
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           'descarga': (BuildContext ct) => DescargaP(),
           'asistenciaoffline': (BuildContext ct) => AlumnoAsistenciaOfflineP(),
           'fechasoffline': (BuildContext ct) => FechasOfflineP(),
+          'fechas': (BuildContext ct) => FechasP(),
         },
         theme: ThemeData(
           primaryColor: Colors.blueGrey
