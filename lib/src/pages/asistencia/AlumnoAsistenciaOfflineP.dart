@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/AsistenciaOfflineM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
-import 'package:plan/src/utils/AsistenciaComponentes.dart'; 
+import 'package:plan/src/utils/AsistenciaComponentes.dart';
+import 'package:plan/src/utils/MiThema.dart'; 
 
 class AlumnoAsistenciaOfflineP extends StatefulWidget {
-
   _AlumnoAsistenciaOfflinePState createState() => _AlumnoAsistenciaOfflinePState();
 }
 
@@ -23,8 +23,8 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          param.curso.curso + ' ' + 
-          param.curso.materia 
+          param.curso.curso + ' | ' + 
+          param.fecha
         ),
       ),
       body: _page(),
@@ -53,11 +53,26 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
 
   Widget _page() {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 2.0,
-        vertical: 0.0
-      ),
-      child: _listaAlumnos(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 5.0),
+            color: Theme.of(context).primaryColorDark,
+            width: double.infinity,
+            child: Column(
+              children: <Widget>[
+                Text(param.curso.materia, style: tituloInfo,),
+                Text(param.curso.periodo, style: tituloInfo, ),
+              ],
+            ) 
+          ),
+
+          Expanded(
+            child: _listaAlumnos(),
+          )
+        ],
+      )
     );
   }
 
@@ -68,9 +83,10 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
         if(snapshot.hasData){
           final als = snapshot.data;
           return ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
             itemCount: als.length,
             itemBuilder: (BuildContext context, int i){
-              return _alumno(als[i]);
+              return _alumno(als[i], i);
             },
           );
         }else{
@@ -82,22 +98,23 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
     );
   }
 
-
-  Widget _alumno(AsistenciaOfflineM a) {
-    return Card(
-      child: ListTile(
-        title: Text(a.alumno),
-        trailing: DropdownButton(
-          value: a.horas.toString(),
-          items: _opts,
-          onChanged: ((s) {
-            setState(() {
-              a.horas = int.parse(s);
-              aopv.actualizarFaltas(a);
-            });
-          }),
-        ),
+  Widget _alumno(AsistenciaOfflineM a, int pos) {
+    return ListTile(
+      title: Text(a.alumno),
+      leading: CircleAvatar(
+        child: Text((pos + 1).toString()),
       ),
+      trailing: DropdownButton(
+        value: a.horas.toString(),
+        items: _opts,
+        onChanged: ((s) {
+          setState(() {
+            a.horas = int.parse(s);
+            aopv.actualizarFaltas(a);
+          });
+        }),
+      ),
+      contentPadding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 7.0),
     );
   }
 

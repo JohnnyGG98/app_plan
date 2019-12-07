@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
 import 'package:plan/src/models/asistencia/FechasClaseM.dart';
-import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/FechasClasePV.dart';
 import 'package:plan/src/utils/FechasComponentes.dart';
+import 'package:plan/src/utils/MiThema.dart';
 
 class FechasOfflineP extends StatelessWidget {
   final fcpv = new FechasClasePV();
@@ -24,13 +24,17 @@ class FechasOfflineP extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(height: 20,),
-
-          Text(curso.materia),
-
-          Text(curso.periodo),
-
-          SizedBox(height: 20,),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.0),
+            color: Theme.of(context).primaryColorDark,
+            width: double.infinity,
+            child: Column(
+              children: <Widget>[
+                Text(curso.materia, style: tituloInfo,),
+                Text(curso.periodo, style: tituloInfo,),
+              ],
+            ) 
+          ),
 
           Expanded(
             child: getFechasLista(

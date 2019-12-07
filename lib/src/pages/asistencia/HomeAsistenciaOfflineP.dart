@@ -3,6 +3,7 @@ import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
 import 'package:plan/src/utils/AsistenciaComponentes.dart';
+import 'package:plan/src/utils/MiThema.dart';
 
 class HomeAsistenciaOfflineP extends StatefulWidget {
 
@@ -54,7 +55,10 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
 
   FlatButton _btnFechas(CursoAsistenciaM c) {
     return FlatButton(
-      child: Icon(Icons.calendar_today),
+      child: Icon(
+        Icons.calendar_today,
+        color: Theme.of(context).primaryColorDark,
+      ),
       onPressed: (){
         Navigator.pushNamed(
           context,
@@ -67,7 +71,10 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
 
   FlatButton _btnDia(CursoAsistenciaM c) {
     return FlatButton(
-      child: Icon(Icons.format_list_numbered_rtl),
+      child: Icon(
+        Icons.format_list_numbered_rtl,
+        color: Theme.of(context).primaryColorDark,
+      ),
       onPressed: (){
         AsistenciaParam asistencia = AsistenciaParam();
         asistencia.curso = c;
@@ -89,18 +96,23 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
       builder:(BuildContext context, AsyncSnapshot<List<CursoAsistenciaM>> snapshot){
         if (snapshot.hasData) {
           final cs = snapshot.data;
-          return ListView.builder(
-            itemCount: cs.length,
-            itemBuilder: (BuildContext context, int i){
-              return cartaCursosAsistenciaBtn(
-                cs[i], 
-                context,
-                _btnDia(cs[i])
-              );
-            },
-          );
+          if (cs.length > 0) {
+            return ListView.builder(
+              itemCount: cs.length,
+              itemBuilder: (BuildContext context, int i){
+                return cartaCursosAsistenciaBtn(
+                  cs[i], 
+                  context,
+                  _btnDia(cs[i])
+                );
+              },
+            );
+          } else {
+            return sinResultados;
+          }
+          
         } else {
-          return Center (child: CircularProgressIndicator(),);
+          return cargando(context);
         }
       },
     );
@@ -112,18 +124,24 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
       builder:(BuildContext context, AsyncSnapshot<List<CursoAsistenciaM>> snapshot){
         if (snapshot.hasData) {
           final cs = snapshot.data;
-          return ListView.builder(
-            itemCount: cs.length,
-            itemBuilder: (BuildContext context, int i){
-              return cartaCursosAsistenciaBtn(
-                cs[i], 
-                context,
-                _btnFechas(cs[i])
-              );
-            },
-          );
+
+          if (cs.length > 0) {
+            return ListView.builder(
+              itemCount: cs.length,
+              itemBuilder: (BuildContext context, int i){
+                return cartaCursosAsistenciaBtn(
+                  cs[i], 
+                  context,
+                  _btnFechas(cs[i])
+                );
+              },
+            );
+          } else {
+            return sinResultados;
+          }
+          
         } else {
-          return Center (child: CircularProgressIndicator(),);
+          return cargando(context);
         }
       },
     );

@@ -6,6 +6,7 @@ import 'package:plan/src/providers/PeriodoPV.dart';
 import 'package:http/http.dart' as http;
 import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/utils/ConsApi.dart';
+import 'package:plan/src/utils/MiThema.dart';
 import 'package:plan/src/utils/Widgets.dart';
 
 class HomeCursoP extends StatefulWidget {
@@ -266,9 +267,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
                 iconSize: 40.0,
               );
             }else{
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return cargando(context);
             }
           },
         )
@@ -303,9 +302,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
                   iconSize: 40.0,
                 );
               }else{
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return cargando(context);
               }
             },
           )
@@ -340,9 +337,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
                   iconSize: 40.0,
                 );
               }else{
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return cargando(context);
               }
             },
           )
@@ -376,9 +371,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
                   iconSize: 40.0,
                 );
               }else{
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return cargando(context);
               }
             },
           )

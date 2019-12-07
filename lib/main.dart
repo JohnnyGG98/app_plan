@@ -44,7 +44,10 @@ class MyApp extends StatelessWidget {
           'fechas': (BuildContext ct) => FechasP(),
         },
         theme: ThemeData(
-          primaryColor: Colors.blueGrey
+          primaryColor: Color.fromRGBO(10, 61, 98, 1.0),
+          primaryColorDark: Color.fromRGBO(6, 40, 65, 1.0),
+
+          
         ),
       ),
     );
