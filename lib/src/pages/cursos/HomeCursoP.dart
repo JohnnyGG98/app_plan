@@ -31,7 +31,6 @@ class _HomeCursoPState extends State<HomeCursoP> {
   String _cursoNombreSelec = '0';
   String _materiaSelec = '0';
   bool _carrerasCargado = false;
-  bool _conectado = false;
 
   @override
   Widget build(BuildContext context) {
@@ -68,95 +67,18 @@ class _HomeCursoPState extends State<HomeCursoP> {
     return _paginaSecundaria();
   }
 
-   Future<bool> _tenemosConexion() async {
-    try{
-      if(!_conectado){
-        final r = await http.get(ConsApi.path+'alumno/buscar/johnny');
-        if(r.body.isNotEmpty){
-          _conectado = true;
-          return true;
-        }else{
-          return false;
-        }
-      }else{
-        return true;
-      }
-    } catch(_){
-      _conectado = false;
-      return false;
-    }
-  }
-
   Widget _paginaSecundaria() {
-    return FutureBuilder(
-      future: _tenemosConexion(),
-      builder: (BuildContext ct, AsyncSnapshot<bool> data){
-        if(data.hasData){
-          if(data.data){
-            if(!_carrerasCargado){
-              carreras = carpv.getTodos();
-              _carrerasCargado = true;
-            }
-            return ListView(
-              children: <Widget>[
-                _headerPage(),
-                SizedBox(height: 40.0,),
-                _combos(),
-              ]
-            );
-          }else{
-            return _volverComprobarConexion();
-          }
-        }else{
-          return MisWidgets.cargando('Comprobando la conexion a la aplicacion.');
-        }
-      },
-    );
-  }
+    if(!_carrerasCargado){
+      carreras = carpv.getTodos();
+      _carrerasCargado = true;
+    }
 
-  Widget _volverComprobarConexion(){
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30.0),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Card(
-              child: ListTile(
-                contentPadding: EdgeInsets.symmetric(vertical: 15.0),
-                title: Text(
-                  'No pudimos establecer conexion con el sistema',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25.0
-                  ),
-                ),
-              ),
-              elevation: 5.0,
-              color: Colors.blueGrey,
-            ),
-            SizedBox(height: 10.0,),
-            Text('Volver a comprobar',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20.0
-              ),
-            ),
-            SizedBox(height: 10.0,),
-            IconButton(
-              icon: Icon(Icons.cached,
-                size: 40.0,
-              ),
-              onPressed: (){
-                setState(() {
-                  print('Comprobando conexion');
-                });
-              },
-            )
-          ],
-        )
-      ),
+    return ListView(
+      children: <Widget>[
+        _headerPage(),
+        SizedBox(height: 40.0,),
+        _combos(),
+      ]
     );
   }
 
@@ -263,7 +185,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
                   });
                 }),
                 isExpanded: true,
-                icon: Icon(Icons.content_paste),
+                icon: dropDown,
                 iconSize: 40.0,
               );
             }else{
@@ -298,7 +220,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
                     });
                   }),
                   isExpanded: true,
-                  icon: Icon(Icons.content_paste),
+                  icon: dropDown,
                   iconSize: 40.0,
                 );
               }else{
@@ -333,8 +255,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
                     });
                   }),
                   isExpanded: true,
-                  icon: Icon(Icons.content_paste),
-                  iconSize: 40.0,
+                  icon: dropDown,
                 );
               }else{
                 return cargando(context);
@@ -367,8 +288,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
                     });
                   }),
                   isExpanded: true,
-                  icon: Icon(Icons.content_paste),
-                  iconSize: 40.0,
+                  icon: dropDown,
                 );
               }else{
                 return cargando(context);

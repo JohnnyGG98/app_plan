@@ -9,10 +9,13 @@ class PeriodoPV {
 
   Future<List<PeriodoM>> _obtenerPeriodo(url) async {
     final res = await http.get(url);
-    final decodeData = json.decode(res.body);
-    final periodos = new Periodos.fromJsonList(decodeData['items']);
+    if (esResValida(res)) {
+      final decodeData = json.decode(res.body);
+      final periodos = new Periodos.fromJsonList(decodeData['items']);
 
-    return periodos.periodos;
+      return periodos.periodos;
+    }
+    return [];
   }
 
   Future<List<PeriodoM>> getTodos() async {

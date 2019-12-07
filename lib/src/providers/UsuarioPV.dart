@@ -12,26 +12,18 @@ class UsuarioPV {
       'login': 'true'
     };
 
-    print('DATA: ');
-    print(data);
-
     final res = await http.post(
       ConsApi.path + 'v1/usuario/login/',
       body: data
     );
-
-
-    print(res.body);
-
-    Map<String, dynamic> decodedRes = json.decode(res.body);
-
-    if (decodedRes['statuscode'] == 200) {
-      return true;
-    } else {
-      print(decodedRes);
-      print('***************');
-      return false;
+    if (esResValida(res)) {
+      print(res.body);
+      Map<String, dynamic> decodedRes = json.decode(res.body);
+      if (decodedRes['statuscode'] == 200) {
+        return true;
+      }
     }
+    return false;
   }
 
 }

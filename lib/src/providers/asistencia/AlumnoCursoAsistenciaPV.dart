@@ -10,13 +10,12 @@ class AlumnoCursoAsistenciaPV {
   Future<List<AlumnoCursoAsistenciaM>> getByDocente(String identificacion) async {
     String url = _url + 'alumnos/' + identificacion;
     final res = await http.get(url); 
-
-    print(res.body);
-    print('----');
-    final data = json.decode(res.body);
-    final acs = AlumnoCursoAsistencias.fromJsonList(data['items']); 
-
-    return acs.acs;
+    if (esResValida(res)) {
+      final data = json.decode(res.body);
+      final acs = AlumnoCursoAsistencias.fromJsonList(data['items']); 
+      return acs.acs;
+    } 
+    return [];
   }
 
 }

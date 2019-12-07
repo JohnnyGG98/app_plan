@@ -4,6 +4,7 @@ import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/providers/asistencia/CursoAsistenciaPV.dart';
 import 'package:plan/src/utils/AsistenciaComponentes.dart';
+import 'package:plan/src/utils/MiThema.dart';
 
 class HomeAsistenciaP extends StatefulWidget {
   @override
@@ -45,7 +46,7 @@ class _HomeAsistenciaPState extends State<HomeAsistenciaP> {
             },
           );
         } else {
-          return Center (child: CircularProgressIndicator(),);
+          return cargando(context);
         }
       },
     );

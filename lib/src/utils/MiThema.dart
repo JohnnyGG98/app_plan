@@ -14,11 +14,17 @@ Center sinResultados = Center(
   child: Text('No encontramos resultados.', style: _noData,),
 );
 
+Icon dropDown = Icon(
+  Icons.arrow_drop_down,
+  color: Color.fromRGBO(6, 40, 65, 1.0),
+  size: 40.0,
+);
+
 Widget cargando(BuildContext context) {
   return Center(
     child: CircularProgressIndicator(
-      backgroundColor: Theme.of(context).primaryColorDark,
       semanticsLabel: 'Cargando...',
+      valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
     ),
   );
 }

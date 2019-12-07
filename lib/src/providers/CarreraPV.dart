@@ -11,20 +11,18 @@ class CarreraPV {
 
   String _url = ConsApi.path+'v0/carrera/';
 
-
   Future<List<CarreraM>> _obtenerCarrera(url) async{
     final res = await http.get(url);
-    //print(res.body);
-    final decodeData = json.decode(res.body);
-    //print(decodeData['items']);
-    final carreras = new Carreras.fromJsonList(decodeData['items']);
-
-    return carreras.carreras;
+    if (esResValida(res)) {
+      final decodeData = json.decode(res.body);
+      final carreras = new Carreras.fromJsonList(decodeData['items']);
+      return carreras.carreras;
+    }
+    return [];
   }
 
   Future<List<CarreraM>> getTodos() async {
     final url = _url+'todos';
-    print('Esta es la URL '+url.toString());
     return await _obtenerCarrera(url);
   }
 

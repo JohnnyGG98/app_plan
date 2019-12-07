@@ -10,10 +10,13 @@ class CursoAsistenciaPV {
 
   Future<List<CursoAsistenciaM>> _getCursos(String url) async {
     final res = await http.get(url);
-    print(url);
-    final data = json.decode(res.body);
-    final cs = CursosAsistencia.fromJsonList(data['items']);
-    return cs.cas;
+    
+    if (esResValida(res)) {
+      final data = json.decode(res.body);
+      final cs = CursosAsistencia.fromJsonList(data['items']);
+      return cs.cas;
+    }
+    return [];
   }
 
   Future<List<CursoAsistenciaM>> getPorDia(String usuario) async {

@@ -12,12 +12,12 @@ class AlumnoPV {
 
   Future<List<AlumnoM>> _obtenerAlumnos(url) async {
     final res = await http.get(url);
-
-    final decodeData = json.decode(res.body);
-
-    final alumnos = Alumnos.fromJsonList(decodeData['items']);
-
-    return alumnos.alumnos;
+    if (esResValida(res)) {
+      final decodeData = json.decode(res.body);
+      final alumnos = Alumnos.fromJsonList(decodeData['items']);
+      return alumnos.alumnos;
+    }
+    return [];
   }
 
   Future<List<AlumnoM>> getTodos() async {

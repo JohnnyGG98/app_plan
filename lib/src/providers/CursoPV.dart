@@ -12,11 +12,12 @@ class CursoPV {
 
   Future<List<CursoM>> _obtenerCursos(url) async {
     final res = await http.get(url);
-
-    final decodeData = json.decode(res.body);
-    final cursos = new Cursos.fromJsonList(decodeData['items']);
-
-    return cursos.cursos;
+    if (esResValida(res)) {
+      final decodeData = json.decode(res.body);
+      final cursos = new Cursos.fromJsonList(decodeData['items']);
+      return cursos.cursos;
+    }
+    return [];
   }
 
   Future<List<CursoM>> getTodos() async {
@@ -48,15 +49,18 @@ class CursoPV {
   Future<List<String>> getNombreCursoPorPeriodo(int idPeriodo) async {
     final url = _url+'nombre/'+idPeriodo.toString();
     final res = await http.get(url);
-    final decodedata = json.decode(res.body);
-    List<String> nombres = new List();
+    if (esResValida(res)) {
+      final decodedata = json.decode(res.body);
+      List<String> nombres = new List();
 
-    List<dynamic> jsonList = decodedata['items'];
-    for(var i in jsonList){
-      final n = i['curso_nombre'];
-      nombres.add(n);
+      List<dynamic> jsonList = decodedata['items'];
+      for(var i in jsonList){
+        final n = i['curso_nombre'];
+        nombres.add(n);
+      }
+      return nombres;
     }
-    return nombres;
+    return [];
   }
 
   Future<List<MateriaM>> getMateriasPorNombreCursoPeriodo(String curso, int idPeriodo) async {

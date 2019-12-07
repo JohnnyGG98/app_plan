@@ -13,20 +13,23 @@ class FechasClasePV {
   Future<List<FechasClaseM>> getFechasDocente(String identificacion) async {
     String url = _url + 'fechas?identificacion=' + identificacion;
     final res = await http.get(url);
-
-    final data = json.decode(res.body); 
-    final fcs = FechasClases.fromJsonList(data['items']); 
-    return fcs.fcs;
+    if (esResValida(res)) {
+      final data = json.decode(res.body); 
+      final fcs = FechasClases.fromJsonList(data['items']); 
+      return fcs.fcs;
+    }
+    return [];
   }
 
   Future<List<FechasClaseM>> getFechasCurso(int idCurso) async {
     String url = _url + 'fechas?idCurso=' + idCurso.toString();
-    print('Fechas: ' + url);
     final res = await http.get(url);
-
-    final data = json.decode(res.body); 
-    final fcs = FechasClases.fromJsonList(data['items']); 
-    return fcs.fcs;
+    if (esResValida(res)) {
+      final data = json.decode(res.body); 
+      final fcs = FechasClases.fromJsonList(data['items']); 
+      return fcs.fcs;
+    }
+    return [];
   }
 
   Future<List<FechasClaseM>> getFechasLocal(int idCurso) async {
@@ -35,11 +38,8 @@ class FechasClasePV {
 
   Future<bool> descargarFechas(String identificacion) async {
     fcbd.deleteAll();
-
     List<FechasClaseM> fcs = await getFechasDocente(identificacion); 
-
     Future<bool> des;
-
     fcs.forEach((c) => {
       des = fcbd.guardar(c)
     });
