@@ -40,8 +40,8 @@ class FechasClasePV {
     fcbd.deleteAll();
     List<FechasClaseM> fcs = await getFechasDocente(identificacion); 
     Future<bool> des;
-    fcs.forEach((c) => {
-      des = fcbd.guardar(c)
+    fcs.forEach((c) {
+      des = fcbd.guardar(c);
     });
     return des;
   }  

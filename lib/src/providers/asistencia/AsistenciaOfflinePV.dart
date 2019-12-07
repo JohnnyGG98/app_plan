@@ -38,8 +38,8 @@ class AsistenciaOfflinePV {
 
     final cas = CursosAsistencia.fromJsonList(data['items']);
 
-    cas.cas.forEach((c) => {
-      des = cabd.guardar(c)
+    cas.cas.forEach((c) {
+      des = cabd.guardar(c);
     });
     
     return des;
@@ -57,8 +57,8 @@ class AsistenciaOfflinePV {
 
     final aas = AlumnoCursoAsistencias.fromJsonList(data['items']);
 
-     aas.acs.forEach((a) => {
-      des = aabd.guardar(a)
+     aas.acs.forEach((a) {
+      des = aabd.guardar(a);
     });
     return des;
   }
@@ -68,8 +68,8 @@ class AsistenciaOfflinePV {
     print('Descargamos fechas docentes...');
     List<FechasClaseM> fcs = await fcpv.getFechasDocente(identificacion); 
     Future<bool> des;
-    fcs.forEach((c) => {
-      des = fcbd.guardar(c)
+    fcs.forEach((c) {
+      des = fcbd.guardar(c);
     });
     return des;
   }  

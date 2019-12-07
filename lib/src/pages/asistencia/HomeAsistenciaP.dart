@@ -13,7 +13,7 @@ class HomeAsistenciaP extends StatefulWidget {
 
 class _HomeAsistenciaPState extends State<HomeAsistenciaP> {
 
-  final CAPV = new CursoAsistenciaPV();
+  final capv = new CursoAsistenciaPV();
   Future<List<CursoAsistenciaM>> cursos;
   final fecha = new DateTime.now();
 
@@ -21,9 +21,10 @@ class _HomeAsistenciaPState extends State<HomeAsistenciaP> {
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
     print('Usuario logeado ${bloc.usuario}');
-    
-    cursos = CAPV.getPorDia(bloc.usuario);
 
+    if (cursos == null) {
+      cursos = capv.getPorDia(bloc.usuario);
+    }
     return Scaffold(
       body: _page(),
     );

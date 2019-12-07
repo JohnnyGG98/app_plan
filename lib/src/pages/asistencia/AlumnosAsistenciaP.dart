@@ -11,7 +11,7 @@ class AlumnosAsistenciaP extends StatefulWidget {
 }
 
 class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
-  final APV = new AsistenciaPV();
+  final apv = new AsistenciaPV();
   Future<List<AlumnoAsistenciaM>> alumnos;
   List<DropdownMenuItem<String>> opts;
   AsistenciaParam param; 
@@ -23,7 +23,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
 
     if (alumnos == null) {
       param = ModalRoute.of(context).settings.arguments;
-      alumnos = APV.getListado(
+      alumnos = apv.getListado(
         param.curso.idCurso, 
         param.fecha
       );
@@ -88,7 +88,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
         onChanged: ((s) {
           setState(() {
             a.numFalta = int.parse(s);
-            APV.actualizar(
+            apv.actualizar(
               a.idAsistencia, 
               a.numFalta
             );

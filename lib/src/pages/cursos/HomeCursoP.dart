@@ -3,11 +3,8 @@ import 'package:plan/src/models/PeriodoM.dart';
 import 'package:plan/src/providers/CarreraPV.dart';
 import 'package:plan/src/providers/CursoPV.dart';
 import 'package:plan/src/providers/PeriodoPV.dart';
-import 'package:http/http.dart' as http;
 import 'package:plan/src/providers/ProviderI.dart';
-import 'package:plan/src/utils/ConsApi.dart';
 import 'package:plan/src/utils/MiThema.dart';
-import 'package:plan/src/utils/Widgets.dart';
 
 class HomeCursoP extends StatefulWidget {
   @override

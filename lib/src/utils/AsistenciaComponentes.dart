@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
-import 'package:plan/src/models/params/AsistenciaParam.dart';
 
 List<DropdownMenuItem<String>> getCmbFaltas(int limite) {
   List<DropdownMenuItem<String>> opts = new List();
@@ -28,7 +27,6 @@ Widget cartaCursosAsistenciaBtn(
   BuildContext context,
   FlatButton btn
 ){
-  final fecha = new DateTime.now();
   TextStyle s = TextStyle(
     fontSize: 20.0
   );

@@ -4,7 +4,6 @@ import 'package:plan/src/models/asistencia/FechasClaseM.dart';
 import 'package:plan/src/providers/asistencia/FechasClasePV.dart';
 import 'package:plan/src/utils/FechasComponentes.dart';
 
-
 class FechasP extends StatelessWidget {
 
   final fcpv = new FechasClasePV();

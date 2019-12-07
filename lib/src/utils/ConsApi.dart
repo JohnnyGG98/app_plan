@@ -13,6 +13,7 @@ bool esResValida(http.Response res) {
   String body = res.body;
 
   print('Statuscode directo: ' + res.statusCode.toString());
+  print(res.toString());
 
   if (body.contains('statuscode')) {
     if (body.contains('200')) {
