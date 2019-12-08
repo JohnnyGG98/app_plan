@@ -33,7 +33,6 @@ class _HomePState extends State<HomeP> {
         onPressed: (){
           Navigator.pushNamed(context, 'offline');
         },
-        backgroundColor: Theme.of(context).primaryColor,
       ),
     );
   }
@@ -50,9 +49,10 @@ class _HomePState extends State<HomeP> {
 
    Widget _crearBarra() {
     return BottomNavigationBar(
-      //Que elemento esta activo
+      backgroundColor: Theme.of(context).primaryColorDark,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white60,
       currentIndex: currentIndex,
-      //La posicion en donde se hizo click -> index
       onTap: (index){
         setState(() {
           currentIndex = index;          

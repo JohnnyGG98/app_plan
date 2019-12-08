@@ -149,6 +149,9 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
 
   Widget _crearBarra() {
     return BottomNavigationBar(
+      backgroundColor: Theme.of(context).primaryColorDark,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white60,
       currentIndex: currentIndex,
       onTap: (index){
         setState(() {

@@ -47,7 +47,7 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
         param.fecha
       ); 
 
-      setState(() {});
+      //setState(() {});
     }
   }
 
