@@ -273,10 +273,12 @@ class LoginPage extends StatelessWidget {
           padding: EdgeInsets.only(top: 80.0),
           child: Column(
             children: <Widget>[
-              Icon( 
-                Icons.bookmark, 
-                color: Colors.white,
-                size: 100.0,
+              Container(
+                height: 80.0,
+                child: Image(
+                  image: AssetImage('assets/SPP2.png'),
+                  fit: BoxFit.contain,
+                ),
               ),
               SizedBox(
                 height: 10.0, 

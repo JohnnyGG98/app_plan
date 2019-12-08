@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class MisWidgets {
@@ -81,3 +83,69 @@ Drawer crearMenuLateral(BuildContext context) {
     ),
   );
 }
+
+Stack iconAPP = Stack(
+  children: <Widget>[
+    Transform.rotate(
+      //El pi lo importamos de dart math
+      angle: -pi / 5.0,
+      child: Container(
+        width: 160.0,
+        height: 100.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(80.0),
+          //color: Colors.pink
+          gradient: LinearGradient(
+            colors: [
+              Color.fromRGBO(6, 40, 65, 1.0),
+              Color.fromRGBO(10, 61, 98, 1.0),
+            ]
+          )
+        ),
+      ),
+    ),
+
+
+    Transform.rotate(
+      //El pi lo importamos de dart math
+      angle: pi / 5.0,
+      child: Container(
+        width: 160.0,
+        height: 100.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(80.0),
+          //color: Colors.pink
+          gradient: LinearGradient(
+            colors: [
+              Color.fromRGBO(6, 40, 65, 1.0),
+              Color.fromRGBO(10, 61, 98, 1.0),
+            ]
+          )
+        ),
+      ),
+    ),
+
+    Container(
+      width: 160.0,
+      height: 100.0,
+      child: Image(
+        image: AssetImage('assets/SPP2.png'),
+        fit: BoxFit.contain,
+      ),
+    ),
+    
+    Container(
+      child: Text('Plan', 
+        style: TextStyle(
+          fontSize: 50.0, 
+          color: Colors.white, 
+          fontWeight: FontWeight.w800,
+          letterSpacing: 3.0,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
+    )
+
+  ],
+);

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/PeriodoM.dart';
 import 'package:plan/src/providers/CarreraPV.dart';
@@ -5,6 +7,8 @@ import 'package:plan/src/providers/CursoPV.dart';
 import 'package:plan/src/providers/PeriodoPV.dart';
 import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/utils/MiThema.dart';
+import 'package:plan/src/utils/Widgets.dart';
+import 'package:plan/src/widgets/dropdowmcustom.dart';
 
 class HomeCursoP extends StatefulWidget {
   @override
@@ -61,7 +65,13 @@ class _HomeCursoPState extends State<HomeCursoP> {
     final bloc = Provider.of(context);
     print('Usuario logeado ${bloc.usuario}');
 
-    return _paginaSecundaria();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Cursos'),
+      ),
+      drawer: crearMenuLateral(context),
+      body: _paginaSecundaria(),
+    );
   }
 
   Widget _paginaSecundaria() {
@@ -98,15 +108,20 @@ class _HomeCursoPState extends State<HomeCursoP> {
     final header = Column(
       children: <Widget>[
         SizedBox(height: 40.0,),
-        Text('Plan', 
-        style: TextStyle(fontSize: 50.0),),
-        SizedBox(height: 20.0,),
+        iconAPP,
+        SizedBox(height: 40.0,),
+        Divider(
+          color: Theme.of(context).primaryColorDark,
+          thickness: 5.0,
+        ),
+        SizedBox(height: 10.0,),
         _buscador(),
       ],
     );
-
     return _paddingWidgets(header);
   }
+
+  
 
   Widget _combos(){
     final body = Column(
@@ -169,8 +184,8 @@ class _HomeCursoPState extends State<HomeCursoP> {
           future: carreras,
           builder: (BuildContext ct, AsyncSnapshot<List<CarreraM>> snapshot){
             if(snapshot.hasData){
-              return DropdownButton(
-
+              return MultilineDropdownButtonFormField(
+                decoration: txtDecoration,
                 value: _carreraSelec,
                 items: getCarreras(snapshot.data),
                 onChanged: ((s){
@@ -181,9 +196,6 @@ class _HomeCursoPState extends State<HomeCursoP> {
                     _materiaSelec = '0';
                   });
                 }),
-                isExpanded: true,
-                icon: dropDown,
-                iconSize: 40.0,
               );
             }else{
               return cargando(context);
@@ -205,8 +217,8 @@ class _HomeCursoPState extends State<HomeCursoP> {
           future: periodos,
             builder: (BuildContext ct, AsyncSnapshot<List<PeriodoM>> snapshot){
               if(snapshot.hasData){
-                return DropdownButton(
-
+                return MultilineDropdownButtonFormField(
+                  decoration: txtDecoration,
                   value: _periodoSelec,
                   items: getPeriodos(snapshot.data),
                   onChanged: ((s){
@@ -216,9 +228,6 @@ class _HomeCursoPState extends State<HomeCursoP> {
                       _materiaSelec = '0';
                     });
                   }),
-                  isExpanded: true,
-                  icon: dropDown,
-                  iconSize: 40.0,
                 );
               }else{
                 return cargando(context);
@@ -241,8 +250,8 @@ class _HomeCursoPState extends State<HomeCursoP> {
           future: cursosNombre,
             builder: (BuildContext ct, AsyncSnapshot<List<String>> snapshot){
               if(snapshot.hasData){
-                return DropdownButton(
-
+                return MultilineDropdownButtonFormField(
+                  decoration: txtDecoration,
                   value: _cursoNombreSelec,
                   items: getNombreCurso(snapshot.data),
                   onChanged: ((s){
@@ -251,8 +260,6 @@ class _HomeCursoPState extends State<HomeCursoP> {
                       _materiaSelec = '0';
                     });
                   }),
-                  isExpanded: true,
-                  icon: dropDown,
                 );
               }else{
                 return cargando(context);
@@ -275,8 +282,8 @@ class _HomeCursoPState extends State<HomeCursoP> {
           future: materias,
             builder: (BuildContext ct, AsyncSnapshot<List<MateriaM>> snapshot){
               if(snapshot.hasData){
-                return DropdownButton(
-
+                return MultilineDropdownButtonFormField(
+                  decoration: txtDecoration,
                   value: _materiaSelec,
                   items: getMateria(snapshot.data),
                   onChanged: ((s){
@@ -285,7 +292,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
                     });
                   }),
                   isExpanded: true,
-                  icon: dropDown,
+                  
                 );
               }else{
                 return cargando(context);
@@ -374,15 +381,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
   }
 
   static Widget _stlItem(String item){
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 10.0,
-        horizontal: 5.0
-      ),
-      child: Text(item, 
-        style: TextStyle(fontSize: 15.0),
-      ),
-    );
+    return Text(item,);
   }
 
   Widget _botonesCombo(){

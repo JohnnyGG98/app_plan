@@ -14,12 +14,13 @@ class _HomePState extends State<HomeP> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /*
       appBar: AppBar(
         title: Text('Plan'),
       ),
 
       drawer: crearMenuLateral(context),
-
+*/
       body: _cargarPagina(currentIndex),
       bottomNavigationBar: _crearBarra(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

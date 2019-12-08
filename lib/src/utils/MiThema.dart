@@ -43,3 +43,9 @@ Widget cargando(BuildContext context) {
     ),
   );
 }
+
+const txtDecoration = InputDecoration(
+  fillColor: Colors.white,
+  filled: true,
+  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+);

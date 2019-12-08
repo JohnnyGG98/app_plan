@@ -5,6 +5,7 @@ import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/providers/asistencia/CursoAsistenciaPV.dart';
 import 'package:plan/src/utils/AsistenciaComponentes.dart';
 import 'package:plan/src/utils/MiThema.dart';
+import 'package:plan/src/utils/Widgets.dart';
 
 class HomeAsistenciaP extends StatefulWidget {
   @override
@@ -16,56 +17,53 @@ class _HomeAsistenciaPState extends State<HomeAsistenciaP> {
   final capv = new CursoAsistenciaPV();
   Future<List<CursoAsistenciaM>> cursos, cursosTodos;
   final fecha = new DateTime.now();
-  // Controlador del tab 
-  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
     print('Usuario logeado ${bloc.usuario}');
 
-    if (cursos == null && currentIndex == 0) {
+    if (cursos == null) {
       cursos = capv.getPorDia(bloc.usuario);
     }
 
-    if (cursosTodos == null && currentIndex == 1) {
+    if (cursosTodos == null) {
       cursosTodos = capv.getTodos(bloc.usuario);
     }
-    
-    return Scaffold(
-      body: _cargarPagina(currentIndex),
-      bottomNavigationBar: _tab(),
-
-    );
+    return _tabBar();
   }
 
-  Widget _cargarPagina(int currentIndex) {
-    switch(currentIndex){
-      case 0: return _cursosDia();
-      case 1: return _cursosTodos();
-      default:
-      return _cursosTodos();
-    }
-  }
 
-  Widget _tab() {
-    return BottomNavigationBar(
-      currentIndex: currentIndex,
-      onTap: (index){
-        setState(() {
-          currentIndex = index;          
-        });
-      },
-      items: [
-         BottomNavigationBarItem(
-          icon: Icon(Icons.today),
-          title: Text('Dia')
+  Widget _tabBar() {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Asistencia'),
+          bottom: TabBar(
+            
+            tabs: [
+              Tab(
+                icon: Icon(Icons.today),
+                text: 'Dia',
+              ),
+              Tab(
+                icon: Icon(Icons.calendar_today), 
+                text: 'Todos',
+              ),
+            ],
+          ),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          title: Text('Todos')
-        )
-      ],
+
+        drawer: crearMenuLateral(context),
+
+        body: TabBarView(
+          children: [
+            _cursosDia(),
+            _cursosTodos(),
+          ],
+        ),
+      ),
     );
   }
 
