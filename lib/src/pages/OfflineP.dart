@@ -34,13 +34,6 @@ class OfflineP extends StatelessWidget {
           }
         ),
         SizedBox(height: 20.0,),
-        _estiloBtn(
-          'Cursos',
-          (){
-            Navigator.pushNamed(context, 'cursosoffline');
-          }
-        ),
-        SizedBox(height: 20.0,),
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/pages/asistencia/HomeAsistenciaP.dart';
 import 'package:plan/src/pages/cursos/HomeCursoP.dart';
+import 'package:plan/src/utils/Widgets.dart';
 
 class HomeP extends StatefulWidget {
   @override
@@ -15,15 +16,9 @@ class _HomePState extends State<HomeP> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Plan'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.close),
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, '/');
-            },
-          )
-        ],
       ),
+
+      drawer: crearMenuLateral(context),
 
       body: _cargarPagina(currentIndex),
       bottomNavigationBar: _crearBarra(),
@@ -47,7 +42,7 @@ class _HomePState extends State<HomeP> {
     }
   }
 
-   Widget _crearBarra() {
+  Widget _crearBarra() {
     return BottomNavigationBar(
       backgroundColor: Theme.of(context).primaryColorDark,
       selectedItemColor: Colors.white,

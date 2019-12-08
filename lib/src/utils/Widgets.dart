@@ -58,3 +58,26 @@ void mostrarError(BuildContext context, String msg) {
     }
   );
 }
+
+
+Drawer crearMenuLateral(BuildContext context) {
+  return Drawer(
+    child: ListView(
+      children: <Widget>[
+        DrawerHeader(
+          child: Container(
+            child: Text('Menu'),
+          ),
+        ),
+
+        ListTile(
+          leading: Icon(Icons.close),
+          title: Text('Salir'),
+          onTap: () {
+            Navigator.pushReplacementNamed(context, '/');
+          },
+        )
+      ],
+    ),
+  );
+}

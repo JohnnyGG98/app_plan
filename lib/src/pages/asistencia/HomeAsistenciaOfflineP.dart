@@ -4,6 +4,7 @@ import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
 import 'package:plan/src/utils/AsistenciaComponentes.dart';
 import 'package:plan/src/utils/MiThema.dart';
+import 'package:plan/src/utils/Widgets.dart';
 
 class HomeAsistenciaOfflineP extends StatefulWidget {
 
@@ -32,6 +33,9 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
       appBar: AppBar(
         title: Text('Asistencia Offline'),
       ),
+
+      drawer: crearMenuLateral(context),
+      
       body: _cargarPagina(currentIndex),
       bottomNavigationBar: _crearBarra(),
       floatingActionButton: FloatingActionButton(
