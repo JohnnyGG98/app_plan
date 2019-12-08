@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/utils/MiThema.dart';
 
 class MisWidgets {
@@ -64,14 +65,55 @@ void mostrarError(BuildContext context, String msg) {
 
 
 Drawer crearMenuLateral(BuildContext context) {
+  final bloc = Provider.of(context);
   return Drawer(
     child: ListView(
+      padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
           child: Container(
-            child: Text('Menu'),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Menu',
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    color: Colors.white,
+                  ),
+                ),
+                Divider(
+                  color: Colors.white,
+                ),
+                Text(
+                  'Usuario: ' + bloc.usuario,
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    color: Colors.white70,
+                  ),
+                ),
+              ],
+            )
+          ),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(6, 40, 65, 1.0),
+                Color.fromRGBO(10, 61, 98, 1.0),
+              ]
+            )
           ),
         ),
+
+        ListTile(
+          leading: Icon(Icons.home),
+          title: Text('Inicio'),
+          onTap: () {
+            Navigator.pushReplacementNamed(context, 'home');
+          },
+        ),
+
+        Divider(),
 
         ListTile(
           leading: Icon(Icons.close),
