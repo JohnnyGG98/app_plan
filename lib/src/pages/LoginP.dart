@@ -1,13 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/providers/UsuarioPV.dart';
+import 'package:plan/src/utils/MiThema.dart';
+import 'package:plan/src/utils/PreferenciasUsuario.dart';
 import 'package:plan/src/utils/Widgets.dart';
 
 class LoginPage extends StatelessWidget {
 
   final usuarioPV = new UsuarioPV();
+  final _prefs = new PreferenciasUsuario();
 
   @override
   Widget build(BuildContext context) {
@@ -15,16 +19,69 @@ class LoginPage extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           _crearFondo(context),
-          _formulario(context),
+          _existeUsuario(context) ?
+          _usuarioGuardados(context) 
+          : _formulario(context),
         ],
       ),
+    );
+  }
+
+  bool _existeUsuario(BuildContext context) {
+    final bloc = Provider.of(context);
+    if (_prefs.username != '') {
+      bloc.changeUsuario(_prefs.username);  
+      return true;
+    }
+    return false;
+  }
+
+  Widget _usuarioGuardados(BuildContext context) {
+    return Center(
+      child: Container(
+        color: Colors.white,
+        height: 300.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Usuario logueado', 
+              style: TextStyle(fontSize: 25.0),
+            ),
+            Divider(
+              color: Theme.of(context).primaryColor, 
+              height: 30.0,
+              endIndent: 30.0,
+              indent: 30.0,
+              thickness: 5.0,
+            ),
+            RaisedButton(
+              child: btnLoginOpt('Continuar con el usuario'),
+              onPressed: (){
+                Navigator.pushReplacementNamed(context, 'home');
+              },
+              color: Theme.of(context).primaryColorDark,
+              textColor: Colors.white,
+            ),
+            RaisedButton(
+              child: btnLoginOpt('Cambiar de usuario'),
+              onPressed: (){
+                Navigator.pushReplacementNamed(context, '/');
+                _prefs.username = '';
+              },
+              color: Theme.of(context).primaryColorDark,
+              textColor: Colors.white,
+            ),
+          ],
+        ),
+      )
     );
   }
 
   Widget _formulario(BuildContext context) {
     final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
-
+    
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -62,12 +119,27 @@ class LoginPage extends StatelessWidget {
                 SizedBox(height: 25.0),
                 _crearPassword(bloc),
                 SizedBox(height: 25.0),
+                _crearRecordarUsuario(bloc),
+                SizedBox(height: 25.0),
                 _crearBtn(bloc),
               ],
             ),
           )
         ],
       ),
+    );
+  }
+
+  Widget _crearRecordarUsuario(LoginB bloc) {
+    return StreamBuilder(
+      stream: bloc.recordarUsuarioStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return SwitchListTile(
+          value: bloc.recordarUsuario,
+          title: Text('Recordar usuario'),
+          onChanged: (v) => bloc.changeRecordarUsuario(v),
+        );
+      },
     );
   }
 
@@ -140,9 +212,10 @@ class LoginPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(5.0)
           ),
           elevation: 0.0,
-          color: Colors.blueGrey,
+          color: Theme.of(context).primaryColorDark,
           textColor: Colors.white,
           onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+
         );
       },
     );
@@ -151,6 +224,9 @@ class LoginPage extends StatelessWidget {
   _login(LoginB bloc, BuildContext context) async {
     bool res = await usuarioPV.login(bloc.usuario, bloc.password);
     if (res) {
+      if (bloc.recordarUsuario) {
+        _prefs.username = bloc.usuario;
+      }
       Navigator.pushReplacementNamed(context, 'home');
     } else {
       mostrarError(context, 'Usuario o contraseña incorrectas.');
@@ -160,7 +236,7 @@ class LoginPage extends StatelessWidget {
   Widget _crearFondo(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final fondoPantalla = Container(
-      height: size.height * 0.4,
+      height: size.height,
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(

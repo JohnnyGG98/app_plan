@@ -14,18 +14,32 @@ import 'package:plan/src/pages/asistencia/FechasOfflineP.dart';
 import 'package:plan/src/pages/asistencia/FechasP.dart';
 import 'package:plan/src/pages/asistencia/HomeAsistenciaOfflineP.dart';
 import 'package:plan/src/providers/ProviderI.dart';
+import 'package:plan/src/utils/PreferenciasUsuario.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  final prefs = new PreferenciasUsuario();
+  await prefs.initPrefs();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
 
+  String _inicialRoute = '/';
   @override
   Widget build(BuildContext context) {
+    //final bloc = Provider.of(context);
+    final prefs = new PreferenciasUsuario();
+    print('Usuario guardado: ' + prefs.username);
+    if (prefs.username != '') {
+      //bloc.changeUsuario(prefs.username);  
+      //_inicialRoute = 'home';
+    }
+
     return  Provider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'PLAN',
-        initialRoute: '/',
+        initialRoute: _inicialRoute,
         routes: {
           '/': (BuildContext ct) => LoginPage(),
           'home': (BuildContext ct) => HomeP(),

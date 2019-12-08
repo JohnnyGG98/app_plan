@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:plan/src/utils/ConsApi.dart';
+import 'package:plan/src/utils/PreferenciasUsuario.dart';
 
 class UsuarioPV {
+
 
   Future<bool> login (String usuario, String password) async {
     final data = {

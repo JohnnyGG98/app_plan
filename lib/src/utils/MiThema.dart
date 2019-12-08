@@ -6,6 +6,21 @@ TextStyle tituloInfo = TextStyle(
   color: Colors.white
 );
 
+Widget btnLoginOpt(String txt) {
+  return Container(
+    padding: EdgeInsets.symmetric(
+      vertical: 10.0
+    ),
+    width: 250.0,
+    child: Text(
+      txt, 
+      textAlign: TextAlign.center,
+    ),
+  );
+}
+
+
+
 TextStyle _noData = TextStyle(
   fontSize: 25.0,
 );
