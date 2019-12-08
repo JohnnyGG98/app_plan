@@ -3,6 +3,7 @@ import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
 import 'package:plan/src/models/asistencia/FechasClaseM.dart';
 import 'package:plan/src/providers/asistencia/FechasClasePV.dart';
 import 'package:plan/src/utils/FechasComponentes.dart';
+import 'package:plan/src/utils/Widgets.dart';
 
 class FechasP extends StatelessWidget {
 
@@ -22,11 +23,22 @@ class FechasP extends StatelessWidget {
           curso.curso
         ),
       ),
-      body: getFechasLista(
-        fechas, 
-        curso, 
-        'listaasistencia'
-      ),
+      body: Column(
+        children: <Widget>[
+          ctnInformacion(
+            context, 
+            curso.materia, 
+            curso.periodo
+          ),
+          Expanded(
+            child:  getFechasLista(
+            fechas, 
+            curso, 
+            'listaasistencia'
+          ),
+          )
+        ],
+      )
     );
   }
 

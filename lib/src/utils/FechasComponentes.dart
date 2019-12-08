@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
 import 'package:plan/src/models/asistencia/FechasClaseM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
+import 'package:plan/src/utils/MiThema.dart';
 
 Widget getFechasLista(
   Future<List<FechasClaseM>> fechas,
@@ -45,9 +46,7 @@ Widget getFechasLista(
           }
         );
       } else {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+        return cargando(context);
       }
     },
   );

@@ -3,6 +3,8 @@ import 'package:plan/src/models/asistencia/AlumnoAsistenciaM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaPV.dart';
 import 'package:plan/src/utils/AsistenciaComponentes.dart';
+import 'package:plan/src/utils/MiThema.dart';
+import 'package:plan/src/utils/Widgets.dart';
 
 class AlumnosAsistenciaP extends StatefulWidget {
   
@@ -33,8 +35,8 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          param.curso.curso + ' ' + 
-          param.curso.materia
+          param.curso.curso + ' | ' + 
+          param.fecha
         ),
       ),
       body: _page(),
@@ -42,12 +44,17 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
   }
 
   Widget _page() {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 2.0,
-        vertical: 0.0
-      ),
-      child: _listaAlumnos(),
+    return Column(
+      children: <Widget>[
+        ctnInformacion(
+          context, 
+          param.curso.materia, 
+          param.curso.periodo
+        ),
+        Expanded(
+          child: _listaAlumnos(),
+        )
+      ],
     );
   }
 
@@ -64,9 +71,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
             },
           );
         }else{
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return cargando(context);
         }
       },
     );
@@ -74,13 +79,9 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
 
   Widget _alumno(AlumnoAsistenciaM a, int pos) {
     return ListTile(
-      title: Text(
-        a.alumno,
-        style: textSize,
-      ),
+      title: Text(a.alumno,),
       leading: CircleAvatar(
         child: Text((pos + 1).toString()),
-        backgroundColor: Colors.blueGrey,
       ),
       trailing: DropdownButton(
         value: a.numFalta.toString(),
@@ -94,6 +95,10 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
             );
           });
         }),
+      ),
+      contentPadding: EdgeInsets.symmetric(
+        vertical: 4.0, 
+        horizontal: 7.0
       ),
     );
   }

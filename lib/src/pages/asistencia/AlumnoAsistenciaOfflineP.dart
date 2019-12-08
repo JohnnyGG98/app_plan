@@ -3,7 +3,8 @@ import 'package:plan/src/models/asistencia/AsistenciaOfflineM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
 import 'package:plan/src/utils/AsistenciaComponentes.dart';
-import 'package:plan/src/utils/MiThema.dart'; 
+import 'package:plan/src/utils/MiThema.dart';
+import 'package:plan/src/utils/Widgets.dart'; 
 
 class AlumnoAsistenciaOfflineP extends StatefulWidget {
   _AlumnoAsistenciaOfflinePState createState() => _AlumnoAsistenciaOfflinePState();
@@ -46,27 +47,18 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
         param.curso.idCurso, 
         param.fecha
       ); 
-
-      //setState(() {});
     }
   }
 
   Widget _page() {
     return Container(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 5.0),
-            color: Theme.of(context).primaryColorDark,
-            width: double.infinity,
-            child: Column(
-              children: <Widget>[
-                Text(param.curso.materia, style: tituloInfo,),
-                Text(param.curso.periodo, style: tituloInfo, ),
-              ],
-            ) 
-          ),
+          ctnInformacion(
+          context, 
+          param.curso.materia, 
+          param.curso.periodo
+        ),
 
           Expanded(
             child: _listaAlumnos(),
@@ -90,9 +82,7 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
             },
           );
         }else{
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return cargando(context);
         }
       },
     );
@@ -114,7 +104,10 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
           });
         }),
       ),
-      contentPadding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 7.0),
+      contentPadding: EdgeInsets.symmetric(
+        vertical: 4.0, 
+        horizontal: 7.0
+      ),
     );
   }
 

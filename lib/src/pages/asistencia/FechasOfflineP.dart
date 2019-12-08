@@ -4,6 +4,7 @@ import 'package:plan/src/models/asistencia/FechasClaseM.dart';
 import 'package:plan/src/providers/asistencia/FechasClasePV.dart';
 import 'package:plan/src/utils/FechasComponentes.dart';
 import 'package:plan/src/utils/MiThema.dart';
+import 'package:plan/src/utils/Widgets.dart';
 
 class FechasOfflineP extends StatelessWidget {
   final fcpv = new FechasClasePV();
@@ -24,16 +25,10 @@ class FechasOfflineP extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.0),
-            color: Theme.of(context).primaryColorDark,
-            width: double.infinity,
-            child: Column(
-              children: <Widget>[
-                Text(curso.materia, style: tituloInfo,),
-                Text(curso.periodo, style: tituloInfo,),
-              ],
-            ) 
+          ctnInformacion(
+            context, 
+            curso.materia, 
+            curso.periodo
           ),
 
           Expanded(

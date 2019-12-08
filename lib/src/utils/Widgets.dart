@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:plan/src/utils/MiThema.dart';
 
 class MisWidgets {
 
@@ -149,3 +150,21 @@ Stack iconAPP = Stack(
 
   ],
 );
+
+Widget ctnInformacion(
+  BuildContext context,
+  String materia,
+  String periodo
+) {
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.0),
+    color: Theme.of(context).primaryColorDark,
+    width: double.infinity,
+    child: Column(
+      children: <Widget>[
+        Text(materia, style: tituloInfo,),
+        Text(periodo, style: tituloInfo,),
+      ],
+    ) 
+  );
+}
