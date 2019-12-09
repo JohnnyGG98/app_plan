@@ -14,7 +14,7 @@ class OfflineP extends StatelessWidget {
         height: double.infinity,
         child: Stack(
           children: <Widget>[
-            Center(child: logo,),
+            //Center(child: logo,),
             _opciones(context),
           ],
         ),

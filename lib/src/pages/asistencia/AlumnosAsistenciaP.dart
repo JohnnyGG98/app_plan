@@ -29,7 +29,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
         param.curso.idCurso, 
         param.fecha
       );
-      opts =getCmbFaltas(param.curso.horas);
+      opts =getCmbFaltas(param.curso.horas??0);
     } 
     
     return Scaffold(

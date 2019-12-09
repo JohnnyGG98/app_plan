@@ -22,7 +22,7 @@ class CursoAsistenciaM {
     materia = json['materia_nombre'];
     curso = json['curso_nombre'];
     dia = json['dia_sesion'];
-    horas = int.parse(json['horas']);
+    horas = int.parse(json['horas'] ?? "0");
   }
 
   factory CursoAsistenciaM.getFromJson(Map<String, dynamic> json) => new CursoAsistenciaM(
