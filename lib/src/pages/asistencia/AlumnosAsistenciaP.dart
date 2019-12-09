@@ -83,7 +83,32 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
       leading: CircleAvatar(
         child: Text((pos + 1).toString()),
       ),
-      trailing: DropdownButton(
+      trailing: TextField(
+        onChanged: ((s) {
+          a.numFalta = int.parse(s);
+          apv.actualizar(
+            a.idAsistencia, 
+            a.numFalta
+          );
+        }),
+        readOnly: true,
+        
+
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderSide: BorderSide()),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.search),
+            onPressed: (){
+              
+            },
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 10.0)
+        ),
+        
+      ),
+
+      /*
+      DropdownButton(
         value: a.numFalta.toString(),
         items: opts,
         onChanged: ((s) {
@@ -96,6 +121,8 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
           });
         }),
       ),
+*/
+
       contentPadding: EdgeInsets.symmetric(
         vertical: 4.0, 
         horizontal: 7.0
