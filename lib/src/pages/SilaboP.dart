@@ -86,7 +86,6 @@ class _SilaboPState extends State<SilaboP> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 MisWidgets.alertInfoHeader(context, s.materiaNombre, s.cursos),
-                //SizedBox(height: 15.0,),
                 Expanded(
                   child: informacionActividades(s.idSilabo),
                 )
