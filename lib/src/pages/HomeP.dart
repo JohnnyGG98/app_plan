@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/pages/asistencia/HomeAsistenciaP.dart';
 import 'package:plan/src/pages/cursos/HomeCursoP.dart';
-import 'package:plan/src/utils/Widgets.dart';
 
 class HomeP extends StatefulWidget {
   @override
@@ -14,13 +13,6 @@ class _HomePState extends State<HomeP> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*
-      appBar: AppBar(
-        title: Text('Plan'),
-      ),
-
-      drawer: crearMenuLateral(context),
-*/
       body: _cargarPagina(currentIndex),
       bottomNavigationBar: _crearBarra(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

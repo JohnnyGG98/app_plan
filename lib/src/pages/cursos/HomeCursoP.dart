@@ -83,7 +83,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
     return ListView(
       children: <Widget>[
         _headerPage(),
-        SizedBox(height: 40.0,),
+        SizedBox(height: 20.0,),
         _combos(),
       ]
     );
@@ -147,31 +147,24 @@ class _HomeCursoPState extends State<HomeCursoP> {
         Expanded(
           child: TextField(
             decoration: InputDecoration(
-              border: OutlineInputBorder(
-                  borderSide: BorderSide()
+              border: OutlineInputBorder(borderSide: BorderSide()),
+              suffixIcon: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: (){
+                  _llamarPageCurso(['buscar', _query]);
+                },
               ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 10.0)
             ),
             autofocus: false,
             style: TextStyle(
               color: Colors.black,
-              fontSize: 20.0,
             ),
             onChanged: (input){
               _query = input;
             },
           ),
         ),
-        RaisedButton(
-          color: Colors.blue,
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Icon(Icons.search, ),
-          ),
-          onPressed: (){
-            _llamarPageCurso(['buscar', _query]);
-            //Navigator.pushNamed(context, 'curso', arguments: param);
-          },
-        )
       ],
     );
   }
@@ -386,13 +379,13 @@ class _HomeCursoPState extends State<HomeCursoP> {
 
   Widget _botonesCombo(){
     if(_periodoSelec != '0'){
-      final pading = EdgeInsets.symmetric(horizontal: 35.0,vertical: 15.0);
+      final pading = EdgeInsets.symmetric(horizontal: 30.0,vertical: 15.0);
       return Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             FlatButton(
-              color: Colors.blueGrey,
+              color: Theme.of(context).primaryColor,
               child: _txtBtns('Curso'),
               padding: pading,
               onPressed: (){
@@ -406,7 +399,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
               },
             ),
             FlatButton(
-              color: Colors.blueGrey,
+              color: Theme.of(context).primaryColor,
               padding: pading,
               child: _txtBtns('Silabo'),
               onPressed: (){
@@ -432,7 +425,7 @@ class _HomeCursoPState extends State<HomeCursoP> {
       txt,
       style: TextStyle(
         color: Colors.white,
-        fontSize: 25.0
+        fontSize: 20.0
       ),
       textAlign: TextAlign.center,
     );

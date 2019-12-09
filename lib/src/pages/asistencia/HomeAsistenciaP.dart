@@ -33,6 +33,15 @@ class _HomeAsistenciaPState extends State<HomeAsistenciaP> {
     return _tabBar();
   }
 
+  Widget _getTabIcon(String titulo, IconData icon) {
+    return Tab(
+      child: ListTile(
+        title: Text(titulo, style: TextStyle(color: Colors.white),),
+        leading: Icon(icon, color: Colors.white,),
+      ),
+    );
+  }
+
 
   Widget _tabBar() {
     return DefaultTabController(
@@ -43,14 +52,8 @@ class _HomeAsistenciaPState extends State<HomeAsistenciaP> {
           bottom: TabBar(
             
             tabs: [
-              Tab(
-                icon: Icon(Icons.today),
-                text: 'Dia',
-              ),
-              Tab(
-                icon: Icon(Icons.calendar_today), 
-                text: 'Todos',
-              ),
+              _getTabIcon('Día', Icons.today),
+              _getTabIcon('Todos', Icons.calendar_today),
             ],
           ),
         ),

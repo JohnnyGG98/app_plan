@@ -3,35 +3,30 @@ import 'package:plan/src/providers/CursoPV.dart';
 
 class CursoP extends StatelessWidget {
   final cur = new CursoPV();
+  TextStyle s = TextStyle(fontSize: 20.0);
 
   @override
   Widget build(BuildContext context) {
     final List param = ModalRoute.of(context).settings.arguments;
-    //Titulo de la pagina
     String titulo = '';
-    //Aqui cargaremos todos los cursos
     Future<List<CursoM>> cursos;
     switch(param[0]){
       case 'buscar': {
-        //print('Estamos buscandoo: '+param[1].toString());
         cursos = cur.buscar(param[1].toString().replaceAll(' ', ''));
         titulo = 'Buscar Curso: '+param[1].toString();
       }
       break;
       case 'curso': {
-        //print('Buscaremos por curso: '+param[1]);
         cursos = cur.getPorIdCurso(int.parse(param[1].toString()));
         titulo = 'Curso: '+param[1].toString();
       }
       break;
       case 'nombre': {
-        //print('Buscaremos por nombre: '+param[1]);
         cursos = cur.getPorNombreCursoPeriodo(param[1].toString());
         titulo = 'Nombre Curso: '+param[1].toString().split('-')[0];
       }
       break;
       case 'periodo': {
-        //print('Buscaremos por periodo: '+param[1]);
         cursos = cur.getPorPeriodo(int.parse(param[1].toString()));
         titulo = 'Periodo Curso: '+param[1].toString();
       }
@@ -45,7 +40,6 @@ class CursoP extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(titulo),
-        backgroundColor: Colors.blueGrey,
       ),
       body: _listaCursos(cursos),
     );
@@ -73,9 +67,6 @@ class CursoP extends StatelessWidget {
   }
 
   Widget _carta(CursoM c, BuildContext context){
-    TextStyle s = TextStyle(
-      fontSize: 20.0
-    );
     return SafeArea(
       child: Container(
         padding: EdgeInsets.only(
@@ -93,6 +84,7 @@ class CursoP extends StatelessWidget {
                   Text(c.getDocente(), style: s,),
                   Text(c.periodoNombre),               Text(c.materiaNombre, style: s,),
                   Text(c.nombre),
+                  Divider()
                 ],
               )
               
@@ -102,14 +94,12 @@ class CursoP extends StatelessWidget {
                 FlatButton(
                   child: Icon(Icons.school),
                   onPressed: (){
-                    //print(c.idCurso);
                     Navigator.pushNamed(context, 'alumno', arguments: c.idCurso);
                   },
                 ),
                 FlatButton(
-                  child: Icon(Icons.book),
+                  child: Icon(Icons.picture_as_pdf,),
                   onPressed: (){
-                    print(c.idMateria.toString()+' '+c.idPeriodo.toString());
                     Navigator.pushNamed(context, 'silabo', arguments: ['curso', c.idCurso.toString()] );
                   },
                 )

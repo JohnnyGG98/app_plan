@@ -9,7 +9,7 @@ class MisWidgets {
   static const stlTxtTituloCard = TextStyle(
     color: Colors.black,
     fontSize: 20.0,
-    fontWeight: FontWeight.w600
+    fontWeight: FontWeight.w600,
   );
 
   static const stlTxtDescripcionCard = TextStyle(
@@ -41,6 +41,45 @@ class MisWidgets {
         Text(descripcion, style: stlTxtDescripcionCard,),
         SizedBox(height: 5.0,),
       ],
+    );
+  }
+
+  static Widget alertInfoHeader(BuildContext context, String titulo, String nombre) {
+    return Container(
+      decoration: BoxDecoration(
+        color:  Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0)
+        )
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: 20.0,
+        vertical: 15.0
+      ),
+      width: double.maxFinite,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            titulo, 
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 25.0
+            ),
+          ),
+          SizedBox(height: 5.0,),
+          Text(
+            nombre, 
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0
+            ),
+          ),
+          SizedBox(height: 5.0,),
+        ],
+      ),
     );
   }
 }

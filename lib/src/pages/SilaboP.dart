@@ -9,6 +9,8 @@ import 'package:plan/src/models/ActividadM.dart';
 import 'package:plan/src/models/SilaboM.dart';
 import 'package:plan/src/providers/SilaboPV.dart';
 import 'package:plan/src/utils/ConsApi.dart';
+import 'package:plan/src/utils/MiThema.dart';
+import 'package:plan/src/utils/Widgets.dart';
 
 class SilaboP extends StatefulWidget {
   @override
@@ -59,7 +61,6 @@ class _SilaboPState extends State<SilaboP> {
     return Scaffold(
       appBar: AppBar(
         title: Text(titulo),
-        backgroundColor: Colors.blueGrey,
       ),
       body: _listaSilabos(silabos),
     );
@@ -76,8 +77,7 @@ class _SilaboPState extends State<SilaboP> {
           ),
           elevation: 5.0,
           contentPadding: EdgeInsets.only(
-            top: 0.0,   
-            bottom: 15.0
+            top: 0.0, 
           ),
           content: Container(
             width: double.maxFinite,
@@ -85,25 +85,8 @@ class _SilaboPState extends State<SilaboP> {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0)
-                    )
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 10.0
-                  ),
-                  width: double.maxFinite,
-                  child: ListTile(
-                    title: Text(s.materiaNombre),
-                    subtitle: Text(s.cursos),
-                  ),
-                ),
-                SizedBox(height: 15.0,),
+                MisWidgets.alertInfoHeader(context, s.materiaNombre, s.cursos),
+                //SizedBox(height: 15.0,),
                 Expanded(
                   child: informacionActividades(s.idSilabo),
                 )
@@ -129,15 +112,12 @@ class _SilaboPState extends State<SilaboP> {
                 subtitle: Text(actividades[i].indicador),
                 trailing: CircleAvatar(
                   child: Text(actividades[i].valoracion),
-                  backgroundColor: Colors.blue,
                 ),
               );
             },
           );
         }else{
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return cargando(context);
         }
       },
     );
@@ -166,9 +146,7 @@ class _SilaboPState extends State<SilaboP> {
               },
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return cargando(context);
           }
         }
       },
@@ -183,75 +161,73 @@ class _SilaboPState extends State<SilaboP> {
       SilaboM s, 
       BuildContext ct
   ) {
-    final wt = Card(
-      elevation: 10.0,
-      //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            leading: Icon(Icons.attach_file, color: Colors.blue),
-            title: Text(materiaNombre),
-            subtitle: Text(prdLectivoNombre),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              FlatButton(
-                child: Column(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Icon(Icons.remove_red_eye, color: Colors.blue),
-                    Text("Ver")
-                  ],
-                ),
-                onPressed: () {
-                  getFileFromUrl(urlSilabo).then((f) {
-                    setState(() {
-                      urlPDFPath = f.path;
-                      print(urlPDFPath);
-                      if (urlPDFPath != null) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    PdfViewPage(path: urlPDFPath)));
-                      }
+    final wt = SafeArea(
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(materiaNombre),
+              subtitle: Text(prdLectivoNombre),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                FlatButton(
+                  child: Column(
+                    children: <Widget>[
+                      Icon(Icons.remove_red_eye, color: Theme.of(context).primaryColor,),
+                      Text("Ver")
+                    ],
+                  ),
+                  onPressed: () {
+                    getFileFromUrl(urlSilabo).then((f) {
+                      setState(() {
+                        urlPDFPath = f.path;
+                        print(urlPDFPath);
+                        if (urlPDFPath != null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => 
+                                PdfViewPage(path: urlPDFPath)
+                              )
+                          );
+                        }
+                      });
                     });
-                  });
-                },
-              ),
-              FlatButton(
-                child: Column(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Icon(Icons.file_download, color: Colors.blue),
-                    Text("Descargar")
-                  ],
+                  },
                 ),
-                onPressed: () {
-                  urlSilabo = ConsApi.path + "//silabo//verpdf/" + idSilabo;
-                  downloadFile(urlSilabo);
-                },
-              ),
-              FlatButton(
-                child: Column(
-                  // Replace with a Row for horizontal icon + text
-                  children: <Widget>[
-                    Icon(Icons.library_books, color: Colors.blue),
-                    Text("Tareas"),
-                    
-                  ],
+                FlatButton(
+                  child: Column(
+                    children: <Widget>[
+                      Icon(Icons.file_download, color: Theme.of(context).primaryColor),
+                      Text("Descargar")
+                    ],
+                  ),
+                  onPressed: () {
+                    urlSilabo = ConsApi.path + "/silabo/verpdf/" + idSilabo;
+                    downloadFile(urlSilabo);
+                  },
                 ),
-                onPressed: () {
-                  _verActividades(ct, s);
-                },
-              )
-            ],
-          )
-        ],
+                FlatButton(
+                  child: Column(
+                    children: <Widget>[
+                      Icon(Icons.library_books, color: Theme.of(context).primaryColor),
+                      Text("Tareas"),
+                    ],
+                  ),
+                  onPressed: () {
+                    _verActividades(ct, s);
+                  },
+                )
+              ],
+            ),
+            Divider(),
+          ],
+        ),
+  
       ),
     );
-
     return wt;
   }
 

@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:plan/src/providers/AlumnoPV.dart';
 import 'package:plan/src/utils/Abrir.dart';
+import 'package:plan/src/utils/MiThema.dart';
 import 'package:plan/src/utils/Widgets.dart';
 
 class AlumnoP extends StatelessWidget {
   final almn = new AlumnoPV();
   final int idCurso;
-
   AlumnoP({this.idCurso = 0});
-
   AlumnoP.fromCurso({this.idCurso = 0});
   
   @override
@@ -18,7 +17,6 @@ class AlumnoP extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Alumnos'),
-        backgroundColor: Colors.blueGrey,
       ),
       body: _cargarAlumnos(idCurso),
     );
@@ -45,9 +43,7 @@ class AlumnoP extends StatelessWidget {
             },
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return cargando(context);
         }
       },
     );
@@ -67,9 +63,7 @@ class AlumnoP extends StatelessWidget {
             },
           );
         } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return cargando(context);
         }
       },
     );
@@ -111,24 +105,10 @@ class AlumnoP extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    color:  Colors.blue,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0)
-                    )
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 10.0
-                  ),
-                  width: double.maxFinite,
-                  child: MisWidgets.info('Informacion de:', a.getNombreCorto()),
-                ),
+                MisWidgets.alertInfoHeader(context, 'Información de: ', a.getNombreCorto()),
                 SizedBox(height: 15.0,),
                 Expanded(
-                  child: _listaInformacion(a),
+                  child: _listaInformacion(context, a),
                 )
               ],
             ),
@@ -139,7 +119,7 @@ class AlumnoP extends StatelessWidget {
     );
   }
 
-  Widget _listaInformacion(AlumnoM a){
+  Widget _listaInformacion(BuildContext context, AlumnoM a){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: ListView(
@@ -153,24 +133,36 @@ class AlumnoP extends StatelessWidget {
           MisWidgets.info('Correo:', a.correo),
           MisWidgets.info('Celular:', a.celular),
           MisWidgets.info('Telefono:', a.telefono),
+
+          Divider(thickness: 3.0,),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween, 
             children: <Widget>[
 
               IconButton(
-                icon: Icon(Icons.email, color: Colors.blue,),
+                icon: Icon(
+                  Icons.email, 
+                  color: Theme.of(context).primaryColor,
+                ),
                 onPressed: (){
                   abrirEmail(a.correo);
                 },
               ),
               IconButton(
-                icon: Icon(Icons.sms, color: Colors.blue,),
+                icon: Icon(
+                  Icons.sms, 
+                  color: Theme.of(context).primaryColor,
+                ),
                 onPressed: (){
                   abrir('sms:'+a.celular);
                 },
               ),
               IconButton(
-                icon: Icon(Icons.phone_in_talk, color: Colors.blue,),
+                icon: Icon(
+                  Icons.phone_in_talk, 
+                  color: Theme.of(context).primaryColor,
+                ),
                 onPressed: (){
                   abrir('tel:'+a.celular);
                 },
@@ -184,8 +176,10 @@ class AlumnoP extends StatelessWidget {
 
   Widget _foto(int id, String url){
     return ClipRRect(
+
       borderRadius: BorderRadius.circular(15.0),
       child: FadeInImage(
+        height: 250.0,
         image: NetworkImage(url),
         placeholder: AssetImage('assets/no-image.jpg'),
         fit: BoxFit.cover,
