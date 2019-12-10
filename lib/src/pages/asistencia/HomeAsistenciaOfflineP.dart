@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
+import 'package:plan/src/providers/ProviderI.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
 import 'package:plan/src/utils/AsistenciaComponentes.dart';
 import 'package:plan/src/utils/MiThema.dart';
@@ -20,13 +21,14 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
  
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of(context);
 
     if (currentIndex == 0 && cursosDia == null) {
-      cursosDia = apv.getCursosPorDia();
+      cursosDia = apv.getCursosPorDia(bloc.usuario);
     }
 
     if (currentIndex != 0 && cursos == null) {
-      cursos = apv.getCursosAll();
+      cursos = apv.getCursosAll(bloc.usuario);
     }
 
     return Scaffold(

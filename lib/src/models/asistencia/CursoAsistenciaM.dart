@@ -4,7 +4,8 @@ class CursoAsistenciaM {
   String materia; 
   String curso;
   int dia; 
-  int horas; 
+  int horas;
+  String docente;  
 
 
   CursoAsistenciaM({
@@ -13,7 +14,8 @@ class CursoAsistenciaM {
     this.materia,
     this.curso,
     this.dia,
-    this.horas
+    this.horas,
+    this.docente
   });
 
   CursoAsistenciaM.fromJSONMap(Map<String, dynamic> json){
@@ -31,7 +33,8 @@ class CursoAsistenciaM {
     materia: json['materia'],
     curso: json['curso'],
     dia: json['dia'],
-    horas: json['horas']
+    horas: json['horas'],
+    docente: json['docente']
   );
 
   Map<String, dynamic> toJson() => {
@@ -40,7 +43,8 @@ class CursoAsistenciaM {
     "materia": materia,
     "curso": curso,
     "dia": dia,
-    "horas": horas
+    "horas": horas,
+    "docente": docente
   };
 
 }

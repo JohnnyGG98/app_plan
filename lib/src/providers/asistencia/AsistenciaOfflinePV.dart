@@ -31,7 +31,7 @@ class AsistenciaOfflinePV {
   Future<bool> _descargarCursosDocente(String identificacion) async {
     final String url = _url + 'cursos/' + identificacion;
     Future<bool> des;
-    cabd.deleteAll();
+    cabd.deleteAll(identificacion);
 
     final res = await http.get(url);
     final data = json.decode(res.body);
@@ -39,6 +39,7 @@ class AsistenciaOfflinePV {
     final cas = CursosAsistencia.fromJsonList(data['items']);
 
     cas.cas.forEach((c) {
+      c.docente = identificacion;
       des = cabd.guardar(c);
     });
     
@@ -74,17 +75,17 @@ class AsistenciaOfflinePV {
     return des;
   }  
 
-  Future<List<CursoAsistenciaM>> getCursosAll() {
-    return cabd.getTodos();
+  Future<List<CursoAsistenciaM>> getCursosAll(String identificacion) {
+    return cabd.getTodos(identificacion);
   }
 
   Future<CursoAsistenciaM> getCursoById(int idCurso) async {
     return cabd.getCurso(idCurso);
   }
 
-  Future<List<CursoAsistenciaM>> getCursosPorDia() {
+  Future<List<CursoAsistenciaM>> getCursosPorDia(String identificacion) {
     final dia = new DateTime.now();
-    return cabd.getByDia(dia.weekday);
+    return cabd.getByDia(identificacion, dia.weekday);
   }
 
   Future<List<AlumnoCursoAsistenciaM>> getAlumnosByCurso(int idCurso) {

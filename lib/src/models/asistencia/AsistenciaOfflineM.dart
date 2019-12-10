@@ -7,6 +7,7 @@ class AsistenciaOfflineM {
   String alumno; 
   int horas = 0; 
   String fecha; 
+  int sincronizado = 0;
 
   AsistenciaOfflineM({
     this.id,
@@ -14,7 +15,8 @@ class AsistenciaOfflineM {
     this.idAlmnCurso,
     this.alumno,
     this.horas,
-    this.fecha
+    this.fecha,
+    this.sincronizado
   }); 
 
   AsistenciaOfflineM.fromJSONMap(Map<String, dynamic> json){
@@ -32,7 +34,8 @@ class AsistenciaOfflineM {
     idAlmnCurso: json['id_almn_curso'],
     alumno: json['alumno'],
     horas: json['horas'],
-    fecha: json['fecha']
+    fecha: json['fecha'],
+    sincronizado: json['sincronizado']
   );
 
   Map<String, dynamic> toJson() => {
@@ -41,7 +44,8 @@ class AsistenciaOfflineM {
     "id_almn_curso": idAlmnCurso,
     "alumno": alumno,
     "horas": horas,
-    "fecha": fecha
+    "fecha": fecha,
+    "sincronizado": sincronizado
   };
     
 }

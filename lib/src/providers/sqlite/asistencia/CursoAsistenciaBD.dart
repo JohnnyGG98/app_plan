@@ -12,13 +12,14 @@ class CursoAsistenciaBD extends BD {
     return res > 0;
   }
 
-  Future<List<CursoAsistenciaM>> getByDia(int diaSemana) async {
+  Future<List<CursoAsistenciaM>> getByDia(String cedula, int diaSemana) async {
     final db = await database;
     final res = await db.query(
       'cursoasistencia',
-      where: 'dia = ?',
+      where: 'dia = ? AND docente = ?',
       whereArgs: [
-        diaSemana
+        diaSemana,
+        cedula
       ]
     );
     print('Cursos asistencia select ');
@@ -41,7 +42,7 @@ class CursoAsistenciaBD extends BD {
     return res.isNotEmpty ? CursoAsistenciaM.getFromJson(res.first) : null;
   }
 
-  Future<List<CursoAsistenciaM>> getTodos() async {
+  Future<List<CursoAsistenciaM>> getTodos(String cedula) async {
     final db = await database;
     final res = await db.query(
       'cursoasistencia',
@@ -50,6 +51,10 @@ class CursoAsistenciaBD extends BD {
         'periodo',
         'materia',
         'curso'
+      ],
+      where: 'docente = ?',
+      whereArgs: [
+        cedula
       ],
       groupBy: 'id_curso, periodo, materia, curso ',
       orderBy: 'curso, id_curso DESC'
@@ -60,9 +65,9 @@ class CursoAsistenciaBD extends BD {
     return list;
   }
 
-  Future<int> deleteAll() async {
+  Future<int> deleteAll(String cedula) async {
     final db = await database;
-    final res = await db.rawDelete('DELETE FROM cursoasistencia');
+    final res = await db.rawDelete("DELETE FROM cursoasistencia WHERE docente = '$cedula'");
     return res;
   }
 
