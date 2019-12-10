@@ -130,7 +130,7 @@ class AsistenciaOfflinePV {
     return aobd.getFechasByCurso(idCurso);
   }
 
-  sincronizar(String docente) async {
+  Future<bool> sincronizar(String docente) async {
 
     String url = _url + 'sincronizar/{docente}';
 
@@ -158,7 +158,7 @@ class AsistenciaOfflinePV {
         alumnos.add(alu);
       });
 
-      /* 
+      
       print('Request sincronizar');
       print(request);
 
@@ -170,11 +170,11 @@ class AsistenciaOfflinePV {
       if (esResValida(res)) {
         Map<String, dynamic> decodedRes = json.decode(res.body);
         if (decodedRes['statuscode'] == 200) {
-          aobd.estaSincronizado(f.idCurso, f.fecha);
+          await aobd.estaSincronizado(f.idCurso, f.fecha);
         }
-      }*/
+      } 
     });
-    
+    return true;
   }
 
 }

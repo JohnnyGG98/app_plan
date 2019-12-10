@@ -38,7 +38,7 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
           IconButton(
             icon: Icon(Icons.cloud_upload),
             onPressed: (){
-              apv.sincronizar();
+              Navigator.pushNamed(context, 'sincronizar');
             },
           )
         ],
