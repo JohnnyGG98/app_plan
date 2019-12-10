@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:plan/src/utils/ConsApi.dart';
-import 'package:plan/src/utils/PreferenciasUsuario.dart';
 
 class UsuarioPV {
 
@@ -19,7 +18,6 @@ class UsuarioPV {
       body: data
     );
     if (esResValida(res)) {
-      print(res.body);
       Map<String, dynamic> decodedRes = json.decode(res.body);
       if (decodedRes['statuscode'] == 200) {
         return true;

@@ -130,4 +130,51 @@ class AsistenciaOfflinePV {
     return aobd.getFechasByCurso(idCurso);
   }
 
+  sincronizar(String docente) async {
+
+    String url = _url + 'sincronizar/{docente}';
+
+    List<AsistenciaOfflineM> fechas = await aobd.getCursoFechaSinSincronizar();
+
+    fechas.forEach((f) async {
+      List<Map<String, dynamic>> alumnos = new List();
+      Map<String, dynamic> request = {
+        "id_curso": f.idCurso,
+        "fecha": f.fecha,
+        "alumnos": alumnos
+      };
+
+      List<AsistenciaOfflineM> lista = await aobd.getSinSincronizar(
+        idCurso: f.idCurso,
+        fecha: f.fecha        
+      );
+
+      lista.forEach((l){
+        Map<String, dynamic> alu ={
+          "id_almn_curso": l.idAlmnCurso,
+          "fecha": l.fecha,
+          "horas": l.horas
+        };
+        alumnos.add(alu);
+      });
+
+      /* 
+      print('Request sincronizar');
+      print(request);
+
+      final res = await http.post(
+        url,
+        body: request
+      );
+
+      if (esResValida(res)) {
+        Map<String, dynamic> decodedRes = json.decode(res.body);
+        if (decodedRes['statuscode'] == 200) {
+          aobd.estaSincronizado(f.idCurso, f.fecha);
+        }
+      }*/
+    });
+    
+  }
+
 }

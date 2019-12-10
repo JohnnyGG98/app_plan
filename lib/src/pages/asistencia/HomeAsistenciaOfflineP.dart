@@ -34,6 +34,14 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Asistencia Offline'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.cloud_upload),
+            onPressed: (){
+              apv.sincronizar();
+            },
+          )
+        ],
       ),
 
       drawer: crearMenuLateral(context),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class ConsApi {
@@ -16,7 +18,8 @@ bool esResValida(http.Response res) {
   print(res.toString());
 
   if (body.contains('statuscode')) {
-    if (body.contains('200')) {
+    Map<String, dynamic> decodedRes = json.decode(res.body);
+    if (decodedRes['statuscode'] == 200) {
       return true;
     } else {
       print('Error: \n' + body);

@@ -66,5 +66,52 @@ class AsistenciaOfflineBD extends BD {
     return res;
   }
 
+  Future<List<AsistenciaOfflineM>> getCursoFechaSinSincronizar() async {
+    final db = await database;
+    final res = await db.query(
+      'asistenciaoffline',
+      where: 'sincronizado = 0 ',
+      columns: [
+        'id_curso',
+        'fecha'
+      ],
+      groupBy: 'id_curso, fecha',
+      orderBy: 'fecha'
+    );
+
+    List<AsistenciaOfflineM> list = res.isNotEmpty ? res.map((m) => AsistenciaOfflineM.getFromJson(m)).toList() : [];
+    return list;
+  }
+
+  Future<List<AsistenciaOfflineM>> getSinSincronizar({
+    int idCurso, 
+    String fecha
+  }) async {
+    final db = await database;
+    final res = await db.query(
+      'asistenciaoffline',
+      where: 'sincronizado = 0 '
+      'AND id_curso = ? '
+      'AND fecha = ? ',
+      whereArgs: [
+        idCurso,
+        fecha
+      ]
+    );
+
+    List<AsistenciaOfflineM> list = res.isNotEmpty ? res.map((m) => AsistenciaOfflineM.getFromJson(m)).toList() : [];
+    return list;
+  }
+
+  Future<int> estaSincronizado(int idCurso, String fecha) async {
+    final db = await database; 
+    final res = await db.rawUpdate(
+      'UPDATE asistenciaoffline '
+      'SET sincronizado = 1 '
+      'WHERE id_curso = {idCurso} '
+      'AND fecha fecha;'
+    );
+    return res;
+  }
 
 }
