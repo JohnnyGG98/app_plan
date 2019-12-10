@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/AsistenciaOfflineM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaOfflinePV.dart';
-import 'package:plan/src/utils/AsistenciaComponentes.dart';
 import 'package:plan/src/utils/MiThema.dart';
-import 'package:plan/src/utils/Widgets.dart'; 
+import 'package:plan/src/utils/Widgets.dart';
+import 'package:spinner_input/spinner_input.dart'; 
 
 class AlumnoAsistenciaOfflineP extends StatefulWidget {
   _AlumnoAsistenciaOfflinePState createState() => _AlumnoAsistenciaOfflinePState();
@@ -15,12 +15,25 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
   final aopv = new AsistenciaOfflinePV();
   
   Future<List<AsistenciaOfflineM>> alumnos;
-  List<DropdownMenuItem<String>> _opts;
-  AsistenciaParam param; 
+  AsistenciaParam param;
+  double maxHoras = 0.0; 
 
   @override
   Widget build(BuildContext context) {    
-    _iniciar();
+    
+    if (alumnos == null) {
+      param = ModalRoute.of(context).settings.arguments; 
+      alumnos = aopv.getLista(
+        param.curso.idCurso, 
+        param.fecha
+      ); 
+
+      if (param.curso.horas != null) {
+        maxHoras = double.parse(param.curso.horas.toString() );
+      }
+    }
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -30,24 +43,6 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
       ),
       body: _page(),
     );
-  }
-
-  _iniciar() async {
-    if (alumnos == null) {
-      param = ModalRoute.of(context).settings.arguments; 
-
-      if (param.curso.horas != null) {
-        _opts = getCmbFaltas(param.curso.horas);
-      } else {
-        param.curso = await aopv.getCursoById(param.curso.idCurso);
-        _opts = getCmbFaltas(param.curso.horas);
-      }
-    
-      alumnos = aopv.getLista(
-        param.curso.idCurso, 
-        param.fecha
-      ); 
-    }
   }
 
   Widget _page() {
@@ -60,9 +55,18 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
           param.curso.periodo
         ),
 
-          Expanded(
-            child: _listaAlumnos(),
-          )
+        ListTile(
+          leading: Text('#'),
+          title: Text('Alumno'),
+          trailing: Text('Faltas',),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 25.0
+          ),
+        ),
+
+        Expanded(
+          child: _listaAlumnos(),
+        )
         ],
       )
     );
@@ -75,7 +79,7 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
         if(snapshot.hasData){
           final als = snapshot.data;
           return ListView.builder(
-            padding: EdgeInsets.symmetric(vertical: 10.0),
+            padding: EdgeInsets.only(bottom: 25.0),
             itemCount: als.length,
             itemBuilder: (BuildContext context, int i){
               return _alumno(als[i], i);
@@ -94,16 +98,21 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
       leading: CircleAvatar(
         child: Text((pos + 1).toString()),
       ),
-      trailing: DropdownButton(
-        value: a.horas.toString(),
-        items: _opts,
-        onChanged: ((s) {
+      trailing: SpinnerInput(
+        spinnerValue: double.parse(a.horas.toString()),
+        minValue: 0.0,
+        maxValue: maxHoras,
+        onChange: (v){
           setState(() {
-            a.horas = int.parse(s);
+            a.horas = v.round();
             aopv.actualizarFaltas(a);
           });
-        }),
+        },
+        plusButton: SpinnerButtonStyle(color: Theme.of(context).primaryColorDark,),
+        minusButton: SpinnerButtonStyle(color: Theme.of(context).primaryColor,),
+        middleNumberPadding: EdgeInsets.symmetric(horizontal: 10.0),
       ),
+      
       contentPadding: EdgeInsets.symmetric(
         vertical: 4.0, 
         horizontal: 7.0

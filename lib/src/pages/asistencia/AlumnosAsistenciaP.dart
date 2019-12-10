@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:plan/src/models/asistencia/AlumnoAsistenciaM.dart';
 import 'package:plan/src/models/params/AsistenciaParam.dart';
 import 'package:plan/src/providers/asistencia/AsistenciaPV.dart';
-import 'package:plan/src/utils/AsistenciaComponentes.dart';
 import 'package:plan/src/utils/MiThema.dart';
 import 'package:plan/src/utils/Widgets.dart';
+import 'package:spinner_input/spinner_input.dart';
 
 class AlumnosAsistenciaP extends StatefulWidget {
   
@@ -15,10 +15,11 @@ class AlumnosAsistenciaP extends StatefulWidget {
 class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
   final apv = new AsistenciaPV();
   Future<List<AlumnoAsistenciaM>> alumnos;
-  List<DropdownMenuItem<String>> opts;
   AsistenciaParam param; 
 
   TextStyle textSize = TextStyle(fontSize: 14);
+
+  double maxHoras = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,10 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
         param.curso.idCurso, 
         param.fecha
       );
-      opts =getCmbFaltas(param.curso.horas??0);
+    }
+
+    if (param.curso.horas != null) {
+      maxHoras = double.parse(param.curso.horas.toString());
     } 
     
     return Scaffold(
@@ -51,6 +55,15 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
           param.curso.materia, 
           param.curso.periodo
         ),
+        ListTile(
+          leading: Text('#'),
+          title: Text('Alumno'),
+          trailing: Text('Faltas',),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 25.0
+          ),
+        ),
+        
         Expanded(
           child: _listaAlumnos(),
         )
@@ -69,6 +82,7 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
             itemBuilder: (BuildContext context, int i){
               return _alumno(als[i], i);
             },
+            padding: EdgeInsets.only(bottom: 25.0),
           );
         }else{
           return cargando(context);
@@ -83,46 +97,23 @@ class _AlumnosAsistenciaPState extends State<AlumnosAsistenciaP> {
       leading: CircleAvatar(
         child: Text((pos + 1).toString()),
       ),
-      trailing: TextField(
-        onChanged: ((s) {
-          a.numFalta = int.parse(s);
-          apv.actualizar(
-            a.idAsistencia, 
-            a.numFalta
-          );
-        }),
-        readOnly: true,
-        
-
-        decoration: InputDecoration(
-          border: OutlineInputBorder(borderSide: BorderSide()),
-          suffixIcon: IconButton(
-            icon: Icon(Icons.search),
-            onPressed: (){
-              
-            },
-          ),
-          contentPadding: EdgeInsets.symmetric(horizontal: 10.0)
-        ),
-        
-      ),
-
-      /*
-      DropdownButton(
-        value: a.numFalta.toString(),
-        items: opts,
-        onChanged: ((s) {
+      trailing: SpinnerInput(
+        spinnerValue: double.parse(a.numFalta.toString()),
+        minValue: 0.0,
+        maxValue: maxHoras,
+        onChange: (v){
           setState(() {
-            a.numFalta = int.parse(s);
+            a.numFalta = v.round();  
             apv.actualizar(
               a.idAsistencia, 
               a.numFalta
             );
           });
-        }),
+        },
+        plusButton: SpinnerButtonStyle(color: Theme.of(context).primaryColorDark,),
+        minusButton: SpinnerButtonStyle(color: Theme.of(context).primaryColor,),
+        middleNumberPadding: EdgeInsets.symmetric(horizontal: 10.0),
       ),
-*/
-
       contentPadding: EdgeInsets.symmetric(
         vertical: 4.0, 
         horizontal: 7.0

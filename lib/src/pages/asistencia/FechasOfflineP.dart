@@ -3,7 +3,6 @@ import 'package:plan/src/models/asistencia/CursoAsistenciaM.dart';
 import 'package:plan/src/models/asistencia/FechasClaseM.dart';
 import 'package:plan/src/providers/asistencia/FechasClasePV.dart';
 import 'package:plan/src/utils/FechasComponentes.dart';
-import 'package:plan/src/utils/MiThema.dart';
 import 'package:plan/src/utils/Widgets.dart';
 
 class FechasOfflineP extends StatelessWidget {
