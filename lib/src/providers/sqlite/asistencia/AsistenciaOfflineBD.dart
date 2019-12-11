@@ -70,7 +70,7 @@ class AsistenciaOfflineBD extends BD {
     final db = await database;
     final res = await db.query(
       'asistenciaoffline',
-      where: 'sincronizado = 0 ',
+      where: ' sincronizado IS NULL ',
       columns: [
         'id_curso',
         'fecha'
@@ -90,7 +90,7 @@ class AsistenciaOfflineBD extends BD {
     final db = await database;
     final res = await db.query(
       'asistenciaoffline',
-      where: 'sincronizado = 0 '
+      where: 'sincronizado IS NULL '
       'AND id_curso = ? '
       'AND fecha = ? ',
       whereArgs: [
@@ -108,8 +108,8 @@ class AsistenciaOfflineBD extends BD {
     final res = await db.rawUpdate(
       'UPDATE asistenciaoffline '
       'SET sincronizado = 1 '
-      'WHERE id_curso = {idCurso} '
-      'AND fecha fecha;'
+      'WHERE id_curso = $idCurso '
+      "AND fecha = '$fecha';"
     );
     return res;
   }

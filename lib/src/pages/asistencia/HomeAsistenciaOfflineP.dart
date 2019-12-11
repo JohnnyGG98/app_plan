@@ -23,11 +23,12 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
 
-    if (currentIndex == 0 && cursosDia == null) {
+    if (cursosDia == null) {
+      print('Consultamos por dia!!!');
       cursosDia = apv.getCursosPorDia(bloc.usuario);
     }
 
-    if (currentIndex != 0 && cursos == null) {
+    if (cursos == null) {
       cursos = apv.getCursosAll(bloc.usuario);
     }
 
@@ -36,9 +37,9 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
         title: Text('Asistencia Offline'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.cloud_upload),
+            icon: Icon(Icons.cloud_download),
             onPressed: (){
-              Navigator.pushNamed(context, 'sincronizar');
+              Navigator.pushNamed(context, 'descarga');
             },
           )
         ],
@@ -49,9 +50,9 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
       body: _cargarPagina(currentIndex),
       bottomNavigationBar: _crearBarra(),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.cloud_download),
+        child: Icon(Icons.cloud_upload),
         onPressed: () {
-          Navigator.pushNamed(context, 'descarga');
+          Navigator.pushNamed(context, 'sincronizar');
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -110,7 +111,8 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
       builder:(BuildContext context, AsyncSnapshot<List<CursoAsistenciaM>> snapshot){
         if (snapshot.hasData) {
           final cs = snapshot.data;
-          if (cs.length > 0) {
+          
+          if (cs.length > 0) {  
             return ListView.builder(
               itemCount: cs.length,
               itemBuilder: (BuildContext context, int i){
@@ -138,7 +140,6 @@ class _HomeAsistenciaOfflinePState extends State<HomeAsistenciaOfflineP> {
       builder:(BuildContext context, AsyncSnapshot<List<CursoAsistenciaM>> snapshot){
         if (snapshot.hasData) {
           final cs = snapshot.data;
-
           if (cs.length > 0) {
             return ListView.builder(
               itemCount: cs.length,

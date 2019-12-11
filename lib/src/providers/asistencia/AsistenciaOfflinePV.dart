@@ -29,10 +29,11 @@ class AsistenciaOfflinePV {
   }
 
   Future<bool> _descargarCursosDocente(String identificacion) async {
-    final String url = _url + 'cursos/' + identificacion;
+    final String url = _url + 'cursos/' + identificacion + '?descargar=y';
     Future<bool> des;
     cabd.deleteAll(identificacion);
 
+    print('Cursos descargados desde aqui: ' + url);
     final res = await http.get(url);
     final data = json.decode(res.body);
 
@@ -40,6 +41,7 @@ class AsistenciaOfflinePV {
 
     cas.cas.forEach((c) {
       c.docente = identificacion;
+      print('Dia: ' + c.dia.toString());
       des = cabd.guardar(c);
     });
     
@@ -50,8 +52,6 @@ class AsistenciaOfflinePV {
     final String url = _url + 'alumnos/' + identificacion;
     Future<bool> des;
     aabd.deleteAll();
-
-    print('Descargaremos alumnos docente');
 
     final res = await http.get(url);
     final data = json.decode(res.body);
@@ -85,6 +85,8 @@ class AsistenciaOfflinePV {
 
   Future<List<CursoAsistenciaM>> getCursosPorDia(String identificacion) {
     final dia = new DateTime.now();
+    print('Fecha: ' + dia.toString());
+    print('Dia: ' + dia.weekday.toString());
     return cabd.getByDia(identificacion, dia.weekday);
   }
 
@@ -114,10 +116,15 @@ class AsistenciaOfflinePV {
     }
 
     lista =  await aobd.getByCursoFecha(idCurso, fecha);
+
+    lista.sort((a, b) {
+      return a.alumno.toLowerCase().compareTo(b.alumno.toLowerCase());
+    });
     return lista; 
   }
 
   actualizarFaltas(AsistenciaOfflineM ao) async {
+    ao.sincronizado = null;
     bool res = await aobd.editar(ao);
     if (res) {
       print('Editamos correctamente');
@@ -130,18 +137,23 @@ class AsistenciaOfflinePV {
     return aobd.getFechasByCurso(idCurso);
   }
 
-  Future<bool> sincronizar(String docente) async {
+  Future<bool> sincronizaAhora(String docente) async {
+    return await _sincronizar(docente);
+  }
 
-    String url = _url + 'sincronizar/{docente}';
-
+  Future<bool> _sincronizar(String docente) async {
+    String url = _url + 'sincronizar/$docente';
     List<AsistenciaOfflineM> fechas = await aobd.getCursoFechaSinSincronizar();
 
-    fechas.forEach((f) async {
+    bool subido = true;
+
+    for(AsistenciaOfflineM f in fechas) {
+
       List<Map<String, dynamic>> alumnos = new List();
       Map<String, dynamic> request = {
-        "id_curso": f.idCurso,
-        "fecha": f.fecha,
-        "alumnos": alumnos
+        '"id_curso"': f.idCurso,
+        '"fecha"': '"${f.fecha}"',
+        '"alumnos"': alumnos
       };
 
       List<AsistenciaOfflineM> lista = await aobd.getSinSincronizar(
@@ -149,32 +161,32 @@ class AsistenciaOfflinePV {
         fecha: f.fecha        
       );
 
-      lista.forEach((l){
+      for (AsistenciaOfflineM l in lista) {
         Map<String, dynamic> alu ={
-          "id_almn_curso": l.idAlmnCurso,
-          "fecha": l.fecha,
-          "horas": l.horas
+          '"id_almn_curso"': l.idAlmnCurso,
+          '"fecha"': '"${l.fecha}"',
+          '"horas"': l.horas
         };
         alumnos.add(alu);
-      });
-
-      
-      print('Request sincronizar');
-      print(request);
+      } 
 
       final res = await http.post(
         url,
-        body: request
+        body: {
+          "asistencia": request.toString()
+        }
       );
 
       if (esResValida(res)) {
-        Map<String, dynamic> decodedRes = json.decode(res.body);
-        if (decodedRes['statuscode'] == 200) {
-          await aobd.estaSincronizado(f.idCurso, f.fecha);
-        }
-      } 
-    });
-    return true;
+        print('Res BODY: ' + res.body);
+        int numAtc = await aobd.estaSincronizado(f.idCurso, f.fecha);
+        print('Num actualizados... $numAtc');
+      } else {
+        subido = false;
+      }
+
+    }
+    return subido;
   }
 
 }

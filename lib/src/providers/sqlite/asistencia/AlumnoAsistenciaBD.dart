@@ -20,7 +20,8 @@ class AlumnoAsistenciaBD extends BD {
       where: 'id_curso = ?',
       whereArgs: [
         idCurso
-      ]
+      ],
+      orderBy: 'alumno'
     );
     // Mapeamos todo en nuestros modelos  
     List<AlumnoCursoAsistenciaM> list = res.isNotEmpty 

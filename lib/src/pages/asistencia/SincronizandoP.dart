@@ -11,14 +11,14 @@ class SincronizandoP extends StatefulWidget {
 class _SincronizandoPState extends State<SincronizandoP> {
   final apv = new AsistenciaOfflinePV();
 
+  Future<bool> subido; 
+
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
-    return Stack(
-      children: <Widget>[
-        _fondo(),
-        _descargando(bloc.usuario)
-      ],
+    subido = apv.sincronizaAhora(bloc.usuario);
+    return Scaffold(
+      body: _descargando(),
     );
   }
 
@@ -31,15 +31,6 @@ class _SincronizandoPState extends State<SincronizandoP> {
     );
   }
 
-  _btnReload(BuildContext context) {
-    return FlatButton(
-      child: Text('Reintentar'),
-      onPressed: (){
-        setState(() {});
-      },
-    );
-  }
-
   _template(String msg, Widget w) {
     return Center(
       child: Column(
@@ -47,22 +38,18 @@ class _SincronizandoPState extends State<SincronizandoP> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(msg),
+          SizedBox(height: 20,),
           Divider(),
+          SizedBox(height: 20,),
           w
         ],
       ),
     );
   }
 
-  _fondo() {
-    return Container(
-      color: Colors.brown,
-    );
-  }
-
-  _descargando(String docente){
+  _descargando(){
     return FutureBuilder(
-      future: apv.sincronizar(docente),
+      future: subido,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
         if (snapshot.hasData) {
           final res = snapshot.data;
@@ -74,7 +61,7 @@ class _SincronizandoPState extends State<SincronizandoP> {
           }  else {
             return _template(
               'Error al subir la asistencia.', 
-              _btnReload(context)
+              _btnBack(context)
             );
           }
         } else {
