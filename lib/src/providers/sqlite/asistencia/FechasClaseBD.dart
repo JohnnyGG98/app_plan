@@ -31,4 +31,15 @@ class FechasClaseBD extends BD {
     return res;
   }
 
+  Future<int> asistenciaGuardada(int idCurso, String fecha) async {
+    final db = await database; 
+    final res = await db.rawUpdate(
+      'UPDATE fechasclase '
+      'SET asistencia_guardada = 1 '
+      'WHERE id_curso = $idCurso '
+      "AND fecha = '$fecha';"
+    );
+    return res;
+  }
+
 }

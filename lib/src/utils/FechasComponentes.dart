@@ -27,13 +27,20 @@ Widget getFechasLista(
           itemBuilder: (BuildContext context, int i) {
 
             return ListTile(
-              title: Text(fs[i].fecha),
-              subtitle: Text( fs[i].horas.toString() + ' horas'),
+              title: Text(
+                fs[i].fecha,
+                style: TextStyle(
+                  color: fs[i].asistenciaGuardada != 0 ? 
+                  Colors.green : Colors.black
+                ),
+              ),
+              subtitle: Text(
+                fs[i].horas.toString() + ' horas',
+              ),
               onTap: () async {
                 curso.horas = fs[i].horas;
                 AsistenciaParam asistencia = AsistenciaParam();
                 asistencia.curso = curso;
-                
                 asistencia.fecha = fs[i].fecha;
                 Navigator.pushNamed(
                   context,
@@ -41,6 +48,7 @@ Widget getFechasLista(
                   arguments: asistencia
                 );
               },
+              
             );
 
           }

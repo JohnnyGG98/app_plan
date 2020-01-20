@@ -32,10 +32,10 @@ class FechasP extends StatelessWidget {
           ),
           Expanded(
             child:  getFechasLista(
-            fechas, 
-            curso, 
-            'listaasistencia'
-          ),
+              fechas, 
+              curso, 
+              'listaasistencia'
+            ),
           )
         ],
       )

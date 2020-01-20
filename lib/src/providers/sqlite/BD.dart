@@ -18,7 +18,7 @@ class BD {
   initDB() async {
     Directory docsDir = await getApplicationDocumentsDirectory();
 
-    final String path = join(docsDir.path, 'plancuatro.db');
+    final String path = join(docsDir.path, 'plancinco.db');
 
     return await openDatabase(
       path,
@@ -58,13 +58,14 @@ class BD {
            alumno TEXT, 
            horas INTEGER, 
            fecha TEXT, 
-           sincronizado INT
+           sincronizado INTEGER
           );  
           CREATE TABLE fechasclase ( 
            id_curso INTEGER, 
            fecha TEXT, 
            dia INTEGER, 
-           horas INTEGER
+           horas INTEGER,
+           asistencia_guardada INTEGER
           ); ''';
 
 }

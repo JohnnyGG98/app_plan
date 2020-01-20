@@ -137,6 +137,10 @@ class AsistenciaOfflinePV {
     return aobd.getFechasByCurso(idCurso);
   }
 
+  asistenciaGuardada(int idCurso, String fecha) {
+    fcbd.asistenciaGuardada(idCurso, fecha);
+  }
+
   Future<bool> sincronizaAhora(String docente) async {
     return await _sincronizar(docente);
   }

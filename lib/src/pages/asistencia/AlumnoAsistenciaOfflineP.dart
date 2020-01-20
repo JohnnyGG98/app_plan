@@ -26,13 +26,17 @@ class _AlumnoAsistenciaOfflinePState extends State<AlumnoAsistenciaOfflineP> {
       alumnos = aopv.getLista(
         param.curso.idCurso, 
         param.fecha
+      );
+
+      aopv.asistenciaGuardada(
+        param.curso.idCurso, 
+        param.fecha
       ); 
 
       if (param.curso.horas != null) {
         maxHoras = double.parse(param.curso.horas.toString() );
       }
     }
-
 
     return Scaffold(
       appBar: AppBar(

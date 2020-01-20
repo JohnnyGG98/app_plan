@@ -5,12 +5,14 @@ class FechasClaseM {
   String fecha; 
   int dia; 
   int horas;
+  int asistenciaGuardada; 
 
   FechasClaseM({
     this.idCurso,
     this.fecha,
     this.dia,
-    this.horas
+    this.horas,
+    this.asistenciaGuardada
   });
 
   FechasClaseM.fromJSONMap(Map<String, dynamic> json) {
@@ -18,20 +20,23 @@ class FechasClaseM {
     fecha = json['fecha'];
     dia = json['dia'];
     horas = json['horas'];
+    asistenciaGuardada = json['asistencia_guardada'];
   }
 
   factory FechasClaseM.getFromJson(Map<String, dynamic> json) => new FechasClaseM(
     idCurso: json['id_curso'],
     fecha: json['fecha'],
     dia: json['dia'],
-    horas: json['horas']
+    horas: json['horas'],
+    asistenciaGuardada: json['asistencia_guardada']
   );
 
   Map<String, dynamic> toJson() => {
     "id_curso": idCurso,
     "fecha": fecha,
     "dia": dia,
-    "horas": horas
+    "horas": horas,
+    "asistencia_guardada": asistenciaGuardada
   };
 
 }
